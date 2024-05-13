@@ -54,3 +54,10 @@ colour's for buttons and form backgrounds etc to be discussed.
 ### Collection Detail
 
 ![screenshot](documentation/wirecollectiondetail.webp)
+
+## Bugs
+### Open Issues
+#### Font package
+When the user hovers over a button all text changes to clack except for the letter "N". I have diagnosed this to be a font package issue as when I load the buttons with a different font the problem does not exist. This issue can also be resolved keeping the "Montaga" Font but removing the transform to uppercase so the letters displayed are lowercase.
+
+Final resolution/ Decision  to discuss with client.
