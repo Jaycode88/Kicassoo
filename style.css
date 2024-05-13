@@ -1,0 +1,90 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Montaga&family=Montez&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+/* Remove presets */
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* body */
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Fonts */
+.montaga {
+    font-family: 'Montaga', serif;
+}
+
+.montez {
+    font-family: 'Montez', cursive;
+}
+
+/* navbar */
+.nav-item {
+    font-weight: 700;
+    font-family: 'montaga', serif;
+}
+
+/* custom button */
+.custom-btn {
+    background-color: #000;
+    color: #fff;
+    font-family: 'montaga', serif;
+    padding: 10px 20px;
+    border: none;
+    /* Removes default border */
+    border-radius: 0px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition for hover effects */
+    cursor: pointer;
+    /* Changes cursor to pointer when hovering over the button */
+}
+
+.custom-btn:hover {
+    background-color: #fff;
+    color: #000;
+    border: #000 solid 1px;
+    font-weight: bold;
+}
+
+.custom-btn-sm {
+    padding: 5px 10px;
+    /* Smaller padding */
+    font-size: 0.8rem;
+    /* Smaller font size */
+}
+
+/* About Section */
+#about {
+    padding: 0px 0;
+}
+
+#about img {
+    max-width: 100%;
+    height: auto;
+}
+
+#about .btn {
+    margin-right: 10px;
+    /* Space between buttons */
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+    footer {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 575px) {
+    #about {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
