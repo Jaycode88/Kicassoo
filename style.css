@@ -38,6 +38,7 @@ body {
     /* Removes default border */
     border-radius: 0px;
     text-transform: uppercase;
+    text-decoration: none;
     letter-spacing: 1px;
     transition: background-color 0.3s, color 0.3s;
     /* Smooth transition for hover effects */
@@ -69,9 +70,14 @@ body {
     height: auto;
 }
 
-#about .btn {
+#about .custom-btn {
     margin-right: 10px;
     /* Space between buttons */
+}
+
+/* all collections page */
+.collections-heading {
+    text-decoration: underline;
 }
 
 /* Collections sections */
@@ -122,5 +128,12 @@ body {
     #about {
         margin-left: 10px;
         margin-right: 10px;
+    }
+}
+
+@media (max-width: 398px) {
+    .custom-btn {
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 }
