@@ -36,7 +36,7 @@
                         <a class="nav-link active" href="collections.html">Collections</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -99,7 +99,8 @@
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                     <h5 class="montaga footer-header">Kicassoo</h5>
-                    <a class="custom-btn custom-btn-sm">Contact Me</a>
+                    <button class="custom-btn custom-btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#contactModal">Contact Me</button>
                     <div class="social-icons mt-2 ms-1">
                         <a href="https://facebook.com" class="me-5 footer-icon"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://instagram.com" class="footer-icon"><i class="fab fa-instagram"></i></a>
@@ -113,6 +114,38 @@
             </div>
         </div>
     </footer>
+
+    <!-- Contact Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contactModalLabel">Contact Me</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contactForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="3" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="custom-btn">Reset</button>
+                            <button type="submit" class="custom-btn">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!--Bootstrap script -->
