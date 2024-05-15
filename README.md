@@ -25,17 +25,17 @@ A website built for An Abstract Artist, The websites main purpose is to showcase
 
 ## Typography
 
-### Logo and extra touches
-
-![Font](documentation/montez.webp)
-
-### Headings
+### Logo and Headings
 
 ![Font](documentation/montaga.webp)
 
 ### Body Text
 
 ![Font](documentation/opensans.webp)
+
+### Accents
+
+![Font](documentation/montez.webp)
 
 ## Colour
 It has Been Decided to keep the main colour them to Black and white as to not pull focus from the Art pieces displayed.
