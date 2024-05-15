@@ -97,6 +97,10 @@ body {
 }
 
 /* footer */
+.footer-header {
+    font-size: 20px;
+}
+
 .footer-icon {
     font-size: 30px;
     color: #000;
