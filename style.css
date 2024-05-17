@@ -11,6 +11,7 @@
 /* body */
 body {
     font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
 }
 
 /* Fonts */
@@ -60,9 +61,16 @@ body {
     /* Smaller font size */
 }
 
+/* Carousel */
+.carousel-inner img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* About Section */
 #about {
     padding: 20px 15px;
+    max-width: 100%;
 }
 
 #about img {
@@ -131,18 +139,13 @@ body {
 @media (min-width: 580px) and (max-width: 767px) {
     .collection-img {
         width: 100%;
-        max-width: 600px;
+        max-width: 100%;
         margin: 0 auto;
     }
 }
 
 
-@media (max-width: 575px) {
-    #about {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-}
+
 
 @media (max-width: 398px) {
     .custom-btn {
