@@ -52,6 +52,7 @@ body {
     color: #000 !important;
     border: #000 solid 1px;
     font-weight: bold;
+    scale: 1.1;
 }
 
 .custom-btn-sm {
@@ -104,6 +105,15 @@ body {
     /* Space above the button */
 }
 
+/*Images in collections grow noted out as dont like look need discuss with client */
+/*.grow {
+    transition: all 0.3s;
+}
+
+.grow:hover {
+    transform: scale(1.05);
+}*/
+
 /* footer */
 .footer-header {
     font-size: 20px;
@@ -122,6 +132,7 @@ body {
     padding: 5px;
     border-radius: 5px;
     margin: 0;
+    scale: 1.1;
 }
 
 /* Media Queries */
