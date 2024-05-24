@@ -23,6 +23,10 @@ body {
     font-family: 'Montez', cursive;
 }
 
+.open-sans {
+    font-family: 'Open Sans', sans-serif;
+}
+
 /* navbar */
 .nav-item {
     font-weight: 700;
