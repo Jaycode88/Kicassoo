@@ -61,3 +61,28 @@ colour's for buttons and form backgrounds etc to be discussed.
 When the user hovers over a button all text changes to clack except for the letter "N". I have diagnosed this to be a font package issue as when I load the buttons with a different font the problem does not exist. This issue can also be resolved keeping the "Montaga" Font but removing the transform to uppercase so the letters displayed are lowercase.
 
 Final resolution/ Decision  to discuss with client.
+
+#### Logo
+All images provided for logo are not of good enough qaulity to pop on the site as they should. Alternative images needed.
+This applies to Meta Icon also!
+
+
+## Further points to discuss before sign off
+
+### Social icons and links
+To check that links lead to correct profiles.
+Add facebook account and icon as I did not find an account.
+
+### Contact form
+Needs completion to create send functionality either using formspree or to open client default mail application.
+
+### About section
+Image needed
+content added show alternative for choice.
+
+### Collection Banner images
+Client to advise on canca designs
+
+### Collection Deatail pages
+Image descriptions?
+Image Dimensions?
