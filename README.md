@@ -86,3 +86,5 @@ Client to advise on canca designs
 ### Collection Deatail pages
 Image descriptions?
 Image Dimensions?
+
+this is a test line to check merge from laptop
