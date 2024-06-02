@@ -57,13 +57,15 @@ colour's for buttons and form backgrounds etc to be discussed.
 
 ## Bugs
 ### Open Issues
-#### Font package
-When the user hovers over a button all text changes to clack except for the letter "N". I have diagnosed this to be a font package issue as when I load the buttons with a different font the problem does not exist. This issue can also be resolved keeping the "Montaga" Font but removing the transform to uppercase so the letters displayed are lowercase.
-resolution remover uppercase transform.
-
 #### Logo
 All images provided for logo are not of good enough qaulity to pop on the site as they should. Alternative images needed.
 This applies to Meta Icon also!
+Result: I have enhanced one of the supplied Image which looks better atleast until an alternative is provided
+
+### Solved bugs
+#### Font package
+When the user hovers over a button all text changes to clack except for the letter "N". I have diagnosed this to be a font package issue as when I load the buttons with a different font the problem does not exist. This issue can also be resolved keeping the "Montaga" Font but removing the transform to uppercase so the letters displayed are lowercase.
+resolution remover uppercase transform.
 
 
 ## Further points to discuss before sign off
@@ -76,14 +78,12 @@ Gcapture to prevent spam!
 
 ### About section
 Image needed
-content confirmed!
 
 ### Collection Banner images
-Client to advise on canva designs.... Result try to round images on new designs
-on kingdom change yellow text to forrest green
+Client to advise on canva designs.... 
+Result: try to round images on new designs
+- on kingdom change yellow text to forrest green
 
 ### Collection Deatail pages
-Image descriptions? remove
-Image Dimensions? non bold, no word dimensions, dimensions tbc
-
-this is a test line to check merge from laptop
+Image Dimensions?
+Result: non bold, no word dimensions, dimensions tbc
