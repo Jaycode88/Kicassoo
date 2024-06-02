@@ -87,3 +87,7 @@ Result: try to round images on new designs
 ### Collection Deatail pages
 Image Dimensions?
 Result: non bold, no word dimensions, dimensions tbc
+
+
+# Note to self
+- Add auto complete attribute to email and name form fields
