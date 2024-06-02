@@ -75,6 +75,8 @@ Add facebook account and icon as I did not find an account.
 
 ### Contact form
 Needs completion to create send functionality either using formspree or to open client default mail application.
+should add a message sent meesage upon completion!
+Gcapture to prevent spam!
 
 ### About section
 Image needed
