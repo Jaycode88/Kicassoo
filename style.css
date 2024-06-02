@@ -42,7 +42,6 @@ body {
     border: none;
     /* Removes default border */
     border-radius: 0px;
-    text-transform: uppercase;
     text-decoration: none !important;
     letter-spacing: 1px;
     transition: background-color 0.3s, color 0.3s;
@@ -89,10 +88,6 @@ body {
 }
 
 /* all collections page */
-.collections-heading {
-    text-decoration: underline;
-}
-
 /* Collections sections */
 .collection-text {
     position: relative;

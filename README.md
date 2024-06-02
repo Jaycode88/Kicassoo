@@ -59,8 +59,7 @@ colour's for buttons and form backgrounds etc to be discussed.
 ### Open Issues
 #### Font package
 When the user hovers over a button all text changes to clack except for the letter "N". I have diagnosed this to be a font package issue as when I load the buttons with a different font the problem does not exist. This issue can also be resolved keeping the "Montaga" Font but removing the transform to uppercase so the letters displayed are lowercase.
-
-Final resolution/ Decision  to discuss with client.
+resolution remover uppercase transform.
 
 #### Logo
 All images provided for logo are not of good enough qaulity to pop on the site as they should. Alternative images needed.
@@ -69,9 +68,6 @@ This applies to Meta Icon also!
 
 ## Further points to discuss before sign off
 
-### Social icons and links
-To check that links lead to correct profiles.
-Add facebook account and icon as I did not find an account.
 
 ### Contact form
 Needs completion to create send functionality either using formspree or to open client default mail application.
@@ -80,13 +76,14 @@ Gcapture to prevent spam!
 
 ### About section
 Image needed
-content added show alternative for choice.
+content confirmed!
 
 ### Collection Banner images
-Client to advise on canca designs
+Client to advise on canva designs.... Result try to round images on new designs
+on kingdom change yellow text to forrest green
 
 ### Collection Deatail pages
-Image descriptions?
-Image Dimensions?
+Image descriptions? remove
+Image Dimensions? non bold, no word dimensions, dimensions tbc
 
 this is a test line to check merge from laptop
