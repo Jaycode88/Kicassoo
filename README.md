@@ -115,6 +115,8 @@ You can fork this repository by using the following steps:
 
 ### Connecting to FormKeep
 
+- Create an account with [FormKeep](https://formkeep.com/)
+
 ## Tools and Technologies used
 - [HTML](https://en.wikipedia.org/wiki/HTML)  is the backbone of web content. It defines the structure and content of the web pages.
 - [CSS](https://en.wikipedia.org/wiki/CSS) used to control the visual presentation of the web application. It defines the layout, colors, fonts etc.
