@@ -75,6 +75,8 @@ To add a hint of personality and flair to certain elements, we've incorporated "
 ![screenshot](documentation/wirecollectiondetail.webp)
 
 ## Features
+### Copy protection code
+For security purposes to stop digital copright infrinement, Code has been added which disables the users ability to use the right click options on images, These options include copy and save image as.. Whilst this measure does not provide complete protection it acts as a detterrent to those casual attempts of image theft.
 
 ## Deployment
 ## DEPLOYMENT
@@ -114,6 +116,8 @@ You can fork this repository by using the following steps:
 ### Live Deployment
 
 ### Connecting to FormKeep
+
+- Create an account with [FormKeep](https://formkeep.com/)
 
 ## Tools and Technologies used
 - [HTML](https://en.wikipedia.org/wiki/HTML)  is the backbone of web content. It defines the structure and content of the web pages.
