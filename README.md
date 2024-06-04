@@ -57,7 +57,7 @@ colour's for buttons and form backgrounds etc to be discussed.
 
 ## Bugs
 ### Open Issues
-#### Logo
+#### Logo *
 All images provided for logo are not of good enough qaulity to pop on the site as they should. Alternative images needed.
 This applies to Meta Icon also!
 Result: I have enhanced one of the supplied Image which looks better atleast until an alternative is provided
@@ -76,18 +76,14 @@ Needs completion to create send functionality either using formspree or to open 
 should add a message sent meesage upon completion!
 Gcapture to prevent spam!
 
-### About section
-Image needed
+### About section *
+Image needed 
 
-### Collection Banner images
+### Collection Banner images *
 Client to advise on canva designs.... 
 Result: try to round images on new designs
 - on kingdom change yellow text to forrest green
 
-### Collection Deatail pages
+### Collection Deatail pages *
 Image Dimensions?
 Result: non bold, no word dimensions, dimensions tbc
-
-
-# Note to self
-- Add auto complete attribute to email and name form fields
