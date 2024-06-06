@@ -75,8 +75,37 @@ To add a hint of personality and flair to certain elements, we've incorporated "
 ![screenshot](documentation/wirecollectiondetail.webp)
 
 ## Features
-### Copy protection code
-For security purposes to stop digital copright infrinement, Code has been added which disables the users ability to use the right click options on images, These options include copy and save image as.. Whilst this measure does not provide complete protection it acts as a detterrent to those casual attempts of image theft.
+### Responsiveness & Accessibility
+The site has been built to be perfectly responsive accross all devices for 300px wide and up. Special care has been taken to ensure the correct size image is loaded for the correct device type ensuring lower load times and high performance. 
+The site Has a 100% accessibility score, ensuring it is accesible to screen readers and other assitive technologies Therefore reaching wider audiences.
+
+### Image Copy protection code
+For security purposes to stop digital copright infrinement, Code has been added which disables the user's ability to use the right click options on images, These options include copy and save image as.. etc. Whilst this measure does not provide complete protection it acts as a detterrent to those casual attempts of image theft.
+
+### Navigation
+The website is built with clear and responsive navigation structure enabling user's to easily find their way around the site.
+
+### Home Page
+The home page consists of Am Image carousel hosting the collection images, As well as the About Me Section.
+
+### About me
+This section displays an image of the artist, as well as content decribing the artist and her journey.
+
+### Collections
+This page Features each of the artist's collections with a description, an image and a button to view the collection.
+
+### Collection Gallery
+Each Collection has its on gallery page to display the Art pieces from each collection, Here the user can find the Title and dimensions to the art pieces. This section has a call to action contact button for the user to make enquiries.
+
+### Contact form Modal
+The contact form Has been placed into a modal so that it can be accessed on any page. The backend to the form has been set up with [FormKeep](https://formkeep.com/). The form allows users to make direct contact with the artist. The from requests basic data such as the Name, Email address and the User's message.
+N.B Please see Deployment section for instuctions for [FormKeep](https://formkeep.com/) Setup etc.
+
+### Footer 
+This contains social links and contact button for Kicasso as well as Socail links for the site developer.
+
+## Future features
+Please See your future features proposal document(If you have not recieved this please contact your developer)
 
 ## Deployment
 ## DEPLOYMENT
@@ -127,6 +156,7 @@ You can fork this repository by using the following steps:
 - [Font Awesome](https://fontawesome.com/) For Icons
 - [Google Fonts](https://fonts.google.com/) for all Fonts.
 - [Responsinator](http://www.responsinator.com/) Used to check responsiveness.
+- [FormKeep](https://formkeep.com/) Used for contact form back end.
 
 
 ## Bugs
