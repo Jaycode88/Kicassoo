@@ -83,7 +83,10 @@ The site Has a 100% accessibility score, ensuring it is accesible to screen read
 For security purposes to stop digital copright infrinement, Code has been added which disables the user's ability to use the right click options on images, These options include copy and save image as.. etc. Whilst this measure does not provide complete protection it acts as a detterrent to those casual attempts of image theft.
 
 ### Navigation
-The website is built with clear and responsive navigation structure enabling user's to easily find their way around the site.
+The website is built with clear and responsive navigation structure enabling user's to easily find their way around the site. The Navigation consists of the Kicassoo Logo as well as links to the sites pages/sections. When viewed on Smaller screen sizes the navigation links are found in a dropdown burger menu.
+
+![Desktop Navigation](documentation/desktopnav.webp)
+![Mobile Navigation](documentation/navmob.webp)
 
 ### Home Page
 The home page consists of Am Image carousel hosting the collection images, As well as the About Me Section.
@@ -98,11 +101,16 @@ This page Features each of the artist's collections with a description, an image
 Each Collection has its on gallery page to display the Art pieces from each collection, Here the user can find the Title and dimensions to the art pieces. This section has a call to action contact button for the user to make enquiries.
 
 ### Contact form Modal
-The contact form Has been placed into a modal so that it can be accessed on any page. The backend to the form has been set up with [FormKeep](https://formkeep.com/). The form allows users to make direct contact with the artist. The from requests basic data such as the Name, Email address and the User's message.
+The contact form Has been placed into a modal so that it can be accessed on any page. The backend to the form has been set up with [FormKeep](https://formkeep.com/). The form allows users to make direct contact with the artist. The from requests basic data such as the Name, Email address and the User's message. The form has security so that all fields must be entered before the form can be sent, this includes a check that the email is in the correct format. Once the User has sent a message a message success page opens in a new tab.
 N.B Please see Deployment section for instuctions for [FormKeep](https://formkeep.com/) Setup etc.
+
+![Contact Modal](documentation/contactmodal.webp)
 
 ### Footer 
 This contains social links and contact button for Kicasso as well as Socail links for the site developer.
+![Desktop Footer](documentation/desktopfooter.webp)
+![Mobile Footer](documentation/mobfooter.webp)
+
 
 ## Future features
 Please See your future features proposal document(If you have not recieved this please contact your developer)
@@ -161,24 +169,19 @@ You can fork this repository by using the following steps:
 
 ## Bugs
 ### Open Issues
-#### Logo *
-All images provided for logo are not of good enough qaulity to pop on the site as they should. Alternative images needed.
-This applies to Meta Icon also!
-Result: I have enhanced one of the supplied Image which looks better atleast until an alternative is provided
+
 
 ### Solved bugs
 #### Font package
-When the user hovers over a button all text changes to clack except for the letter "N". I have diagnosed this to be a font package issue as when I load the buttons with a different font the problem does not exist. This issue can also be resolved keeping the "Montaga" Font but removing the transform to uppercase so the letters displayed are lowercase.
-resolution remover uppercase transform.
+I had an issue When the user hovered over a button, all the text changed to black except for the letter "N". I diagnosed this to be a font package issue as when I load the buttons with a different font the problem did not exist. The other option I found was to remove the text transform to uppercase class. 
+I discussed with client which resolution they preffered and it was chosen to remove the uppercase transform.
+
+#### Logo
+I recieved an image to use as a logo but this was not of sufficient quality and did not look good on the preview site, I requested another image but this was poorly sized and pixelated.
+I managed to get a much clearer image using image manipulation and AI software.
 
 
-## Further points to discuss before sign off
-
-
-### Contact form
-Needs completion to create send functionality either using formspree or to open client default mail application.
-should add a message sent meesage upon completion!
-Gcapture to prevent spam!
+## Needed in able to sign off
 
 ### About section *
 Image needed 
@@ -187,7 +190,15 @@ Image needed
 Client to advise on canva designs.... 
 Result: try to round images on new designs
 - on kingdom change yellow text to forrest green
+Images re-designed now awaiting response
 
-### Collection Deatail pages *
+### Collection Gallery pages *
 Image Dimensions?
 Result: non bold, no word dimensions, dimensions tbc
+Contact made, awaiting response
+
+## Upon sign off
+
+- Sign Customer upto FormKeep and transfer code so messages go to their account.
+- Use customer gmail for Recaptcha security on form.
+- Publish with chosen Host.
