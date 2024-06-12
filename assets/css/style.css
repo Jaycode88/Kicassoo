@@ -116,6 +116,7 @@ body {
 /* footer */
 .footer-header {
     font-size: 20px;
+    margin-left: 25px !important;
 }
 
 .footer-icon {
@@ -132,6 +133,10 @@ body {
     border-radius: 5px;
     margin: 0;
     scale: 1.1;
+}
+
+footer button {
+    margin-left: 15px;
 }
 
 /* Media Queries */
@@ -154,13 +159,24 @@ body {
     }
 }
 
+@media (max-width: 767px) {
+    .footer-header {
+        margin-left: 15px !important;
+    }
+}
+
 
 
 
 @media (max-width: 398px) {
     .custom-btn {
-        margin-top: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .about-btn-container {
+        text-align: center;
     }
 }
 
@@ -168,4 +184,6 @@ body {
     #about img {
         margin-bottom: 10px;
     }
+
+
 }
