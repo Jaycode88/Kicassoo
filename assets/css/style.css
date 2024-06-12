@@ -104,6 +104,11 @@ body {
     /* Space above the button */
 }
 
+.img-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /*Images in collections grow noted out as dont like look need discuss with client */
 /*.grow {
     transition: all 0.3s;
