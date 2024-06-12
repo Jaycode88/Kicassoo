@@ -75,6 +75,7 @@ body {
 #about {
     padding: 20px 15px;
     max-width: 100%;
+    margin-top: 10px;
 }
 
 #about img {
@@ -92,6 +93,7 @@ body {
 .collection-text {
     position: relative;
     /* Ensures positioning context */
+    margin-top: 10px;
 }
 
 .button-container {
@@ -189,6 +191,10 @@ footer button {
     #about img {
         margin-bottom: 10px;
         max-width: 50%;
+    }
+
+    #about {
+        margin-top: 0px;
     }
 }
 
