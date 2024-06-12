@@ -188,7 +188,24 @@ footer button {
 @media (max-width: 991px) {
     #about img {
         margin-bottom: 10px;
+        max-width: 50%;
     }
+}
 
+@media (max-width: 500px) {
+    #about img {
+        max-width: 60%;
+    }
+}
 
+@media (max-width: 400px) {
+    #about img {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 359px) {
+    .about-btn {
+        margin-top: 20px;
+    }
 }
