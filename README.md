@@ -1,5 +1,7 @@
 # [Kicassoo](https://jaycode88.github.io/Kicassoo/)
 
+# N.B to Self contact form action have been removed for gitpages deployment. Correct form actions are on the Ionos Deployment!
+
 ** amiresponsive image here **
 
 Welcome to Kicassoo, the online showcase for an abstract artist. This website is dedicated to presenting the artist's profile and captivating collections. With a focus on artistic expression and creativity, Kicassoo offers visitors a glimpse into the vibrant world of contemporary art.
@@ -98,7 +100,7 @@ This section displays an image of the artist, as well as content decribing the a
 This page Features each of the artist's collections with a description, an image and a button to view the collection.
 
 ### Collection Gallery
-Each Collection has its on gallery page to display the Art pieces from each collection, Here the user can find the Title and dimensions to the art pieces. This section has a call to action contact button for the user to make enquiries.
+Each Collection has its on gallery page to display the Art pieces from each collection, Here the user can find the Title to the art pieces. As well as a call to action contact button for the user to make enquiries.
 
 ### Contact form Modal
 The contact form Has been placed into a modal so that it can be accessed on any page. The backend to the form has been set up with [FormKeep](https://formkeep.com/). The form allows users to make direct contact with the artist. The from requests basic data such as the Name, Email address and the User's message. The form has security so that all fields must be entered before the form can be sent, this includes a check that the email is in the correct format. Once the User has sent a message a message success page opens in a new tab.
@@ -154,7 +156,7 @@ You can fork this repository by using the following steps:
 
 ### Connecting to FormKeep
 
-- Create an account with [FormKeep](https://formkeep.com/)
+- Create an account with [FormKeep](https://formkeep.com/), Create a 
 
 ## Tools and Technologies used
 - [HTML](https://en.wikipedia.org/wiki/HTML)  is the backbone of web content. It defines the structure and content of the web pages.
@@ -180,22 +182,6 @@ I discussed with client which resolution they preffered and it was chosen to rem
 I recieved an image to use as a logo but this was not of sufficient quality and did not look good on the preview site, I requested another image but this was poorly sized and pixelated.
 I managed to get a much clearer image using image manipulation and AI software.
 
-
-## Needed in able to sign off
-
-### About section *
-Image needed 
-
-### Collection Banner images *
-Client to advise on canva designs.... 
-Result: try to round images on new designs
-- on kingdom change yellow text to forrest green
-Images re-designed now awaiting response
-
-### Collection Gallery pages *
-Image Dimensions?
-Result: non bold, no word dimensions, dimensions tbc
-Contact made, awaiting response
 
 ## Upon sign off
 
