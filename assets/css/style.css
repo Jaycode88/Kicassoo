@@ -311,3 +311,46 @@ footer button {
         margin: 10px 0;
     }
 }
+
+@media (max-width: 400px) {
+    .content-box {
+        top: 10%;
+        /* Adjusts the top position for smaller screens */
+        transform: translate(-50%, -10%);
+        /* Adjusts the transform for smaller screens */
+        padding: 10px;
+        /* Adds padding to ensure content doesn't touch the edges */
+    }
+
+    .title-box {
+        padding: 5px;
+        /* Reduces padding for smaller screens */
+    }
+
+    .content-box h1 {
+        font-size: 2em;
+        /* Reduces font size for smaller screens */
+    }
+
+    .content-box p {
+        padding: 10px;
+        /* Reduces padding for smaller screens */
+        font-size: 0.9em;
+        /* Adjusts font size for better readability */
+    }
+
+    .btn-container {
+        padding: 5px;
+        /* Reduces padding for smaller screens */
+        margin-top: 10px;
+        /* Reduces margin top for smaller screens */
+    }
+
+    .btn-container a,
+    .btn-container button {
+        padding: 8px;
+        /* Reduces padding for buttons on smaller screens */
+        font-size: 0.9em;
+        /* Adjusts font size for buttons on smaller screens */
+    }
+}
