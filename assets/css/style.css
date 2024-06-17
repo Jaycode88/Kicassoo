@@ -88,6 +88,10 @@ body {
     /* Space between buttons */
 }
 
+.about-btn-container {
+    text-align: center;
+}
+
 /* all collections page */
 /* Collections sections */
 .collection-text {
@@ -176,7 +180,17 @@ footer button {
     }
 }
 
+@media (min-width: 1500px) {
+    #about .custom-btn {
+        margin-top: 40px !important;
+    }
+}
 
+@media (min-width: 1450px) {
+    #about .custom-btn {
+        margin-top: 20px;
+    }
+}
 
 
 @media (max-width: 398px) {
@@ -185,14 +199,23 @@ footer button {
     }
 }
 
-@media (max-width: 1200px) {
-    .about-btn-container {
-        text-align: center;
+@media (max-width: 1300px) {
+    #about img {
+        margin-top: 50px;
+
+    }
+}
+
+@media (min-width: 1300px) {
+    #about img {
+        margin-top: 15px;
+
     }
 }
 
 @media (max-width: 991px) {
     #about img {
+        margin-top: 0px;
         margin-bottom: 10px;
         max-width: 50%;
     }
