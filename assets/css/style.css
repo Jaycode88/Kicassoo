@@ -167,6 +167,31 @@ body {
     margin-bottom: 10px;
 }
 
+/* Image watermark */
+.watermark-container {
+    position: relative;
+    display: inline-block;
+}
+
+.watermark-container img {
+    width: 100%;
+    height: auto;
+}
+
+.watermark-container::before {
+    content: "";
+    background: url('/assets/images/copyrightgrey.png') repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    /* Adjust opacity as needed */
+    pointer-events: none;
+    /* Ensures the watermark does not interfere with clicking on the image */
+}
+
 /*Images in collections grow noted out as dont like look need discuss with client */
 /*.grow {
     transition: all 0.3s;
