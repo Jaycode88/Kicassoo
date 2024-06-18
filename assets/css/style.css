@@ -255,6 +255,14 @@ footer button {
     .collection-text {
         margin-top: 20px !important;
     }
+
+    .developer-info p {
+        font-size: 14px;
+    }
+
+    .developer-info .footer-icon {
+        font-size: 24px;
+    }
 }
 
 @media (min-width: 1500px) {
