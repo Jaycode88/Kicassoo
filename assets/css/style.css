@@ -192,15 +192,6 @@ body {
     /* Ensures the watermark does not interfere with clicking on the image */
 }
 
-/*Images in collections grow noted out as dont like look need discuss with client */
-/*.grow {
-    transition: all 0.3s;
-}
-
-.grow:hover {
-    transform: scale(1.05);
-}*/
-
 /* footer */
 .footer-header {
     font-size: 20px;
@@ -266,13 +257,17 @@ footer button {
 }
 
 @media (min-width: 1500px) {
-    #about .custom-btn {
+
+    #about .custom-btn,
+    #events .custom-btn {
         margin-top: 40px !important;
     }
 }
 
 @media (min-width: 1450px) {
-    #about .custom-btn {
+
+    #about .custom-btn,
+    #events .custom-btn {
         margin-top: 20px;
     }
 }
@@ -285,39 +280,66 @@ footer button {
 }
 
 @media (max-width: 1300px) {
-    #about img {
+
+    #about img,
+    #events img {
         margin-top: 50px;
 
     }
 }
 
 @media (min-width: 1300px) {
-    #about img {
+
+    #about img,
+    #events img {
         margin-top: 15px;
 
     }
 }
 
 @media (max-width: 991px) {
-    #about img {
+
+    #about img,
+    #events img {
         margin-top: 0px;
         margin-bottom: 10px;
         max-width: 50%;
     }
 
-    #about {
+    #about,
+    #events {
         margin-top: 0px;
+    }
+
+    .event-btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-btn-container .custom-btn {
+        margin-bottom: 10px;
+        width: 60%;
+        text-align: center;
+    }
+
+    .event-btn-container .custom-btn:last-child {
+        margin-bottom: 0;
     }
 }
 
 @media (max-width: 500px) {
-    #about img {
+
+    #about img,
+    #events img {
         max-width: 60%;
     }
 }
 
 @media (max-width: 400px) {
-    #about img {
+
+    #about img,
+    #events img {
         max-width: 80%;
     }
 }
@@ -385,5 +407,23 @@ footer button {
         /* Reduces padding for buttons on smaller screens */
         font-size: 0.9em;
         /* Adjusts font size for buttons on smaller screens */
+    }
+}
+
+@media (max-width: 410px) {
+    .event-btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-btn-container .custom-btn {
+        margin-bottom: 10px;
+        width: 60%;
+        text-align: center;
+    }
+
+    .event-btn-container .custom-btn:last-child {
+        margin-bottom: 0;
     }
 }
