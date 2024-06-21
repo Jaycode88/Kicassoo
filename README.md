@@ -1,6 +1,6 @@
 # [Kicassoo](https://jaycode88.github.io/Kicassoo/)
 
-# N.B to Self contact form action have been removed for gitpages deployment. Correct form actions are on the Ionos Deployment!
+# N.B to Self This is the Django Branch do not push this to main branch 
 
 ** amiresponsive image here **
 
