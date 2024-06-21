@@ -1,2 +1,7 @@
 # Ignore .htaccess files
 .htaccess
+
+# Django stuff:
+*.sqlite3
+*.pyc
+__pycache__
