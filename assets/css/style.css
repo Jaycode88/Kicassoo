@@ -192,6 +192,15 @@ body {
     /* Ensures the watermark does not interfere with clicking on the image */
 }
 
+/* Events page */
+/* section divider */
+.section-divider {
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+
+}
+
 /* footer */
 .footer-header {
     font-size: 20px;
@@ -311,7 +320,8 @@ footer button {
     }
 
     #about,
-    #events {
+    #events,
+    #pop-event {
         margin-top: 0px;
     }
 
