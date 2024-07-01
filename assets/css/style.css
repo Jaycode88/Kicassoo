@@ -186,7 +186,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.6;
+    opacity: 0.5;
     /* Adjust opacity as needed */
     pointer-events: none;
     /* Ensures the watermark does not interfere with clicking on the image */
