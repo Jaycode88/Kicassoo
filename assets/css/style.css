@@ -180,7 +180,7 @@ body {
 
 .watermark-container::before {
     content: "";
-    background: url('/assets/images/copyrightgrey.png') repeat;
+    background: url('/assets/images/copyrightgrey.webp') repeat;
     position: absolute;
     top: 0;
     left: 0;
