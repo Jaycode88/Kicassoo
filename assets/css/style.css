@@ -321,7 +321,8 @@ footer button {
 
     #about,
     #events,
-    #pop-event {
+    #pop-event,
+    #sip-event {
         margin-top: 0px;
     }
 
