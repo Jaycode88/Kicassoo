@@ -1,3 +1,21 @@
+# This is the kicassoo store readme
+
+## unsolved bugs
+
+- nav bar dropdown on screen sizes below 332px is a pain in the ass as it the dropdown does not ocnnedct to the nav bar making it look not great
+
+- homepage styling on screens below 450px the buttons go out of the image this may be to do with my cody and home-content heigh calculations??
+
+
+
+
+
+
+
+
+
+
+
 # [Kicassoo](https://jaycode88.github.io/Kicassoo/)
 
 # N.B to Self This is the Django Branch do not push this to main branch 

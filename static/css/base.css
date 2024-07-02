@@ -18,13 +18,27 @@ body {
     color: #000;
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
+    padding-top: 160px;
+}
+
+@media (max-width: 991px) {
+    body {
+        padding-top: 82px;
+        /* Adjust this value to match the height of your mobile header */
+    }
+}
+
+@media (max-width: 332px) {
+    body {
+        padding-top: 105px;
+        /* Adjust this value to match the height of your mobile header */
+    }
 }
 
 /* Reset margins and padding for the body and header */
 body,
 header {
     margin: 0;
-    padding: 0;
 }
 
 /* Ensure the header is reset properly */
@@ -40,6 +54,11 @@ icon {
     justify-content: center;
     height: 1.5rem;
     width: 1.5rem;
+}
+
+/*-----FONTS-----*/
+.montaga {
+    font-family: 'Montaga', serif;
 }
 
 /*------HEADER------*/
@@ -100,6 +119,48 @@ icon {
     margin-right: 30px !important;
 }
 
+/* Ensure proper margin on mobile devices for the mobile top header */
+@media (max-width: 991px) {
+    .navbar-toggler {
+        margin-left: 50px;
+    }
+
+    .mob-nav-icons {
+        margin-right: 50px;
+    }
+
+    .nav-item {
+        margin-left: 50px;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar-toggler {
+        margin-left: 20px;
+    }
+
+    .mob-nav-icons {
+        margin-right: 20px;
+    }
+
+    .nav-item {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 332px) {
+    .mob-nav-icons {
+        margin-left: 40px;
+        margin-bottom: 20px;
+    }
+}
+
+/*----main nav----*/
+.nav-link {
+    color: #000 !important;
+    font-size: 1.2rem !important;
+}
+
 
 /* -----Home Page----- */
 #home-content {
@@ -153,6 +214,23 @@ icon {
     margin: 10px 5px;
 }
 
+
+@media (max-width: 700px) {
+    .content-box h1 {
+        font-size: 2.5em;
+    }
+
+    .btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-container a,
+    .btn-container button {
+        margin: 10px 0;
+    }
+}
 
 
 
