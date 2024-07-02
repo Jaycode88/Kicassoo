@@ -1,0 +1,247 @@
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Montaga&family=Montez&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+/* Remove presets */
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+html {
+    height: 100%;
+    /* This allows the h-100 and centering classes to work */
+}
+
+body {
+    height: calc(100vh - 164px);
+    color: #000;
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Reset margins and padding for the body and header */
+body,
+header {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure the header is reset properly */
+header.container-fluid {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* From Bulma */
+icon {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+/*------HEADER------*/
+/*-------logo-------*/
+/* Ensure there are no margins or padding for the logo container and image */
+.main-logo-link {
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.main-logo-link img {
+    display: block;
+    max-height: 100px;
+    /* Adjust this value as needed */
+    width: auto;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
+    /* Ensures the image scales correctly */
+}
+
+/* Ensure the parent container has no padding or margin */
+#logo-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    justify-content: flex-start !important;
+    align-items: flex-start;
+}
+
+/* Ensure the flex parent has no padding or margin */
+#top-nav {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/*---Bag and account icons---*/
+#nav-icons-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Reduce padding and margin for the list items to minimize space */
+#nav-icons-container .list-inline-item {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    padding: 0 !important;
+}
+
+/* Add margin-right for the last item to provide spacing from the edge */
+#nav-icons-container .list-inline-item:last-child {
+    margin-right: 30px !important;
+}
+
+
+/* -----Home Page----- */
+#home-content {
+    background: url('/media/images/home_2048.webp') no-repeat center center fixed;
+    background-size: cover;
+    height: calc(100vh - 164px);
+    /* may need to change this when footer is made??*/
+}
+
+.content-box {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    text-align: center;
+    color: white;
+}
+
+.title-box {
+    background: rgba(0, 0, 0, 0.7);
+    /* Almost black background */
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.content-box h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+.content-box p {
+    background: rgba(255, 255, 255, 0.7);
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.btn-container {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.btn-container a,
+.btn-container button {
+    margin: 10px 5px;
+}
+
+
+
+
+
+
+
+/*------------Buttons------------*/
+/* custom button */
+.custom-btn {
+    background-color: #000;
+    color: #fff;
+    font-family: 'montaga', serif;
+    padding: 10px 20px;
+    border: none;
+    /* Removes default border */
+    border-radius: 0px;
+    text-decoration: none !important;
+    letter-spacing: 1px;
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition for hover effects */
+    cursor: pointer;
+    /* Changes cursor to pointer when hovering over the button */
+}
+
+.custom-btn:hover {
+    background-color: #fff;
+    color: #000 !important;
+    border: #000 solid 1px;
+    font-weight: bold;
+    scale: 1.1;
+}
+
+.custom-btn-sm {
+    padding: 5px 10px;
+    /* Smaller padding */
+    font-size: 0.8rem;
+    /* Smaller font size */
+}
+
+/* .shop-now-button {
+    background: black;
+    color: white;
+    min-width: 260px;
+} */
+
+.btn-black {
+    background: black !important;
+    color: white !important;
+    border-radius: 0px !important;
+}
+
+/* .shop-now-button:hover,
+.shop-now-button:active,
+.shop-now-button:focus,
+.btn-black:hover,
+.btn-black:active,
+.btn-black:focus {
+    background: black;
+    color: white;
+} */
+
+/* .text-black {
+    color: black !important;
+} */
+
+.border-black {
+    border: 1px solid black !important;
+}
+
+/*------------Media Queries------------*/
+
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 80%;
+    }
+}
+
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    .header-container {
+        padding-top: 164px;
+    }
+}
