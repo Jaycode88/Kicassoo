@@ -1,7 +1,38 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block page_header %}
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<h1 class="display-4 text-success">It Works!</h1>
+<!-- Home content Section -->
+<section id="home-content">
+    <img src="assets/images/home_1600.webp" alt="Kicassoo Art Image" class="home-img" srcset="
+        assets/images/home_300.webp 300w,
+        assets/images/home_840.webp 840w,
+        assets/images/home_1150.webp 1150w,
+        assets/images/home_1390.webp 1390w,
+        assets/images/home_1600.webp 1600w,
+        assets/images/home_1760.webp 1760w,
+        assets/images/home_1910.webp 1910w,
+        assets/images/home_2048.webp 2048w" sizes="100vw">
+    <div class="content-box">
+        <div class="title-box">
+            <h1 class="montaga">Kicassoo</h1>
+        </div>
+        <p>Welcome to the vibrant world of Kicassoo, where the interplay of colors and tones transforms spaces into
+            captivating displays of stillness and beauty. Kicassoo's work is a testament to her ability to capture
+            the essence of the present moment, bringing a unique energy to homes, offices, and personal spaces.</p>
+        <div class="btn-container">
+            <a href="collections.html" class="custom-btn">View Collections</a>
+            <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact
+                Me</button>
+        </div>
+    </div>
+</section>
 {% endblock %}
