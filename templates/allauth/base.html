@@ -23,7 +23,7 @@
 
     {% block corecss %}
     <!-- Style Sheets-->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -51,30 +51,31 @@
 
 <body>
     <header class="container-fluid fixed-top">
-        <div class="row">
-            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left">
+        <div id="top-nav" class="row bg-white pt-lg-2 d-none d-lg-flex">
+            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left" id="logo-container">
                 <a href="{% url 'home' %}" class="nav-link main-logo-link">
-                    <h2 class="montaga text-black my-0">Kicassoo</h2>
+                    <img src="{{ MEDIA_URL }}images/logo.svg" alt="Kicassoo Logo" class="img-fluid">
                 </a>
             </div>
 
-            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0"></div>
-            <form action="" method="get">
-                <div class="input-group w-100">
-                    <input type="text" class="form-control border border-black rounded-0" name="q"
-                        placeholder="Search in The Kicassoo Shop">
-                    <div class="input-group-append">
-                        <button class="form-control custom-btn" type="submit">
-                            <span class="icon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </form>
-
             <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
-                <ul class="list-inline list-unstyled text-center text-lg-right my-0">
+                <form action="" method="get">
+                    <div class="input-group w-100">
+                        <input type="text" class="form-control border border-black rounded-0" name="q"
+                            placeholder="Search The Kicassoo Store">
+                        <div class="input-group-append">
+                            <button class="form-control btn-black" type="submit">
+                                <span class="icon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0" id="nav-icons-container">
+                <ul class="list-inline list-unstyled my-0">
                     <li class="list-inline-item dropdown">
                         <a href="#" class="text-black nav-link" id="user-options" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
@@ -128,65 +129,6 @@
 
     {% block postloadjs %}
     {% endblock %}
-
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
-                <img src="assets/images/logo.svg" alt="Logo" height="80">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="collections.html">Collections</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="events.html">Events</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Footer -->
-    <footer class="bg-white text-black">
-        <div class="container-fluid py-4">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    <p class="montaga footer-header">Kicassoo</p>
-                    <button class="custom-btn custom-btn-sm" data-bs-toggle="modal"
-                        data-bs-target="#contactModal">Contact Me</button>
-                    <div class="social-icons mt-2 ms-1">
-                        <a href="https://www.snapchat.com/add/dollyz88" class="footer-icon me-5" target="_blank"
-                            aria-label="Go to Kicassoo's SnapChat"><i class="fa-brands fa-snapchat"></i></a>
-                        <a href="https://www.instagram.com/kicassoo/" class="footer-icon" target="_blank"
-                            aria-label="Go to Kicassoo's Instagram"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-6 text-center text-md-end developer-info">
-                    <p>Website designed & developed</p>
-                    <p>by Joe Seabrook</p>
-                    <a href="https://www.linkedin.com/in/joeseabrook/" target="_blank" class="footer-icon"
-                        aria-label="Go to Developers linkedin profile"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
 
 </body>
 
