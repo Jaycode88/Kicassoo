@@ -47,6 +47,28 @@ header.container-fluid {
     margin: 0 !important;
 }
 
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 80%;
+    }
+}
+
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    .header-container {
+        padding-top: 164px;
+    }
+}
+
 /* From Bulma */
 icon {
     align-items: center;
@@ -390,26 +412,119 @@ footer button {
     border: 1px solid black !important;
 }
 
-/*------------Media Queries------------*/
+/* -----------About page---------- */
+#about {
+    padding: 20px 15px;
+    max-width: 100%;
+    margin-top: 10px;
+}
 
-/* Slightly larger container on xl screens */
-@media (min-width: 1200px) {
-    .container {
+#about img {
+    max-width: 100%;
+    height: auto;
+}
+
+#about .custom-btn {
+    margin-right: 10px;
+    /* Space between buttons */
+}
+
+.about-btn-container {
+    text-align: center;
+}
+
+@media (min-width: 1500px) {
+
+    #about .custom-btn,
+    #events .custom-btn {
+        margin-top: 40px !important;
+    }
+}
+
+@media (min-width: 1450px) {
+
+    #about .custom-btn,
+    #events .custom-btn {
+        margin-top: 20px;
+    }
+}
+
+
+@media (max-width: 398px) {
+    .custom-btn {
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 1300px) {
+
+    #about img,
+    #events img {
+        margin-top: 50px;
+
+    }
+}
+
+@media (min-width: 1300px) {
+
+    #about img,
+    #events img {
+        margin-top: 15px;
+
+    }
+}
+
+@media (max-width: 991px) {
+
+    #about img,
+    #events img {
+        margin-top: 0px;
+        margin-bottom: 10px;
+        max-width: 50%;
+    }
+
+    #about,
+    #events,
+    #pop-event,
+    #sip-event {
+        margin-top: 0px;
+    }
+
+    .event-btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-btn-container .custom-btn {
+        margin-bottom: 10px;
+        width: 60%;
+        text-align: center;
+    }
+
+    .event-btn-container .custom-btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 500px) {
+
+    #about img,
+    #events img {
+        max-width: 60%;
+    }
+}
+
+@media (max-width: 400px) {
+
+    #about img,
+    #events img {
         max-width: 80%;
     }
 }
 
-/* fixed top navbar only on medium and up */
-@media (min-width: 992px) {
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 1030;
-    }
-
-    .header-container {
-        padding-top: 164px;
+@media (max-width: 359px) {
+    .about-btn {
+        margin-top: 20px;
     }
 }

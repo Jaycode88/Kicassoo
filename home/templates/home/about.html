@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+<!-- About Section -->
+<section id="about" class="container">
+    <div class="row">
+        <!-- This will only be visible on mobile, positioned at the top -->
+        <div class="col-12 d-lg-none text-center">
+            <h1 class="montaga">About Kicassoo</h1>
+        </div>
+
+        <!-- Image column: on the left for desktop, second in order on mobile -->
+        <div class="col-12 col-lg-6 order-2 order-lg-1 text-center">
+            <img src="{{ MEDIA_URL }}images/about.webp" class="img-fluid" alt="About Kicassoo Image">
+        </div>
+
+        <!-- Content column: on the right for desktop, third in order on mobile -->
+        <div class="col-12 col-lg-6 order-3 order-lg-2">
+            <!-- This will only be visible on desktop -->
+            <div class="d-none d-lg-block">
+                <h1 class="montaga">About Kicassoo</h1>
+            </div>
+
+            <!-- About content -->
+            <p>Starting in the heart of East London, Kicassoo's artistic journey is deeply rooted
+                in the rich
+                cultural tapestry and dynamic street art of Brick Lane and Shoreditch. These vibrant areas, renowned
+                for their expressive and quirky street art, have profoundly influenced her creative vision.
+
+                Music, culture, and modern societal traditions are the lifeblood of her art, infusing each piece
+                with a rhythm and vibrancy that speak to the soul. Whether it's the beats of a song or the colors of
+                her cultural heritage, these elements come together in a harmonious blend on her canvases.</p>
+
+            <p>Since moving to Southend, Kicassoo has embraced a new wave of creativity, engaging with the community
+                through various artistic initiatives. Over the past three years, she has brought art to the public
+                through pop-up events, arts and crafts sessions, and interactive group activities like Sip and
+                Paint. Her commitment to fostering creativity in others is evident in her dedication to one-on-one
+                sessions and community workshops.</p>
+
+            <p>Kicassoo is an abstract artist at heart, primarily working with acrylic paints but never limiting
+                herself to one medium. She believes in the power of art to transcend form and function, offering
+                viewers a moment to pause, reflect, and connect with a memory or emotion captured in time. Each
+                piece is a journey into a still moment, inviting you to explore and feel the depth of her artistic
+                expression.</p>
+            <div class="mt-5 about-btn-container">
+                <a href="collections.html" class="custom-btn">View Collections</a>
+                <button class="custom-btn about-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact
+                    Me</button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
