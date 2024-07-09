@@ -227,7 +227,6 @@ footer button {
     background: url('/media/images/home_2048.webp') no-repeat center center fixed;
     background-size: cover;
     height: calc(100vh - 164px);
-    /* may need to change this when footer is made??*/
 }
 
 .content-box {
@@ -528,3 +527,34 @@ footer button {
         margin-top: 20px;
     }
 }
+
+@media (max-width: 332px) {
+
+    #about {
+        margin-top: 5px;
+    }
+}
+
+/* ------Events page----------- */
+/* section divider */
+.section-divider {
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+
+}
+
+.events-page-title {
+    margin-bottom: 20px;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+@media (max-width: 332px) {
+
+    .events-page-title {
+        padding-top: 30px;
+    }
+}
+
+/* more events media queries above with about page */
