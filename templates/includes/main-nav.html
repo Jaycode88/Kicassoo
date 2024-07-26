@@ -38,6 +38,21 @@
                 Print Store
             </a>
         </li>
+        <!-- Navigation Item: Print Store -->
+        <li class="nav-item dropdown">
+            <a class="montaga font-weight-bold nav-link dropdown-toggle mr-6" role="button" href="#"
+                id="print-store-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Print Store
+            </a>
+            <!-- Dropdown Menu for Print store -->
+            <div class="dropdown-menu border-0" aria-labelledby="print-store-link">
+                <!-- Specific categories as dropdown items -->
+                <a href="{% url 'product_list' %}" class="dropdown-item">All Products</a>
+                <a href="{% url 'product_list' %}?category=Stationary" class="dropdown-item">Stationary</a>
+                <a href="{% url 'product_list' %}?category=Wall Art" class="dropdown-item">Wall Art</a>
+                <a href="{% url 'product_list' %}?category=Puzzles" class="dropdown-item">Puzzles</a>
+            </div>
+        </li>
 
     </ul>
 </div>
