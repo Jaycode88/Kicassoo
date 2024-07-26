@@ -13,12 +13,12 @@ class Command(BaseCommand):
             try:
                 print(f"Processing item: {item}")  # Debugging statement
 
-                product_details = api.get_product_variants(item['id'])
-                if not product_details or 'sync_variants' not in product_details:
-                    print(f"No variants found for item: {item}")  # Debugging statement
+                product_details = api.get_product_details(item['id'])
+                if not product_details:
+                    print(f"No details found for item: {item}")  # Debugging statement
                     continue
 
-                variants = product_details['sync_variants']
+                variants = product_details.get('sync_variants', [])
                 if not variants:
                     print(f"No valid variants found for item: {item}")  # Debugging statement
                     continue
