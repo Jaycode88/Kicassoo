@@ -48,7 +48,8 @@
 </head>
 
 <body>
-    <header class="container-fluid fixed-top bg-white">
+    <div class="container-fluid d-flex flex-column min-vh-100">
+    <header class="fixed-top bg-white">
         <div id="top-nav" class="row bg-white pt-lg-2 d-none d-lg-flex">
             <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left" id="logo-container">
                 <a href="{% url 'home' %}" class="nav-link main-logo-link">
@@ -132,13 +133,17 @@
     {% block page_header %}
     {% endblock %}
 
-    {% block content %}
-    {% endblock %}
+    <main class="flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
 
     {% block postloadjs %}
     {% endblock %}
 
+    <footer class="bg-white text-black mt-auto">
     {% include 'includes/footer.html' %}
+    </footer>
 
 </body>
 
