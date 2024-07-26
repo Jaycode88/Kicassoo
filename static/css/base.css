@@ -8,17 +8,20 @@
     border: none;
 }
 
-html {
+/* Ensure the entire document uses full height */
+html,
+body {
     height: 100%;
-    /* This allows the h-100 and centering classes to work */
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    height: calc(100vh - 164px);
     color: #000;
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
     padding-top: 160px;
+
 }
 
 @media (max-width: 991px) {
@@ -35,8 +38,7 @@ body {
     }
 }
 
-/* Reset margins and padding for the body and header */
-body,
+/* Reset margins and padding for the header */
 header {
     margin: 0;
 }
@@ -185,6 +187,10 @@ icon {
 
 /*---- Footer ----*/
 /* footer */
+footer {
+    padding: 10px;
+}
+
 .footer-header {
     font-size: 20px;
     margin-left: 25px !important;
@@ -226,7 +232,7 @@ footer button {
 #home-content {
     background: url('/media/images/home_2048.webp') no-repeat center center fixed;
     background-size: cover;
-    height: calc(100vh - 164px);
+    height: calc(100vh - 130px);
 }
 
 .content-box {
