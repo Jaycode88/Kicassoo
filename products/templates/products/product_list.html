@@ -1,18 +1,61 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Products{% endblock %}
 
 {% block page_header %}
 <h1 class="text-center">Products</h1>
 {% endblock %}
 
 {% block content %}
-    <ul>
+<!-- Products Grid -->
+<div class="row">
     {% for product in products %}
-        <li>{{ product.name }} - {{ product.price }} UKP</li>
+        <!-- Individual Product Card -->
+        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
+            <div class="card h-100 border-0">
+                <a href="{% url 'product_detail' product.id %}">
+                    <img class="card-img-top img-fluid" src="{{ product.image_url }}" alt="{{ product.name }}" width="300" height="300">
+                </a>
+                <!-- Product details, pricing, and links -->
+                <div class="card-body pb-0">
+                    <!-- Product Name -->
+                    <p class="mb-0">{{ product.name }}</p>
+                </div>
+                <div class="card-footer bg-white pt-0 border-0 text-left">
+                    <div class="row">
+                        <div class="col">
+                            <!-- Product Pricing -->
+                            <p class="lead mb-0 text-left font-weight-bold">£{{ product.price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Horizontal Rule after every 4 products for extra large screens -->
+        {% if forloop.counter|divisibleby:4 %}
+            <div class="col-12 d-none d-xl-block mb-5">
+                <hr>
+            </div>
+        {% endif %}
+        <!-- Horizontal Rule after every 3 products for large screens, hidden on extra large screens -->
+        {% if forloop.counter|divisibleby:3 %}
+            <div class="col-12 d-none d-lg-block d-xl-none mb-5">
+                <hr>
+            </div>
+        {% endif %}
+        <!-- Horizontal Rule after every 2 products for small to medium screens, hidden on larger screens -->                        
+        {% if forloop.counter|divisibleby:2 %}
+            <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
+                <hr>
+            </div>
+        {% endif %}
+        <!-- Horizontal Rule after every product for extra small screens -->
+        {% if forloop.counter|divisibleby:1 %}
+            <div class="col-12 d-sm-none mb-5">
+                <hr>
+            </div>
+        {% endif %}
     {% endfor %}
-    </ul>
-</body>
-</html>
+</div>
 {% endblock %}

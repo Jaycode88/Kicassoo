@@ -1,0 +1,24 @@
+<!-- In product_detail.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block page_header %}
+<h1 class="text-center">{{ product.name }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <img class="img-fluid" src="{{ product.image_url }}" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-6">
+            <h2>{{ product.name }}</h2>
+            <p class="lead">£{{ product.price }}</p>
+            <p>{{ product.description }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
