@@ -20,7 +20,7 @@ class PrintfulAPI:
             return response.json()['result']
         return []
 
-    def get_product_variants(self, product_id):
+    def get_product_details(self, product_id):
         response = requests.get(f'{self.base_url}/store/products/{product_id}', headers=self.get_headers())
         print(response.status_code, response.json())  # Debugging
         if response.status_code == 200:
