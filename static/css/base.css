@@ -357,33 +357,33 @@ footer button {
 /*------------Buttons------------*/
 /* custom button */
 .custom-btn {
-    background-color: #000;
-    color: #fff;
-    font-family: 'montaga', serif;
-    padding: 10px 20px;
-    border: none;
+    background-color: #000 !important;
+    color: #fff !important;
+    font-family: 'montaga', serif !important;
+    padding: 10px 20px !important;
+    border: none !important;
     /* Removes default border */
-    border-radius: 0px;
+    border-radius: 0px !important;
     text-decoration: none !important;
-    letter-spacing: 1px;
-    transition: background-color 0.3s, color 0.3s;
+    letter-spacing: 1px !important;
+    transition: background-color 0.3s, color 0.3s !important;
     /* Smooth transition for hover effects */
-    cursor: pointer;
+    cursor: pointer !important;
     /* Changes cursor to pointer when hovering over the button */
 }
 
 .custom-btn:hover {
-    background-color: #fff;
+    background-color: #fff !important;
     color: #000 !important;
-    border: #000 solid 1px;
-    font-weight: bold;
-    scale: 1.1;
+    border: #000 solid 1px !important;
+    font-weight: bold !important;
+    scale: 1.1 !important;
 }
 
 .custom-btn-sm {
-    padding: 5px 10px;
+    padding: 5px 10px !important;
     /* Smaller padding */
-    font-size: 0.8rem;
+    font-size: 0.8rem !important;
     /* Smaller font size */
 }
 
