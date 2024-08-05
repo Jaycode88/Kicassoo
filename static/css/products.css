@@ -1,3 +1,17 @@
+/* Back to top button */
+.btt-button {
+    height: 42px;
+    width: 42px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.btt-link {
+    cursor: pointer;
+}
+
+/* Sort select box */
 @media (max-width: 767px) {
     .sort-select-wrapper {
         width: 100%;
@@ -10,6 +24,7 @@
     }
 }
 
+/* extra margin to show title on smaler screens */
 @media (max-width: 332px) {
 
     .product-page-title {
