@@ -12,17 +12,44 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <!-- Check if the shopping bag is not empty -->
         {% if bag_items %}
             <div class="table-responsive rounded">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in bag_items %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>£{{ item.product.price }}</td>
+                                <td>£{{ item.quantity|multiply:item.product.price }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+                <h5>Subtotal: £{{ total }}</h5>
+                <h5>Delivery: £{{ delivery }}</h5>
+                <h5>Grand Total: £{{ grand_total }}</h5>
+                <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+            </div>
         {% else %}
-            <!-- Display a message when the shopping bag is empty -->
             <p class="lead mb-5">Your bag is empty.</p>
-            <a href="{% url 'products' %}" class="btn btn-orange rounded-0 btn-lg">
+            <a href="{% url 'product_list' %}" class="btn btn-orange rounded-0 btn-lg">
                 <span class="icon">
                     <i class="fas fa-chevron-left"></i>
                 </span>
                 <span class="text-uppercase">Keep Shopping</span>
             </a>
         {% endif %}
+    </div>
+</div>
 {% endblock %}
