@@ -1,0 +1,18 @@
+@media (max-width: 767px) {
+    .sort-select-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    #sort-selector {
+        width: 90%;
+    }
+}
+
+@media (max-width: 332px) {
+
+    .product-page-title {
+        padding-top: 30px;
+    }
+}
