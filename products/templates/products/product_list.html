@@ -89,3 +89,9 @@
     {% endfor %}
 </div>
 {% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/sorting-script.js' %}"></script>
+{% endblock %}
