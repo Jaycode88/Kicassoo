@@ -7,6 +7,9 @@
 - homepage styling on screens below 450px the buttons go out of the image this may be to do with my cody and home-content heigh calculations??
 
 
+## Notes
+
+- to import products from store use terminal command "python manage.py import_products"
 
 
 
