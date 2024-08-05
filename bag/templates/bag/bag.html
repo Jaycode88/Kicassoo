@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Shopping Bag{% endblock %}
+
+{% block page_header %}
+<div class="text-center shopping-Bag-title">
+    <h1 class="montaga">Shopping Bag</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <!-- Check if the shopping bag is not empty -->
+        {% if bag_items %}
+            <div class="table-responsive rounded">
+        {% else %}
+            <!-- Display a message when the shopping bag is empty -->
+            <p class="lead mb-5">Your bag is empty.</p>
+            <a href="{% url 'products' %}" class="btn btn-orange rounded-0 btn-lg">
+                <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span class="text-uppercase">Keep Shopping</span>
+            </a>
+        {% endif %}
+{% endblock %}
