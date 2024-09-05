@@ -38,15 +38,15 @@ def bag_contents(request):
     }
 
     for item_id, quantity in bag.items():
-        product = get_object_or_404(Product, pk=item_id)
+        product = get_object_or_404(Product, printful_id=item_id)  # Use printful_id instead of pk
         total += quantity * product.price
         product_count += quantity
         bag_items.append({
             'item_id': item_id,
             'quantity': quantity,
             'product': product,
-            'printful_id': product.printful_id,  # Using printful_id for shipping calculation
-        })
+            'printful_id': product.printful_id,
+    })
 
     cart_items = [{'external_variant_id': item['printful_id'], 'quantity': item['quantity']} for item in bag_items]
     shipping_rates = get_shipping_rates(cart_items, destination)

@@ -46,7 +46,7 @@
         <!-- Individual Product Card -->
         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
             <div class="card h-100 border-0">
-                <a href="{% url 'product_detail' product.id %}">
+                <a href="{% url 'product_detail' product.printful_id %}">
                     <img class="card-img-top img-fluid" src="{{ product.image_url }}" alt="{{ product.name }}" width="300" height="300">
                 </a>
                 <!-- Product details, pricing, and links -->
