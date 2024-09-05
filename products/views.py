@@ -58,6 +58,6 @@ def product_list(request):
 
     return render(request, 'products/product_list.html', context)
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+def product_detail(request, printful_id):
+    product = get_object_or_404(Product, printful_id=printful_id)
     return render(request, 'products/product_detail.html', {'product': product})
