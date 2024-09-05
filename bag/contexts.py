@@ -19,11 +19,19 @@ def get_shipping_rates(cart_items, destination):
         },
         'items': cart_items
     }
+
     response = requests.post(url, json=data, headers=headers)
+    
+    # Print the response for debugging
+    print(f"Request sent: {data}")
+    print(f"Response status code: {response.status_code}")
+    print(f"Response body: {response.text}")
+
     if response.status_code == 200:
         return response.json()['result']
     else:
         return None
+
 
 def bag_contents(request):
     bag_items = []
@@ -48,7 +56,8 @@ def bag_contents(request):
             'printful_id': product.printful_id,
     })
 
-    cart_items = [{'external_variant_id': item['printful_id'], 'quantity': item['quantity']} for item in bag_items]
+    cart_items = [{'external_variant_id': item['product'].variant_id, 'quantity': item['quantity']} for item in bag_items]
+
     shipping_rates = get_shipping_rates(cart_items, destination)
     
     if shipping_rates:
@@ -56,7 +65,8 @@ def bag_contents(request):
     else:
         delivery = 0  # Default to 0 if no rates are found
 
-    grand_total = delivery + total
+    grand_total = Decimal(delivery) + Decimal(total)
+
 
     context = {
         'bag_items': bag_items,
