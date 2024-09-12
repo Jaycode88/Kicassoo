@@ -32,7 +32,8 @@
                                     {% csrf_token %}
                                     <div class="input-group quantity-controls">
                                         <button class="btn btn-sm btn-outline-secondary decrement-qty" type="submit" name="decrement" value="{{ item.item_id }}">-</button>
-                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}">
+                                        <!-- Detect manual change in quantity input -->
+                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}" oninput="this.form.submit()">
                                         <button class="btn btn-sm btn-outline-secondary increment-qty" type="submit" name="increment" value="{{ item.item_id }}">+</button>
                                         <input type="hidden" name="item_id" value="{{ item.item_id }}">
                                     </div>
