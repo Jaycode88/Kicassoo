@@ -1,62 +1,126 @@
-.table img {
+/* Style for images in the bag table */
+.product-img {
     width: 140px;
     height: auto;
 }
 
-/* For smaller screens, stack table cells vertically */
+/* Quantity selector fix for screens between 768px and 576px */
 @media (max-width: 768px) {
-    .table-responsive {
-        overflow-x: auto;
+    .quantity-input-group {
+        max-width: 150px;
+        /* Increase the width for two-digit numbers */
+        margin: 0 auto;
     }
 
-    .table thead {
-        display: none;
-        /* Hide table headers */
+    .qty-input {
+        width: 60px;
+        /* Adjust width for two-digit numbers */
+        text-align: center;
     }
 
+    .increment-qty,
+    .decrement-qty {
+        width: 40px;
+        /* Slightly larger buttons */
+    }
+
+    /* Ensure the table doesn't allow overflow */
     .table td {
-        display: block;
-        width: 100%;
-        text-align: right;
-        position: relative;
-        padding-left: 50%;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .table td::before {
-        content: attr(data-label);
-        /* Add data-label for each cell */
-        position: absolute;
-        left: 0;
-        width: 50%;
-        padding-left: 15px;
-        font-weight: bold;
-        text-align: left;
-    }
-
-    .table img {
-        width: 100px;
-        height: auto;
-        margin: 10px 0;
-    }
-
-    /* Center the buttons */
-    .input-group-sm {
-        justify-content: center;
+        white-space: nowrap;
+        /* Prevent wrapping of table contents */
     }
 }
 
-/* Adjust product image size for very small screens */
 @media (max-width: 576px) {
-    .table img {
-        width: 80px;
-        height: auto;
+    .table td[data-label="Quantity"] {
+        white-space: normal;
+        /* Allow wrapping for better layout on smaller screens */
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    /* Fix for the quantity header */
+    .text-center[data-label="Quantity"] {
+        padding-right: 10px;
+    }
+}
+
+/* General styling to ensure title is centered */
+.bag-page-title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* For smaller screens below 768px */
+@media (max-width: 768px) {
+    .bag-page-title {
+        text-align: center;
+        font-size: 24px;
+        /* Reduce font size */
+        width: 100%;
+        /* Ensure it spans full width */
+        margin-top: 10px;
+        /* Adjust margin for smaller screens */
+    }
+}
+
+@media (max-width: 455px) {
+    .table td[data-label="Remove"] {
+        display: none;
+        /* Hide the original Remove button column */
+    }
+
+    /* Display the Remove button under the subtotal */
+    .remove-item-mobile {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+
+
+@media (max-width: 380px) {
+
+    /* Ensure table cells wrap and don't overflow */
+    .table td {
+        display: block;
+        text-align: left;
+        white-space: normal;
+    }
+
+    /* Move Subtotal and Remove button to a new line below product info */
+    .table td[data-label="Subtotal"],
+    .remove-item-mobile {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        text-align: right;
+    }
+
+    /* Align the Remove button with the subtotal */
+    .remove-item-mobile {
+        text-align: left;
+    }
+
+    /* Adjust button size */
+    .btn.custom-btn {
+        width: 100%;
+        /* Ensure buttons are full-width */
+    }
+}
+
+@media (max-width: 352px) {
+    .bag-page-title {
+        margin-top: 50px;
+        font-size: 20px;
+        /* Reduce font size */
     }
 }
 
 @media (max-width: 342px) {
-
     .bag-page-title {
-        margin-top: 30px !important;
+        margin-top: 30px;
     }
 }
