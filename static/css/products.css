@@ -25,9 +25,9 @@
 }
 
 /* extra margin to show title on smaler screens */
-@media (max-width: 332px) {
+@media (max-width: 342px) {
 
     .product-page-title {
-        padding-top: 30px;
+        margin-top: 30px !important;
     }
 }

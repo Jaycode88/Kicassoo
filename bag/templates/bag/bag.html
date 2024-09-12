@@ -2,67 +2,90 @@
 {% load static %}
 {% load bag_extras %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/bag.css' %}">
+{% endblock %}
+
 {% block title %}Shopping Bag{% endblock %}
 
+{% block page_header %}
+<h1 class="text-center bag-page-title">Shopping bag</h1>
+{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col">
-        {% if bag_items %}
-        <div class="table-responsive rounded">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Product</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in bag_items %}
+<div class="container flex-grow-1">
+    <div class="row">
+        <div class="col">
+            {% if bag_items %}
+            <div class="table-responsive rounded">
+                <table class="table table-borderless">
+                    <thead class="text-muted">
                         <tr>
-                            <td>
-                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid" style="width: 50px; height: auto;">
-                                {{ item.product.name }}
+                            <th scope="col">Product</th>
+                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col" class="text-center">Price</th>
+                            <th scope="col" class="text-center">Subtotal</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in bag_items %}
+                        <tr>
+                            <!-- Product Image and Name -->
+                            <td class="d-flex align-items-center" data-label="Product">
+                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid rounded" style="width: 140px; height: auto;">
+                                <div class="ml-3">
+                                    <p class="mb-0"><strong>{{ item.product.name }}</strong></p>
+                                </div>
                             </td>
-                            <td>
-                                <!-- Quantity Update Form -->
+                            <!-- Quantity Form -->
+                            <td class="text-center" data-label="Quantity">
                                 <form method="POST" action="{% url 'update_bag' %}">
                                     {% csrf_token %}
-                                    <div class="input-group quantity-controls">
-                                        <button class="btn btn-sm btn-outline-secondary decrement-qty" type="submit" name="decrement" value="{{ item.item_id }}">-</button>
-                                        <!-- Detect manual change in quantity input -->
-                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}" oninput="this.form.submit()">
-                                        <button class="btn btn-sm btn-outline-secondary increment-qty" type="submit" name="increment" value="{{ item.item_id }}">+</button>
+                                    <div class="input-group input-group-sm">
+                                        <button class="btn custom-btn decrement-qty" type="submit" name="decrement" value="{{ item.item_id }}">-</button>
+                                        <input class="form-control text-center" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}" oninput="this.form.submit()">
+                                        <button class="btn custom-btn increment-qty" type="submit" name="increment" value="{{ item.item_id }}">+</button>
                                         <input type="hidden" name="item_id" value="{{ item.item_id }}">
                                     </div>
                                 </form>
                             </td>
-                            <td>£{{ item.product.price }}</td>
-                            <td>£{{ item.quantity|multiply:item.product.price }}</td>
-                            <td>
-                                <!-- Remove Item Form -->
+                            <!-- Price -->
+                            <td class="text-center" data-label="Price">
+                                <p class="mb-0">£{{ item.product.price }}</p>
+                            </td>
+                            <!-- Subtotal -->
+                            <td class="text-center" data-label="Subtotal">
+                                <p class="mb-0">£{{ item.quantity|multiply:item.product.price }}</p>
+                            </td>
+                            <!-- Remove Button -->
+                            <td class="text-center" data-label="Remove">
                                 <form method="POST" action="{% url 'remove_from_bag' item.item_id %}">
                                     {% csrf_token %}
-                                    <button class="btn btn-sm btn-danger" type="submit">Remove</button>
+                                    <button class="btn btn-sm btn-danger rounded-0" type="submit">Remove</button>
                                 </form>
                             </td>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-4">
-            <h5>Subtotal: £{{ total }}</h5>
-            <h5>Delivery: £{{ delivery }}</h5>
-            <h5>Grand Total: £{{ grand_total }}</h5>
-            <a href="#" class="btn btn-primary">Proceed to Checkout</a>
-        </div>        
-        {% else %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-right">
+                <h5>Subtotal: £{{ total|floatformat:2 }}</h5>
+                <h5>Delivery: £{{ delivery|floatformat:2 }}</h5>
+                <h5>Grand Total: £{{ grand_total|floatformat:2 }}</h5>
+                <a href="{% url 'product_list' %}" class="btn custom-btn rounded-0 me-2">
+                    <i class="fas fa-chevron-left"></i> Continue Shopping
+                </a>
+                <a href="#" class="btn btn-green rounded-0 ms-2">Proceed to Checkout</a>
+            </div>
+            {% else %}
             <p class="lead mb-5">Your bag is empty.</p>
-            <a href="{% url 'product_list' %}" class="btn btn-secondary">Keep Shopping</a>
-        {% endif %}
+            <a href="{% url 'product_list' %}" class="btn custom-btn rounded-0 me-2">
+                <i class="fas fa-chevron-left"></i> Continue Shopping
+            </a>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

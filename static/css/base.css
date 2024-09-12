@@ -13,29 +13,25 @@ html,
 body {
     height: 100%;
     margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 body {
-    color: #000;
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
-    padding-top: 160px;
-
 }
 
-@media (max-width: 991px) {
-    body {
-        padding-top: 82px;
-        /* Adjust this value to match the height of your mobile header */
-    }
+.container-fluid {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-@media (max-width: 332px) {
-    body {
-        padding-top: 105px;
-        /* Adjust this value to match the height of your mobile header */
-    }
+#content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Reset margins and padding for the header */
@@ -43,10 +39,24 @@ header {
     margin: 0;
 }
 
-/* Ensure the header is reset properly */
-header.container-fluid {
-    padding: 0 !important;
-    margin: 0 !important;
+#page_header {
+    padding-top: 160px;
+    /* Apply padding here instead */
+}
+
+
+@media (max-width: 991px) {
+    #page_header {
+        padding-top: 82px;
+        /* For smaller screens, adjust header padding */
+    }
+}
+
+@media (max-width: 342px) {
+    #page_header {
+        padding-top: 105px;
+        /* For smaller screens, adjust header padding */
+    }
 }
 
 /* Slightly larger container on xl screens */
@@ -188,7 +198,28 @@ icon {
 /*---- Footer ----*/
 /* footer */
 footer {
+    margin-top: auto;
+    /* Footer stays at the bottom */
     padding: 10px;
+    /* Adjust padding if necessary */
+    text-align: center;
+    background-color: #fff;
+}
+
+footer {
+    margin-top: auto;
+    padding: 10px;
+    text-align: center;
+    background-color: #fff;
+}
+
+/* Fix the extra white space issue */
+footer.mt-auto {
+    margin-top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: relative;
 }
 
 .footer-header {
@@ -385,6 +416,19 @@ footer button {
     /* Smaller padding */
     font-size: 0.8rem !important;
     /* Smaller font size */
+}
+
+.btn-green {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.btn-green:hover {
+    background-color: #fff !important;
+    color: #28a745 !important;
+    border: #28a745 solid 1px !important;
+    font-weight: bold !important;
+    scale: 1.1 !important;
 }
 
 /* .shop-now-button {
