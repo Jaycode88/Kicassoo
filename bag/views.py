@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 
 def view_bag(request):
     """ A view that renders the bag contents page """
@@ -22,3 +23,35 @@ def add_to_bag(request, item_id):
     request.session['bag'] = bag
     print(request.session['bag'])  # For debugging purposes, this can be removed later
     return redirect(redirect_url)
+
+
+def update_bag(request):
+    """Update the quantity of a product in the shopping bag."""
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        quantity = int(request.POST.get('quantity', 1))
+        bag = request.session.get('bag', {})
+
+        if 'increment' in request.POST:
+            bag[item_id] = bag.get(item_id, 0) + 1
+        elif 'decrement' in request.POST and bag.get(item_id, 0) > 1:
+            bag[item_id] = bag.get(item_id) - 1
+        else:
+            bag[item_id] = quantity
+
+        request.session['bag'] = bag
+        return redirect('view_bag')
+    return JsonResponse({'status': 'fail'}, status=400)
+
+
+def remove_from_bag(request, item_id):
+    """Remove a product from the shopping bag."""
+    if request.method == 'POST':
+        bag = request.session.get('bag', {})
+
+        if item_id in bag:
+            del bag[item_id]
+
+        request.session['bag'] = bag
+        return redirect('view_bag')
+    return JsonResponse({'status': 'fail'}, status=400)
