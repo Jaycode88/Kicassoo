@@ -9,7 +9,7 @@
 {% block title %}Shopping Bag{% endblock %}
 
 {% block page_header %}
-<h1 class="text-center bag-page-title">Shopping bag</h1>
+<h1 class="text-center bag-page-title">Shopping Bag</h1>
 {% endblock %}
 
 {% block content %}
@@ -19,51 +19,52 @@
             {% if bag_items %}
             <div class="table-responsive rounded">
                 <table class="table table-borderless">
-                    <thead class="text-muted">
+                    <thead class="text-muted d-none d-md-table-header">
                         <tr>
                             <th scope="col">Product</th>
-                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col" class="text-center" data-label="Quantity">Quantity</th>
                             <th scope="col" class="text-center">Price</th>
                             <th scope="col" class="text-center">Subtotal</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
+                    
                     <tbody>
                         {% for item in bag_items %}
                         <tr>
-                            <!-- Product Image and Name -->
                             <td class="d-flex align-items-center" data-label="Product">
-                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid rounded" style="width: 140px; height: auto;">
-                                <div class="ml-3">
+                                <div class="d-flex flex-column">
+                                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid rounded product-img">
+                                    <p class="mb-0 text-center d-md-none"><strong>{{ item.product.name }}</strong></p>
+                                </div>
+                                <div class="ml-3 d-none d-md-block">
                                     <p class="mb-0"><strong>{{ item.product.name }}</strong></p>
                                 </div>
                             </td>
-                            <!-- Quantity Form -->
                             <td class="text-center" data-label="Quantity">
                                 <form method="POST" action="{% url 'update_bag' %}">
                                     {% csrf_token %}
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group input-group-sm quantity-input-group">
                                         <button class="btn custom-btn decrement-qty" type="submit" name="decrement" value="{{ item.item_id }}">-</button>
-                                        <input class="form-control text-center" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}" oninput="this.form.submit()">
+                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}" oninput="this.form.submit()">
                                         <button class="btn custom-btn increment-qty" type="submit" name="increment" value="{{ item.item_id }}">+</button>
                                         <input type="hidden" name="item_id" value="{{ item.item_id }}">
                                     </div>
                                 </form>
                             </td>
-                            <!-- Price -->
                             <td class="text-center" data-label="Price">
                                 <p class="mb-0">£{{ item.product.price }}</p>
                             </td>
-                            <!-- Subtotal -->
                             <td class="text-center" data-label="Subtotal">
                                 <p class="mb-0">£{{ item.quantity|multiply:item.product.price }}</p>
-                            </td>
-                            <!-- Remove Button -->
-                            <td class="text-center" data-label="Remove">
-                                <form method="POST" action="{% url 'remove_from_bag' item.item_id %}">
-                                    {% csrf_token %}
-                                    <button class="btn btn-sm btn-danger rounded-0" type="submit">Remove</button>
-                                </form>
+                                
+                                <!-- Add the mobile Remove button here -->
+                                <div class="remove-item-mobile">
+                                    <form method="POST" action="{% url 'remove_from_bag' item.item_id %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-sm btn-danger rounded-0" type="submit">Remove</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
