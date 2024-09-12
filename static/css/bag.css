@@ -1,0 +1,62 @@
+.table img {
+    width: 140px;
+    height: auto;
+}
+
+/* For smaller screens, stack table cells vertically */
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table thead {
+        display: none;
+        /* Hide table headers */
+    }
+
+    .table td {
+        display: block;
+        width: 100%;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        /* Add data-label for each cell */
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .table img {
+        width: 100px;
+        height: auto;
+        margin: 10px 0;
+    }
+
+    /* Center the buttons */
+    .input-group-sm {
+        justify-content: center;
+    }
+}
+
+/* Adjust product image size for very small screens */
+@media (max-width: 576px) {
+    .table img {
+        width: 80px;
+        height: auto;
+    }
+}
+
+@media (max-width: 342px) {
+
+    .bag-page-title {
+        margin-top: 30px !important;
+    }
+}

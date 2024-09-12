@@ -47,8 +47,8 @@
     <title>Kicassoo {% block extra_title %}{% endblock %}</title>
 </head>
 
-<body>
-    <div class="container-fluid d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100">
+    <div class="container-fluid flex-grow-1">
     <header class="fixed-top bg-white">
         <div id="top-nav" class="row bg-white pt-lg-2 d-none d-lg-flex">
             <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left" id="logo-container">
@@ -130,21 +130,23 @@
     <div class="message-container"></div>
     {% endif %}
 
-    {% block page_header %}
-    {% endblock %}
+    <div id="page_header">
+        {% block page_header %}
+        {% endblock %}
+    </div>
 
-    <main class="flex-grow-1">
+    <main id="content" class="flex-grow-1">
         {% block content %}
         {% endblock %}
     </main>
 
-    {% block postloadjs %}
-    {% endblock %}
 
     <footer class="bg-white text-black mt-auto">
     {% include 'includes/footer.html' %}
     </footer>
 
+    {% block postloadjs %}
+    {% endblock %}
 </body>
 
 </html>
