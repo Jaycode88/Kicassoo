@@ -4,53 +4,143 @@
 
 {% block title %}Shopping Bag{% endblock %}
 
-{% block page_header %}
-<div class="text-center shopping-Bag-title">
-    <h1 class="montaga">Shopping Bag</h1>
-</div>
-{% endblock %}
-
 {% block content %}
 <div class="row">
     <div class="col">
         {% if bag_items %}
-            <div class="table-responsive rounded">
-                <table class="table table-striped">
-                    <thead>
+        <div class="table-responsive rounded">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in bag_items %}
                         <tr>
-                            <th scope="col">Product</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Total</th>
+                            <td>
+                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid" style="width: 50px; height: auto;">
+                                {{ item.product.name }}
+                            </td>
+                            <td>
+                                <!-- Quantity Update Form -->
+                                <form method="POST" action="{% url 'update_bag' %}">
+                                    {% csrf_token %}
+                                    <div class="input-group quantity-controls">
+                                        <button class="btn btn-sm btn-outline-secondary decrement-qty" type="submit" name="decrement" value="{{ item.item_id }}">-</button>
+                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.item_id }}">
+                                        <button class="btn btn-sm btn-outline-secondary increment-qty" type="submit" name="increment" value="{{ item.item_id }}">+</button>
+                                        <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                                    </div>
+                                </form>
+                            </td>
+                            <td>£{{ item.product.price }}</td>
+                            <td>£{{ item.quantity|multiply:item.product.price }}</td>
+                            <td>
+                                <!-- Remove Item Form -->
+                                <form method="POST" action="{% url 'remove_from_bag' item.item_id %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-danger" type="submit">Remove</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in bag_items %}
-                            <tr>
-                                <td>{{ item.product.name }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>£{{ item.product.price }}</td>
-                                <td>£{{ item.quantity|multiply:item.product.price }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-4">
-                <h5>Subtotal: £{{ total }}</h5>
-                <h5>Delivery: £{{ delivery }}</h5>
-                <h5>Grand Total: £{{ grand_total }}</h5>
-                <a href="#" class="btn btn-primary">Proceed to Checkout</a>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            <h5>Subtotal: £{{ total }}</h5>
+            <h5>Delivery: £{{ delivery }}</h5>
+            <h5>Grand Total: £{{ grand_total }}</h5>
+            <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+        </div>        
         {% else %}
             <p class="lead mb-5">Your bag is empty.</p>
-            <a href="{% url 'product_list' %}" class="btn custom-btn rounded-0">
-                <span class="icon">
-                    <i class="fas fa-chevron-left"></i>
-                </span>
-                <span class="text-uppercase">Keep Shopping</span>
-            </a>
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">Keep Shopping</a>
         {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block postloadjs %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Handle increment
+        $('.increment-qty').click(function(event) {
+            event.preventDefault();
+            const itemId = $(this).data('item-id');
+            let qtyInput = $(`#qty_${itemId}`);
+            let currentQty = parseInt(qtyInput.val());
+            qtyInput.val(currentQty + 1);
+            updateQuantity(itemId, qtyInput.val());
+        });
+    
+        // Handle decrement
+        $('.decrement-qty').click(function(event) {
+            event.preventDefault();
+            const itemId = $(this).data('item-id');
+            let qtyInput = $(`#qty_${itemId}`);
+            let currentQty = parseInt(qtyInput.val());
+            if (currentQty > 1) {
+                qtyInput.val(currentQty - 1);
+                updateQuantity(itemId, qtyInput.val());
+            }
+        });
+    
+        // Handle manual quantity input
+        $('.qty-input').on('change', function() {
+            const itemId = $(this).attr('id').split('_')[1];
+            const newQty = $(this).val();
+            updateQuantity(itemId, newQty);
+        });
+    
+        // Handle remove item
+        $('.remove-item').click(function(event) {
+            event.preventDefault();
+            const itemId = $(this).data('item-id');
+            removeItem(itemId);
+        });
+    
+        // Update quantity via AJAX
+        function updateQuantity(itemId, newQty) {
+            $.ajax({
+                url: '/bag/update/',
+                method: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'item_id': itemId,
+                    'quantity': newQty
+                },
+                success: function(response) {
+                    location.reload();  // Reload the page to reflect changes
+                },
+                error: function(error) {
+                    console.log("Error updating quantity:", error);
+                }
+            });
+        }
+    
+        // Remove item via AJAX
+        function removeItem(itemId) {
+            $.ajax({
+                url: `/bag/remove/${itemId}/`,
+                method: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    location.reload();  // Reload the page to reflect changes
+                },
+                error: function(error) {
+                    console.log("Error removing item:", error);
+                }
+            });
+        }
+    });
+    
+</script>
 {% endblock %}
