@@ -29,7 +29,13 @@ def update_bag(request):
     """Update the quantity of a product in the shopping bag."""
     if request.method == 'POST':
         item_id = request.POST.get('item_id')
-        quantity = int(request.POST.get('quantity', 1))
+        try:
+            quantity = int(request.POST.get('quantity', 1))
+            if quantity < 1:
+                quantity = 1  # Prevent negative or zero quantities
+        except ValueError:
+            quantity = 1  # Default to 1 if invalid input is provided
+        
         bag = request.session.get('bag', {})
 
         if 'increment' in request.POST:
