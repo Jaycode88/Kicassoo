@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings
 from decimal import Decimal
+from django_countries.fields import CountryField
 
 from products.models import Product
 
@@ -15,6 +16,7 @@ class Order(models.Model):
     street_address1 = models.CharField(max_length=80, null=False, blank=False)
     street_address2 = models.CharField(max_length=80, null=True, blank=True)
     county = models.CharField(max_length=80, null=True, blank=True)
+    country = CountryField(default="GB")  # Default to United Kingdom
     date = models.DateTimeField(auto_now_add=True)
 
     # Cost-related fields
@@ -67,6 +69,14 @@ class OrderItem(models.Model):
     printful_variant_id = models.CharField(max_length=50, null=True, blank=True)
     estimated_shipping_date = models.DateField(null=True, blank=True)
 
+    @property
+    def lineitem_total(self):
+        """
+        Calculate the total for this line item.
+        """
+        if self.price is not None and self.quantity is not None:
+            return self.quantity * self.price
+        return Decimal('0.00')
 
     def save(self, *args, **kwargs):
         """
@@ -74,7 +84,6 @@ class OrderItem(models.Model):
         """
         super().save(*args, **kwargs)
         self.order.update_total()
-
 
     def __str__(self):
         return f'{self.quantity} x {self.product.name}'
