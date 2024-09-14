@@ -11,6 +11,8 @@
 
 - to import products from store use terminal command "python manage.py import_products"
 
+- in checkout to create Draft/test order set "confirm" to false in services.py line 48 and views.py line 30
+
 
 
 

@@ -12,8 +12,9 @@ class OrderForm(forms.ModelForm):
             'street_address1', 'street_address2','town_or_city',   
             'county', 'postcode', 'country',
         )
+        # Use the standard widget, no need for flags
         widgets = {
-            'country': CountrySelectWidget(attrs={'class': 'stripe-style-input'}),
+            'country': forms.Select(attrs={'class': 'stripe-style-input', 'disabled': True}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -46,5 +47,6 @@ class OrderForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'stripe-style-input'
             self.fields[field].label = False
 
-        # Set the country field default to "United Kingdom"
+        # Disable the country field and set it to 'GB'
+        self.fields['country'].disabled = True
         self.fields['country'].initial = 'GB'
