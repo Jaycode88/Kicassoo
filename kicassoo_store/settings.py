@@ -24,6 +24,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 PRINTFUL_API_KEY = os.environ.get('PRINTFUL_API_KEY', '')
 
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
+
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

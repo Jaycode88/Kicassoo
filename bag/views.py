@@ -7,8 +7,6 @@ def view_bag(request):
 
 
 def add_to_bag(request, item_id):
-    """ Add a quantity of the specified product to the shopping bag """
-    
     quantity = int(request.POST.get('quantity'))
     redirect_url = request.POST.get('redirect_url')
     bag = request.session.get('bag', {})
@@ -17,6 +15,7 @@ def add_to_bag(request, item_id):
     if item_id in bag:
         bag[item_id] += quantity  # Increment the existing quantity
     else:
+        # Store the printful_id in the session
         bag[item_id] = quantity  # Add a new item with the specified quantity
 
     # Update the session
