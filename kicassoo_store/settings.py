@@ -48,12 +48,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'home',
-    'products',
-    'bag',
-    'checkout',
     
-    # Other
-    'crispy_forms'
+    
+  
 ]
 
 MIDDLEWARE = [
@@ -86,7 +83,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth', # required by all auth
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'bag.contexts.bag_contents',
+                
             ],
             'builtins': [
                 'crispy_forms.templatetags.crispy_forms_tags',
