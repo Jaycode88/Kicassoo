@@ -75,10 +75,10 @@
     
         <!-- Place Order Button (shown only after delivery calculation) -->
         {% if delivery %}
-            <form method="POST" action="{% url 'checkout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success">Place Order</button>
-            </form>
+        <form method="POST" action="{% url 'place_order' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success" id="place-order-btn">Place Order</button>
+        </form>
         {% endif %}
     </div>
 </div>
