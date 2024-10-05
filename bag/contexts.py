@@ -14,11 +14,13 @@ def bag_contents(request):
 
     for printful_id, quantity in bag.items():
         product = get_object_or_404(Product, printful_id=printful_id)
-        total += quantity * product.price
+        subtotal = quantity * product.price  # Calculate subtotal here
+        total += subtotal  # Add subtotal to total
         product_count += quantity
         bag_items.append({
             'product': product,
             'quantity': quantity,
+            'subtotal': subtotal,  # Include subtotal in bag items
         })
 
     grand_total = total

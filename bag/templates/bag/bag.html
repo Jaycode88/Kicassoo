@@ -1,36 +1,88 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/bag.css' %}">
+<link rel="stylesheet" href="{% static 'css/bag.css' %}">
 {% endblock %}
 
-{% block title %}Your Bag{% endblock %}
+{% block title %}Shopping Bag{% endblock %}
 
 {% block page_header %}
 <h1 class="text-center bag-page-title">Shopping Bag</h1>
 {% endblock %}
 
 {% block content %}
-{% if bag_items %}
-  <ul>
-    {% for item in bag_items %}
-      <li>
-        {{ item.product.name }} - £{{ item.product.price }} ({{ item.quantity }})
-        <form method="POST" action="{% url 'adjust_bag' item.product.printful_id %}">
-          {% csrf_token %}
-          <input type="number" name="quantity" value="{{ item.quantity }}">
-          <button type="submit">Update</button>
-        </form>
-        <form method="POST" action="{% url 'remove_from_bag' item.product.printful_id %}">
-          {% csrf_token %}
-          <button type="submit">Remove</button>
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
-  <p>Total: £{{ grand_total }}</p>
-  <a href="{% url 'checkout' %}">Proceed to Checkout</a>
-{% else %}
-  <p>Your bag is empty.</p>
-{% endif %}
+<div class="container flex-grow-1">
+    <div class="row">
+        <div class="col">
+            {% if bag_items %}
+            <div class="table-responsive rounded">
+                <table class="table table-borderless">
+                    <thead class="text-muted d-none d-md-table-header">
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col" class="text-center" data-label="Quantity">Quantity</th>
+                            <th scope="col" class="text-center">Price</th>
+                            <th scope="col" class="text-center">Subtotal</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for item in bag_items %}
+                        <tr>
+                            <td class="d-flex align-items-center" data-label="Product">
+                                <div class="d-flex flex-column">
+                                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid rounded product-img">
+                                    <p class="mb-0 text-center d-md-none"><strong>{{ item.product.name }}</strong></p>
+                                </div>
+                                <div class="ml-3 d-none d-md-block">
+                                    <p class="mb-0"><strong>{{ item.product.name }}</strong></p>
+                                </div>
+                            </td>
+                            <td class="text-center" data-label="Quantity">
+                                <form method="POST" action="{% url 'adjust_bag' item.product.printful_id %}">
+                                    {% csrf_token %}
+                                    <div class="input-group input-group-sm quantity-input-group">
+                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.product.printful_id }}" oninput="this.form.submit()">
+                                    </div>
+                                </form>
+                            </td>
+                            <td class="text-center" data-label="Price">
+                                <p class="mb-0">£{{ item.product.price }}</p>
+                            </td>
+                            <td class="text-center" data-label="Subtotal">
+                                <p class="mb-0">£{{ item.subtotal|floatformat:2 }}</p>  <!-- Displaying the subtotal -->
+                                
+                                <!-- Add the mobile Remove button here -->
+                                <div class="remove-item-mobile">
+                                    <form method="POST" action="{% url 'remove_from_bag' item.product.printful_id %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-sm btn-danger rounded-0" type="submit">Remove</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-right">
+                <h5>Subtotal: £{{ total|floatformat:2 }}</h5>
+                <h5>Delivery: Calculated at checkout</h5>
+                
+                <a href="{% url 'product_list' %}" class="btn custom-btn rounded-0 me-2">
+                    <i class="fas fa-chevron-left"></i> Continue Shopping
+                </a>
+                <a href="{% url 'checkout' %}" class="btn btn-green rounded-0 ms-2">Proceed to Checkout</a>
+            </div>
+            {% else %}
+            <p class="lead mb-5">Your bag is empty.</p>
+            <a href="{% url 'product_list' %}" class="btn custom-btn rounded-0 me-2">
+                <i class="fas fa-chevron-left"></i> Continue Shopping
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

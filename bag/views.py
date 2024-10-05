@@ -43,6 +43,13 @@ def remove_from_bag(request, printful_id):
 
     bag = request.session.get('bag', {})
 
-    bag.pop(printful_id, None)
-    request.session['bag'] = bag
-    return HttpResponse(status=200)
+    # Convert printful_id to string, as session keys might be stored as strings
+    printful_id = str(printful_id)
+
+    if printful_id in bag:
+        bag.pop(printful_id)  # Remove item from the session bag
+
+    request.session['bag'] = bag  # Update the session
+    return redirect('view_bag')  # Redirect back to the bag page after removing
+
+
