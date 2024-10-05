@@ -1,4 +1,5 @@
 from django import forms
+from django_countries.fields import CountryField
 
 class DeliveryForm(forms.Form):
     full_name = forms.CharField(max_length=100, required=True, label="Full Name")
@@ -8,4 +9,4 @@ class DeliveryForm(forms.Form):
     address_line_2 = forms.CharField(max_length=255, required=False, label="Address Line 2")
     city = forms.CharField(max_length=100, required=True, label="City")
     postcode = forms.CharField(max_length=20, required=True, label="Postcode")
-    country = forms.CharField(max_length=50, required=True, label="Country")
+    country = CountryField(blank_label='(Select country)').formfield()  # Use CountryField to get country code
