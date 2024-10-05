@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load bag_extras %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
@@ -13,147 +12,75 @@
 {% endblock %}
 
 {% block content %}
-<div class="container flex-grow-1">
+<div class="container">
     <div class="row">
-        <!-- Order summary section -->
-        <div class="col-12 col-lg-6 order-lg-last mb-5">
-            <p class="text-muted">Order Summary ({{ product_count }})</p>
-            <div class="row">
-                <div class="col-7 offset-2">
-                    <p class="mb-1 mt-0 small text-muted">Item</p>
+        <!-- Checkout Form Section -->
+        <div class="col-lg-6">
+            <h4>Billing Details</h4>
+            <form method="POST" action="{% url 'checkout' %}">
+                {% csrf_token %}
+
+                <!-- Personal Information -->
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" name="full_name" id="full_name" class="form-control" required>
                 </div>
-                <div class="col-3 text-right">
-                    <p class="mb-1 mt-0 small text-muted">Subtotal</p>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" required>
                 </div>
-            </div>
-            {% for item in bag_items %}
-                <!-- Display each item in the bag -->
-                <div class="row">
-                    <div class="col-2 mb-1">
-                        <a href="{% url 'product_detail' item.product.id %}" aria-label="Go to {{ item.product.name }}">
-                            {% if item.product.image_url %}
-                                <!-- Display product image -->
-                                <img class="w-100" src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
-                            {% else %}
-                                <!-- Display a default image if no product image is available -->
-                                <img class="w-100" src="{{ MEDIA_URL }}noimage.png" alt="{{ item.product.name }}">
-                            {% endif %}
-                        </a>
-                    </div>
-                    <!-- Display product name and quantity -->
-                    <div class="col-7">
-                        <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                        <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
-                    </div>
-                    <!-- Calculate and display item subtotal -->
-                    <div class="col-3 text-right">
-                        <p class="my-0 small text-muted">£{{ item.product.price|floatformat:2 }}</p>
-                    </div>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" name="phone_number" id="phone_number" class="form-control" required>
                 </div>
-            {% endfor %}
-            <hr class="my-0">
-            <div class="row text-black text-right">
-                <div class="col-7 offset-2">
-                    <p class="my-0">Order Total:</p>
-                    <p class="my-0">Delivery:</p>
-                    <p class="my-0">Grand Total:</p>
+
+                <!-- Shipping Information -->
+                <h4>Shipping Address</h4>
+                <div class="form-group">
+                    <label for="address_line_1">Address Line 1</label>
+                    <input type="text" name="address_line_1" id="address_line_1" class="form-control" required>
                 </div>
-                <div class="col-3">
-                    <p class="my-0">£{{ total|floatformat:2 }}</p>
-                    <p class="my-0">£{{ delivery|floatformat:2 }}</p>
-                    <p class="my-0"><strong>£{{ grand_total|floatformat:2 }}</strong></p>
+                <div class="form-group">
+                    <label for="address_line_2">Address Line 2 (optional)</label>
+                    <input type="text" name="address_line_2" id="address_line_2" class="form-control">
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" name="city" id="city" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="postcode">Postcode</label>
+                    <input type="text" name="postcode" id="postcode" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" name="country" id="country" class="form-control" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-success">Place Order</button>
+            </form>
         </div>
 
-        <!-- Checkout form section -->
-        <div class="col-12 col-lg-6">
-            <p>Please fill out the form below to complete your order.</p>
-            <p class="text-muted">We currently only ship to The United Kingdom.</p>
-            <form method="POST" action="{% url 'checkout' %}" id="payment-form">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="form-check form-check-inline mb-2">
-                    {% if user.is_authenticated %}
-                        <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
-                        <input class="form-check-input" type="checkbox" id="id-save-info" name="save-info" checked>
-                    {% else %}
-                        <div class="form-check-label">
-                            <a href="{% url 'account_signup' %}">Create an account</a> or 
-                            <a href="{% url 'account_login' %}">login</a> to save this information
-                        </div>
-                    {% endif %}
+        <!-- Order Summary Section -->
+        <div class="col-lg-6">
+            <div class="order-summary border p-3 rounded">
+                <h4>Your Order</h4>
+                <ul class="list-group mb-3">
+                    {% for item in bag_items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.product.name }} x {{ item.quantity }}
+                            <span>{{ item.quantity|floatformat:2 }} x £{{ item.product.price|floatformat:2 }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="border-top pt-3">
+                    <p class="mb-1"><strong>Total: </strong>£{{ grand_total|floatformat:2 }}</p>
+                    <p class="mb-1"><strong>Delivery: </strong>£{{ delivery|floatformat:2 }}</p>
+                    <p class="mb-1"><strong>Grand Total: </strong>£{{ grand_total_with_shipping|floatformat:2 }}</p>
                 </div>
-                <div class="payment mt-2 mb-4">
-                    <p>Payment Information:</p>
-                    <div id="card-payment"></div>
-                    <div id="card-errors" role="alert" class="text-danger"></div>
-                </div>
-                <div class="submit-button">
-                    <a href="{% url 'view_bag' %}" class="btn custom-btn rounded-0 me-2">
-                        <i class="fas fa-chevron-left"></i> Adjust Bag
-                    </a>
-                    <button type="submit" id="submit-button" class="btn btn-green rounded-0">Complete Order</button>
-                    <p class="small text-danger">
-                        <span class="icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </span>
-                        Your card will be charged <strong>£{{ grand_total|floatformat:2 }}</strong>
-                    </p>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block postloadjs %}
-<script>
-    const stripe = Stripe("{{ stripe_public_key }}");
-    const elements = stripe.elements();
-    const card = elements.create('card');
-    card.mount('#card-payment');
-
-    // Handle real-time validation errors from the card element.
-    card.on('change', function (event) {
-        const displayError = document.getElementById('card-errors');
-        if (event.error) {
-            displayError.textContent = event.error.message;
-        } else {
-            displayError.textContent = '';
-        }
-    });
-
-    // Handle form submission.
-    const form = document.getElementById('payment-form');
-    form.addEventListener('submit', async function (event) {
-        event.preventDefault();
-
-        const { error, paymentIntent } = await stripe.confirmCardPayment(
-            "{{ client_secret }}", {
-                payment_method: {
-                    card: card,
-                    billing_details: {
-                        name: form.full_name.value,
-                        email: form.email.value,
-                        address: {
-                            line1: form.street_address1.value,
-                            city: form.town_or_city.value,
-                            postal_code: form.postcode.value,
-                        },
-                    },
-                }
-            });
-
-        if (error) {
-            // Display error message on the frontend
-            const errorElement = document.getElementById('card-errors');
-            errorElement.textContent = error.message;
-        } else {
-            // Payment succeeded, submit the form.
-            form.submit();
-        }
-    });
-</script>
-
 {% endblock %}

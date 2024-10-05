@@ -1,83 +1,36 @@
-import stripe
-from django.shortcuts import render, redirect
-from .models import OrderItem
-from .forms import OrderForm
-from products.models import Product
-from .services import prepare_printful_order_data
-from django.conf import settings
-from decimal import Decimal
-from products.printful_service import PrintfulAPI
-from decimal import Decimal
-
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
+from django.shortcuts import render, redirect, reverse
+from django.contrib import messages
+from bag.contexts import bag_contents
 
 def checkout(request):
+    """ Checkout page that handles form submission and displays the bag items """
+
+    # Handle form submission (POST request)
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.save()
+        # Retrieve the data from the form
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        address_line_1 = request.POST.get('address_line_1')
+        address_line_2 = request.POST.get('address_line_2')
+        city = request.POST.get('city')
+        postcode = request.POST.get('postcode')
+        country = request.POST.get('country')
 
-            # Calculate total and prepare order items
-            total_cost = Decimal(0)
-            cart_items = []
-            for item_id, quantity in request.session.get('bag', {}).items():
-                try:
-                    product = Product.objects.get(printful_id=item_id)
-                    total_cost += product.price * quantity
-                    OrderItem.objects.create(
-                        order=order,
-                        product=product,
-                        quantity=quantity,
-                        price=product.price,
-                        printful_product_id=product.printful_id,
-                    )
-                    cart_items.append({
-                        'external_variant_id': product.variant_id,
-                        'quantity': quantity
-                    })
-                except Product.DoesNotExist:
-                    return redirect('view_bag')
+        # For now, you can just print these details to the console to check they're being collected
+        print(f"Order Details: {full_name}, {email}, {phone_number}, {address_line_1}, {city}, {postcode}, {country}")
+        
+        # Redirect to a success page (to be built later)
+        return redirect(reverse('checkout_success'))  # We'll create this page next
 
-            # Fetch shipping rates based on user's address
-            printful_client = PrintfulAPI()
-            destination = {
-                'country_code': order.country.code,  # Use the user's selected country
-                'city': order.town_or_city,
-                'address1': order.street_address1,
-                'postcode': order.postcode,
-            }
+    # Handle GET request (display form and order details)
+    bag_data = bag_contents(request)  # Get the bag details from the context processor
 
-            shipping_rates = printful_client.get_shipping_rates(cart_items, destination)
-            if shipping_rates:
-                shipping_cost = min(rate['rate'] for rate in shipping_rates)
-            else:
-                shipping_cost = 0  # Default to 0 if no rates are found
+    context = {
+        'bag_items': bag_data['bag_items'],
+        'grand_total': bag_data['grand_total'],
+        'delivery': 0,  # This will be calculated later
+        'grand_total_with_shipping': bag_data['grand_total'],  # Will include delivery later
+    }
 
-            # Add shipping to total cost
-            grand_total = total_cost + Decimal(shipping_cost)
-
-            # Create Stripe PaymentIntent
-            try:
-                intent = stripe.PaymentIntent.create(
-                    amount=int(grand_total * 100),  # Amount in pence
-                    currency='gbp',
-                )
-            except stripe.error.StripeError as e:
-                print(f"Error creating Stripe PaymentIntent: {e}")
-                return redirect('checkout')
-
-            return render(request, 'checkout/checkout.html', {
-                'form': form,
-                'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
-                'client_secret': intent.client_secret,
-                'grand_total': grand_total,  # For display in the template
-                'shipping_cost': shipping_cost,
-            })
-    else:
-        form = OrderForm()
-        return render(request, 'checkout/checkout.html', {
-            'form': form,
-            'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
-        })
+    return render(request, 'checkout/checkout.html', context)
