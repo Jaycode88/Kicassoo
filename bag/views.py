@@ -7,20 +7,32 @@ def view_bag(request):
     return render(request, 'bag/bag.html')
 
 def add_to_bag(request, printful_id):
-    """ Add a quantity of a specific product to the shopping bag """
-    product = get_object_or_404(Product, printful_id=printful_id)
-    quantity = int(request.POST.get('quantity'))
+    """Add a quantity of the specified product to the shopping bag"""
+    quantity = int(request.POST.get('quantity', 1))
+    redirect_url = request.POST.get('redirect_url')
 
+    # Ensure printful_id is always treated as a string in the session
+    printful_id = str(printful_id)
+
+    # Retrieve the current bag from session or initialize a new one
     bag = request.session.get('bag', {})
+    print(f"Current Bag Before Update: {bag}")
 
+    # Check if product is already in the bag and increment the quantity
     if printful_id in bag:
         bag[printful_id] += quantity
     else:
         bag[printful_id] = quantity
 
+    print(f"Updated Bag: {bag}")
+
+    # Save the updated bag to the session
     request.session['bag'] = bag
-    messages.success(request, f'Added {product.name} to your bag')
-    return redirect(reverse('product_list'))
+    request.session.modified = True  # Ensures session is saved even if nothing else changes
+
+    return redirect(redirect_url)
+
+
 
 def adjust_bag(request, printful_id):
     """ Adjust the quantity of the specified product to the specified amount """
