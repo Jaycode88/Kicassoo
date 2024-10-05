@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-
+            
                     <div class="col-12">
                         <a href="{% url 'product_list' %}" class="btn custom-btn rounded-0 mt-5 me-2">
                             <span class="icon">
@@ -57,9 +57,10 @@
                         </a>
                         <input type="submit" class="btn btn-green rounded-0 mt-5 ms-2" value="Add to Bag">
                     </div>
+                    <!-- Hidden field to retain the current page after adding the item -->
                     <input type="hidden" name="redirect_url" value="{{ request.path }}">
                 </div>
-            </form>
+            </form>            
         </div>
     </div>
 </div>
