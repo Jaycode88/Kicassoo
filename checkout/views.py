@@ -5,11 +5,13 @@ from .forms import DeliveryForm
 import requests
 from bag.contexts import bag_contents
 import decimal
+import stripe
 
 import logging
 
 logger = logging.getLogger(__name__)
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def checkout(request):
     """ Checkout page that handles form submission and displays the bag items """
@@ -118,3 +120,38 @@ def calculate_delivery(request):
             return render(request, 'checkout/checkout.html', {'form': form})
 
     return redirect(reverse('checkout'))
+
+
+def place_order(request):
+    """Handles order submission and redirects to payment page with order summary"""
+    
+    if request.method == 'POST':
+        # Example shipping and grand total data
+        shipping_cost = 3.50  # Example value (real one from Printful)
+        grand_total = 12.00  # Example total amount (grabbed from session or order)
+
+        # Calculate grand total with shipping
+        grand_total_with_shipping = grand_total + shipping_cost
+
+        # Create Stripe PaymentIntent
+        payment_intent = stripe.PaymentIntent.create(
+            amount=int(grand_total_with_shipping * 100),  # Convert GBP to pence
+            currency='gbp',
+            payment_method_types=['card'],
+        )
+
+        # Pass the values to the template
+        return render(request, 'checkout/payment_page.html', {
+            'client_secret': payment_intent.client_secret,
+            'grand_total': grand_total,
+            'shipping_cost': shipping_cost,
+            'grand_total_with_shipping': grand_total_with_shipping,
+            'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+        })
+
+    return redirect('checkout')
+
+
+def order_success(request):
+    """Order success page after payment is completed"""
+    return render(request, 'checkout/order_success.html')
