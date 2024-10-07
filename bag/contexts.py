@@ -6,7 +6,7 @@ def bag_contents(request):
     """ Retrieve the bag and calculate totals """
     bag = request.session.get('bag', {})
     bag_items = []
-    total = Decimal(0)
+    total = Decimal(0)  # Total cost of items
     
     for product_id, quantity in bag.items():
         product = Product.objects.get(printful_id=product_id)
@@ -18,9 +18,13 @@ def bag_contents(request):
             'subtotal': subtotal,  # Pass subtotal to the template
         })
 
+    # The grand total is just the sum of item prices (no shipping yet)
+    grand_total = total
+
     context = {
         'bag_items': bag_items,
-        'total': total,
+        'total': total,  # Total without shipping
+        'grand_total': grand_total,  # Grand total will be used later for adding shipping
     }
     
     return context
