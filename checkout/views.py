@@ -6,7 +6,9 @@ import requests
 from bag.contexts import bag_contents
 import decimal
 import stripe
-
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from products.printful_service import PrintfulAPI 
 import logging
 
 logger = logging.getLogger(__name__)
@@ -19,7 +21,6 @@ def checkout(request):
     form = DeliveryForm()  # Initialize the form
 
     if request.method == 'POST':
-        # Retrieve the data from the form
         form = DeliveryForm(request.POST)
         if form.is_valid():
             full_name = form.cleaned_data['full_name']
@@ -31,20 +32,19 @@ def checkout(request):
             postcode = form.cleaned_data['postcode']
             country = form.cleaned_data['country']
 
-            # Print the details to the console to check they're being collected
             print(f"Order Details: {full_name}, {email}, {phone_number}, {address_line_1}, {city}, {postcode}, {country}")
 
-            # Redirect to a success page (to be built later)
             return redirect(reverse('checkout_success'))
 
+    # Get bag data from context processor
     bag_data = bag_contents(request)
 
     context = {
         'form': form,  # Pass the form to the template
-        'bag_items': bag_data['bag_items'],
-        'grand_total': bag_data['grand_total'],
-        'delivery': 0,
-        'grand_total_with_shipping': bag_data['grand_total'],
+        'bag_items': bag_data['bag_items'],  # Items in the bag
+        'grand_total': bag_data['grand_total'],  # Grand total without shipping (only products)
+        'delivery': 0,  # Placeholder for delivery
+        'grand_total_with_shipping': bag_data['grand_total'],  # No shipping added yet
     }
 
     return render(request, 'checkout/checkout.html', context)
@@ -154,4 +154,42 @@ def place_order(request):
 
 def order_success(request):
     """Order success page after payment is completed"""
+     # Clear the bag after payment success
+    request.session['bag'] = {}  # Clear the bag
+    request.session.modified = True  # Mark the session as modified to trigger a save
     return render(request, 'checkout/order_success.html')
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    """Handle Stripe webhooks"""
+
+    # Step 2: Retrieve the webhook payload sent by Stripe
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+
+    # Step 3: Create a Stripe Webhook secret to verify authenticity
+    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+
+    try:
+        # Step 4: Verify the payload's signature
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, webhook_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Step 5: Handle the event (e.g. payment succeeded)
+    if event['type'] == 'payment_intent.succeeded':
+        # Get the payment details from Stripe
+        payment_intent = event['data']['object']
+        # You can add logic here to process the order (next steps)
+        print("Payment succeeded:", payment_intent['id'])
+
+        
+
+    return JsonResponse({'status': 'success'})

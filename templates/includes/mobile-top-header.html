@@ -26,32 +26,7 @@
             </form>
         </div>
     </li>
-    <!-- Mobile User Account: Dropdown for user account options on mobile devices -->
-    <li class="list-inline-item dropdown">
-        <a class="nav-link d-block d-lg-none" href="#" id="user-options-mobile" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <div class="text-center">
-                <!-- Icon for user account -->
-                <div><i class="fas fa-user fa-lg"></i></div>
-                <p class="my-0">My Account</p>
-            </div>
-        </a>
-        <!-- Dropdown for account options -->
-        <div class="dropdown-menu border-0" aria-labelledby="user-options-mobile">
-            {% if request.user.is_authenticated %}
-            {% if request.user.is_superuser %}
-            <!-- Superuser specific options -->
-            <a href="" class="dropdown-item">Product Management</a>
-            {% endif %}
-            <!-- Options for authenticated users -->
-            <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-            {% else %}
-            <!-- Options for guests (non-authenticated users) -->
-            <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
-            <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
-            {% endif %}
-        </div>
-    </li>
+    
     <!-- Mobile Shopping Bag: Link to view the shopping bag on mobile devices -->
     <li class="list-inline-item">
         <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link d-block d-lg-none"

@@ -7,4 +7,5 @@ urlpatterns = [
     path('calculate-delivery/', views.calculate_delivery, name='calculate_delivery'),  # The view to calculate delivery
     path('place-order/', place_order, name='place_order'),
     path('order-success/', order_success, name='order_success'),
-    ]
+    path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
+]
