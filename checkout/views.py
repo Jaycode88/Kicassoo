@@ -104,6 +104,7 @@ def calculate_delivery(request):
             # Add calculated shipping and grand total to context
             grand_total_with_shipping = bag_data['grand_total'] + shipping_cost  # Both are now Decimal
             print(f"Grand Total With Shipping: {grand_total_with_shipping}")
+            
 
             context = {
                 'form': form,
@@ -113,6 +114,7 @@ def calculate_delivery(request):
                 'grand_total_with_shipping': grand_total_with_shipping,  # Pass this as well
             }
 
+            messages.success(request, "Test success message!")
             return render(request, 'checkout/checkout.html', context)
 
         else:
@@ -183,13 +185,24 @@ def stripe_webhook(request):
         # Invalid signature
         return HttpResponse(status=400)
 
-    # Step 5: Handle the event (e.g. payment succeeded)
+    # Handle successful payments
     if event['type'] == 'payment_intent.succeeded':
-        # Get the payment details from Stripe
         payment_intent = event['data']['object']
-        # You can add logic here to process the order (next steps)
-        print("Payment succeeded:", payment_intent['id'])
+        # Clear the bag when payment is successful
+        request.session['bag'] = {}
+        print(f"Payment succeeded: {payment_intent['id']}")
 
+    # Handle failed payments
+    if event['type'] == 'payment_intent.payment_failed':
+        payment_intent = event['data']['object']
+        error_message = payment_intent.get('last_payment_error', {}).get('message', 'Unknown error')
+        print(f"Payment failed: {error_message}")
+        # Redirect user to the Payment Failed page
+        return redirect('payment_failed')
         
 
     return JsonResponse({'status': 'success'})
+
+def payment_failed(request):
+    """Renders the Payment Failed page after a failed payment"""
+    return render(request, 'checkout/payment_failed.html')
