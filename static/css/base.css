@@ -8,6 +8,15 @@
     border: none;
 }
 
+/* error messages */
+.messages {
+    z-index: 9999;
+    position: fixed;
+    top: 50px;
+    left: 20px;
+    width: 300px;
+}
+
 /* Ensure the entire document uses full height */
 html,
 body {

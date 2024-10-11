@@ -38,13 +38,15 @@
                     }
                 }).then(function (result) {
                     if (result.error) {
-                        alert("Payment failed: " + result.error.message);
-                    } else {
+                        // Show error message to your customers
+                        alert(result.error.message);  // Display the error
+                      } else {
                         if (result.paymentIntent.status === 'succeeded') {
-                            window.location.href = "{% url 'order_success' %}";
+                          // Payment successful, redirect to the success page
+                          window.location.href = "/checkout/order-success/";
                         }
-                    }
-                });
+                      }
+                    });
             });
         });
     </script>
