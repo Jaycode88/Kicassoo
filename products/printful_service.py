@@ -1,6 +1,8 @@
 import requests
 from django.conf import settings
+import logging
 
+logger = logging.getLogger(__name__)
 
 class PrintfulAPI:
     def __init__(self):
@@ -15,11 +17,15 @@ class PrintfulAPI:
             'Content-Type': 'application/json',
         }
 
+
     def get_store_products(self):
         """Get all products from Printful store"""
         response = requests.get(f'{self.base_url}/store/products', headers=self.get_headers())
         if response.status_code == 200:
-            return response.json().get('result', [])
+            products = response.json().get('result', [])
+            logger.info("Fetched Printful products: %s", products)  # Log products data for debugging
+            return products
+        logger.error("Failed to fetch products. Status code: %s", response.status_code)
         return []
 
     def get_product_details(self, product_id):
@@ -52,19 +58,31 @@ class PrintfulAPI:
             return None
 
     def create_order(self, order_data, confirm=False):
-        print("Creating draft order with Printful...")
-        print("Order Data:", order_data)  # Log order data for debugging
-        url = f'{self.base_url}/orders'
+        """Send order to Printful with improved debugging and address verification"""
+        logger.info("Creating draft order with Printful...")
+
         order_data['confirm'] = confirm
 
-        for item in order_data.get('items', []):
-            item['sync_variant_id'] = item.pop('variant_id', None)
+        # Log address1 specifically for troubleshooting
+        address1 = order_data['recipient'].get('address1') or order_data['recipient'].get('address_line_1', '')
+        if not address1:
+            logger.error("Critical: Missing address1 in recipient data. Order data: %s", order_data)
+            raise ValueError("address1 is required for Printful orders and cannot be empty.")
+        
+        # Ensure address1 is explicitly set in recipient data
+        order_data['recipient']['address1'] = address1
+        logger.info("Recipient data with confirmed address1 field: %s", order_data['recipient'])
 
         try:
-            response = requests.post(url, json=order_data, headers=self.get_headers())
-            response.raise_for_status()
-            print("Order created successfully:", response.json())
+            response = requests.post(f"{self.base_url}/orders", json=order_data, headers=self.get_headers())
+            response.raise_for_status()  # Raises HTTPError if the status is 4xx/5xx
+            logger.info("Order successfully created with response: %s", response.json())
             return response.json()
+        except requests.exceptions.HTTPError as e:
+            # Detailed error logging for HTTP errors from Printful
+            logger.error("HTTP Error from Printful. Status Code: %s, Response: %s", response.status_code, response.json())
+            return None
         except requests.exceptions.RequestException as e:
-            print(f"Error creating order: {e}")
+            # Logs other request-related errors
+            logger.error("Request error when creating order with Printful: %s", e)
             return None
