@@ -1,16 +1,16 @@
 from django.conf import settings
 
-PRINTFUL_API_URL = 'https://api.printful.com/orders'
+PRINTFUL_API_URL = 'https://api.printful.com'  # Use base URL only
 
 def prepare_printful_order_data(order):
     items = []
     for item in order.items.all():
         items.append({
-            'sync_variant_id': item.printful_variant_id,
+            'sync_variant_id': item.printful_variant_id,  # Ensure sync_variant_id is used here
             'quantity': item.quantity,
-            'retail_price': str(item.price),
         })
 
+    # Assemble the recipient and item data
     return {
         'recipient': {
             'name': order.full_name,
@@ -26,4 +26,3 @@ def prepare_printful_order_data(order):
         'items': items,
         'shipping': 'STANDARD',
     }
-

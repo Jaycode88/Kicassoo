@@ -52,13 +52,18 @@ class PrintfulAPI:
             return None
 
     def create_order(self, order_data, confirm=False):
-        """Create an order in Printful. Set confirm to True for live orders"""
+        print("Creating draft order with Printful...")
+        print("Order Data:", order_data)  # Log order data for debugging
         url = f'{self.base_url}/orders'
         order_data['confirm'] = confirm
+
+        for item in order_data.get('items', []):
+            item['sync_variant_id'] = item.pop('variant_id', None)
 
         try:
             response = requests.post(url, json=order_data, headers=self.get_headers())
             response.raise_for_status()
+            print("Order created successfully:", response.json())
             return response.json()
         except requests.exceptions.RequestException as e:
             print(f"Error creating order: {e}")

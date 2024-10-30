@@ -23,6 +23,7 @@ class Order(models.Model):
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    stripe_payment_intent_id = models.CharField(max_length=50, null=True, blank=True)
 
     # Printful-specific fields
     printful_order_id = models.CharField(max_length=50, null=True, blank=True)  # Store Printful order ID

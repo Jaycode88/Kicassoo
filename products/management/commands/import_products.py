@@ -11,37 +11,33 @@ class Command(BaseCommand):
 
         for item in products:
             try:
-                print(f"Processing item: {item}")  # Debugging statement
-
-                # Get product details (with variants)
+                # Get product details, including variants
                 product_details = api.get_product_details(item['id'])
                 if not product_details:
-                    print(f"No details found for item: {item}")  # Debugging statement
                     continue
 
-                # Get the first variant and its details
+                # Loop through each variant to store `sync_variant_id`
                 variants = product_details.get('sync_variants', [])
-                if not variants:
-                    print(f"No valid variants found for item: {item}")  # Debugging statement
-                    continue
+                for variant in variants:
+                    sync_variant_id = variant['id']  # This is `sync_variant_id` from Printful
+                    price = variant['retail_price']
+                    variant_id = variant['variant_id']  # Specific variant identifier
 
-                first_variant = variants[0]
-                price = first_variant['retail_price']
-                variant_id = first_variant['variant_id']  # Extract the variant_id
+                    # Update or create each variant in your Product model
+                    product, created = Product.objects.update_or_create(
+                        printful_id=item['id'],
+                        variant_id=variant_id,  # Ensure `variant_id` is unique per variant
+                        defaults={
+                            'name': item['name'],
+                            'image_url': item['thumbnail_url'],
+                            'price': price,
+                        }
+                    )
+                    # Optionally, save `sync_variant_id` if not yet stored
+                    product.sync_variant_id = sync_variant_id
+                    product.save()
 
-                # Update or create product with correct data
-                product, created = Product.objects.update_or_create(
-                    printful_id=item['id'],  # Save the product's printful_id
-                    defaults={
-                        'name': item['name'],
-                        'image_url': item['thumbnail_url'],
-                        'price': price,
-                        'variant_id': variant_id,  # Ensure variant_id is saved
-                    }
-                )
-                print(f"Product {'created' if created else 'updated'}: {product.name}")
-            
             except Exception as e:
-                print(f"Error processing item {item}: {e}")  # Error handling and debugging
+                print(f"Error processing item {item}: {e}")
 
         self.stdout.write(self.style.SUCCESS('Successfully imported products from Printful'))
