@@ -22,78 +22,43 @@ logger = logging.getLogger(__name__)
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+from django.shortcuts import render, redirect, reverse
+from django.conf import settings
+from django.contrib import messages
+from .forms import DeliveryForm
+from bag.contexts import bag_contents
+import requests
+from decimal import Decimal
+import stripe
+import json
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 def checkout(request):
-    """Main checkout page that calculates delivery and optionally shows payment form."""
-    form = DeliveryForm()
+    """Unified view to display checkout form and calculate delivery on user request."""
     bag_data = bag_contents(request)
+    form = DeliveryForm(initial=request.session.get('order_details', {}))
+    delivery_cost = None
+    grand_total_with_shipping = None
 
-    # Retrieve delivery cost and grand total from the session if previously calculated
-    delivery_cost = request.session.get('delivery', 0)
-    grand_total_with_shipping = request.session.get('grand_total_with_shipping', bag_data['grand_total'] + Decimal(delivery_cost))
-
-    # Ensure `address_line_1` is mapped to `address1`
-    order_details = request.session.get('order_details', {})
-    if 'address_line_1' in order_details:
-        order_details['address1'] = order_details.pop('address_line_1')
-    
-    print("Order details retrieved in checkout view:", order_details)  # For debugging
-    if not order_details:
-        # Handle missing session data if necessary (e.g., redirect to an error page or recalculate)
-        messages.error(request, "Please fill in your details to calculate delivery.")
-        return redirect(reverse('calculate_delivery'))
-
-    # If a POST request is made, we update the form, but only recalculate delivery if necessary
     if request.method == 'POST':
-        form = DeliveryForm(request.POST)
-        if form.is_valid():
-            # Save the updated form data to session and proceed as before
-            request.session['order_details'] = form.cleaned_data
-            messages.success(request, "Delivery information updated.")
-        else:
-            messages.error(request, "Please correct the errors below.")
-
-    # Context for rendering the checkout page
-    context = {
-        'form': form,
-        'bag_items': bag_data['bag_items'],
-        'grand_total': bag_data['grand_total'],
-        'delivery': delivery_cost,
-        'grand_total_with_shipping': grand_total_with_shipping,
-        'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
-        'order_details': order_details,
-    }
-    return render(request, 'checkout/checkout.html', context)
-
-
-
-def calculate_delivery(request):
-    """Calculate delivery cost using the Printful API and save user details to the session."""
-    
-    if request.method == 'POST':
+        # If the user submits the form, attempt to calculate delivery
         form = DeliveryForm(request.POST)
         
         if form.is_valid():
             form_data = form.cleaned_data
-            print("Form data in calculate_delivery:", form_data)
 
-            # Store user's details in the session, ensure address1 is set properly
-            request.session['order_details'] = {
-                'full_name': form_data['full_name'],
-                'email': form_data['email'],
-                'phone_number': form_data['phone_number'],
-                'address1': form_data['address_line_1'],  # Use address1 as the field name
-                'address2': form_data.get('address_line_2', ''),
-                'city': form_data['city'],
-                'postcode': form_data['postcode'],
-                'country': form_data['country'],
-            }
-            print("Order details saved to session in calculate_delivery:", request.session['order_details'])  # Debugging
+            # Rename `address_line_1` to `address1` for consistency
+            form_data['address1'] = form_data.pop('address_line_1', None)
 
-            # Prepare data for shipping rates calculation
-            bag_data = bag_contents(request)
+            # Save the modified form data to the session
+            request.session['order_details'] = form_data
+            print("Order details saved in session:", form_data)  # Debugging
+
+            # Prepare shipping data for Printful
             shipping_data = {
                 "recipient": {
-                    "address1": form_data['address_line_1'],
+                    "address1": form_data['address1'],
                     "city": form_data['city'],
                     "country_code": form_data['country'],
                     "zip": form_data['postcode'],
@@ -104,6 +69,7 @@ def calculate_delivery(request):
                 ]
             }
 
+            # Calculate delivery cost using the Printful API
             try:
                 response = requests.post(
                     f"{settings.PRINTFUL_API_URL}/shipping/rates",
@@ -113,41 +79,33 @@ def calculate_delivery(request):
                 response_data = response.json()
 
                 if response.status_code == 200:
-                    shipping_cost = Decimal(response_data['result'][0]['rate'])
-                    request.session['delivery'] = float(shipping_cost)
+                    delivery_cost = Decimal(response_data['result'][0]['rate'])
+                    grand_total_with_shipping = bag_data['grand_total'] + delivery_cost
+                    request.session['delivery'] = float(delivery_cost)
+                    request.session['grand_total_with_shipping'] = float(grand_total_with_shipping)
+                    messages.success(request, "Delivery cost calculated successfully.")
                 else:
                     messages.error(request, f"Could not calculate delivery: {response_data['error']['message']}")
-                    shipping_cost = Decimal('0.00')
+                    delivery_cost = Decimal('0.00')
             except Exception as e:
                 messages.error(request, f"Error calculating delivery: {str(e)}")
-                shipping_cost = Decimal('0.00')
+                delivery_cost = Decimal('0.00')
 
-            # Update grand total and save in session
-            grand_total_with_shipping = bag_data['grand_total'] + shipping_cost
-            request.session['grand_total_with_shipping'] = float(grand_total_with_shipping)
+        else:
+            messages.error(request, "Please correct the form errors and try again.")
 
-            # Add delivery cost and items to session details
-            request.session['order_details']['delivery_cost'] = float(shipping_cost)
-            request.session['order_details']['items'] = [
-                {'printful_id': item['product'].variant_id, 'quantity': item['quantity']}
-                for item in bag_data['bag_items']
-            ]
+    # Context for rendering the checkout page
+    context = {
+        'form': form,
+        'bag_items': bag_data['bag_items'],
+        'grand_total': bag_data['grand_total'],
+        'delivery': delivery_cost if delivery_cost is not None else request.session.get('delivery'),  
+        'grand_total_with_shipping': grand_total_with_shipping if grand_total_with_shipping is not None else request.session.get('grand_total_with_shipping'),
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+        'order_details': request.session.get('order_details', {})
+    }
 
-            # Debug the final session data
-            print("Final order details in session after delivery calculation:", request.session['order_details'])
-
-            context = {
-                'form': form,
-                'bag_items': bag_data['bag_items'],
-                'grand_total': bag_data['grand_total'],
-                'delivery': shipping_cost,
-                'grand_total_with_shipping': grand_total_with_shipping,
-            }
-
-            return render(request, 'checkout/checkout.html', context)
-
-    return redirect(reverse('checkout'))
-
+    return render(request, 'checkout/checkout.html', context)
 
 
 def place_order(request):

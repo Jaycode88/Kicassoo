@@ -30,6 +30,10 @@ def add_to_bag(request, printful_id):
     request.session['bag'] = bag
     request.session.modified = True  # Ensures session is saved even if nothing else changes
 
+     # Clear delivery-related session data to force recalculation
+    request.session.pop('delivery', None)
+    request.session.pop('grand_total_with_shipping', None)
+
     return redirect(redirect_url)
 
 
@@ -47,6 +51,12 @@ def adjust_bag(request, printful_id):
         bag.pop(printful_id)
 
     request.session['bag'] = bag
+    request.session.modified = True
+
+    # Clear delivery-related session data to force recalculation
+    request.session.pop('delivery', None)
+    request.session.pop('grand_total_with_shipping', None)
+
     return redirect(reverse('view_bag'))
 
 def remove_from_bag(request, printful_id):
@@ -62,6 +72,12 @@ def remove_from_bag(request, printful_id):
         bag.pop(printful_id)  # Remove item from the session bag
 
     request.session['bag'] = bag  # Update the session
+    request.session.modified = True
+
+    # Clear delivery-related session data to force recalculation
+    request.session.pop('delivery', None)
+    request.session.pop('grand_total_with_shipping', None)
+
     return redirect('view_bag')  # Redirect back to the bag page after removing
 
 

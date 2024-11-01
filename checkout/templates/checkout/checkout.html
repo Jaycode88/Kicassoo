@@ -47,18 +47,22 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         {% if stripe_public_key %}
-        console.log("Stripe public key is available:", "{{ stripe_public_key }}");
         const stripe = Stripe('{{ stripe_public_key }}');
         const elements = stripe.elements();
-        const card = elements.create('card');
-        
-        card.mount('#card-element');  // Ensure you have an element with id="card-element" in your HTML
-    
-        console.log("Card element mounted successfully");
-    
-        const submitButton = document.getElementById('submit-payment');
-    
-        // Set up order details as previously configured
+        let card = elements.create('card');
+
+        // Mount card element only if 'card-element' is available
+        function mountCardElement() {
+            const cardElementContainer = document.getElementById('card-element');
+            if (cardElementContainer && cardElementContainer.childElementCount === 0) {
+                card.mount('#card-element');
+                console.log("Card element mounted successfully");
+            }
+        }
+
+        // Call mount function initially
+        mountCardElement();
+
         const orderDetails = {
             full_name: "{{ order_details.full_name|default_if_none:'' }}",
             email: "{{ order_details.email|default_if_none:'' }}",
@@ -79,10 +83,9 @@
                 {% endfor %}
             ]
         };
-    
+
         console.log("Final Order Details being sent to createPaymentIntent:", orderDetails);
-    
-        // Function to create PaymentIntent and handle payment confirmation
+
         async function createPaymentIntent(orderDetails) {
             try {
                 const response = await fetch("{% url 'create-payment-intent' %}", {
@@ -90,22 +93,21 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(orderDetails)
                 });
-                const data = await response.json();
-                return data;
+                return await response.json();
             } catch (error) {
                 console.error("Error creating PaymentIntent:", error);
                 alert("There was an error setting up the payment. Please try again.");
             }
         }
-    
-        submitButton.addEventListener('click', function (e) {
+
+        document.getElementById('submit-payment').addEventListener('click', function (e) {
             e.preventDefault();
             createPaymentIntent(orderDetails).then(data => {
                 if (!data || !data.clientSecret) {
                     alert("Failed to initialize payment. Please try again.");
                     return;
                 }
-    
+
                 stripe.confirmCardPayment(data.clientSecret, {
                     payment_method: {
                         card: card,
@@ -130,10 +132,11 @@
                 });
             });
         });
+
         {% else %}
         console.error("Stripe public key is missing; unable to load payment form.");
         alert("Error: Payment form could not be loaded. Please try again.");
         {% endif %}
-    });    
+    });
 </script>
 {% endblock %}

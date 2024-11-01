@@ -5,7 +5,6 @@ from checkout import views as checkout_views
 
 urlpatterns = [
     path('', views.checkout, name='checkout'),  # The main checkout view
-    path('calculate-delivery/', views.calculate_delivery, name='calculate_delivery'),  # The view to calculate delivery
     path('place-order/', place_order, name='place_order'),
     path('order-success/', order_success, name='order_success'),
     path('checkout/payment-failed/', checkout_views.payment_failed, name='payment_failed'),
