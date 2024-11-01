@@ -47,21 +47,33 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         {% if stripe_public_key %}
+        console.log("Stripe public key is available:", "{{ stripe_public_key }}");
         const stripe = Stripe('{{ stripe_public_key }}');
         const elements = stripe.elements();
-        let card = elements.create('card');
 
-        // Mount card element only if 'card-element' is available
-        function mountCardElement() {
-            const cardElementContainer = document.getElementById('card-element');
-            if (cardElementContainer && cardElementContainer.childElementCount === 0) {
-                card.mount('#card-element');
-                console.log("Card element mounted successfully");
-            }
-        }
+        // Configure card element to exclude the postal code field
+        const card = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    '::placeholder': {
+                        color: '#aab7c4',
+                    }
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a',
+                }
+            },
+            hidePostalCode: true // Hide postal/ZIP code field
+        });
 
-        // Call mount function initially
-        mountCardElement();
+        card.mount('#card-element');  // Mount card element
+
+        console.log("Card element mounted successfully with postal code hidden.");
+
+        const submitButton = document.getElementById('submit-payment');
 
         const orderDetails = {
             full_name: "{{ order_details.full_name|default_if_none:'' }}",
@@ -84,7 +96,7 @@
             ]
         };
 
-        console.log("Final Order Details being sent to createPaymentIntent:", orderDetails);
+        console.log("Final Order Details before PaymentIntent:", orderDetails);
 
         async function createPaymentIntent(orderDetails) {
             try {
@@ -100,7 +112,7 @@
             }
         }
 
-        document.getElementById('submit-payment').addEventListener('click', function (e) {
+        submitButton.addEventListener('click', function (e) {
             e.preventDefault();
             createPaymentIntent(orderDetails).then(data => {
                 if (!data || !data.clientSecret) {
@@ -132,11 +144,11 @@
                 });
             });
         });
-
         {% else %}
         console.error("Stripe public key is missing; unable to load payment form.");
         alert("Error: Payment form could not be loaded. Please try again.");
         {% endif %}
-    });
+    });    
 </script>
 {% endblock %}
+
