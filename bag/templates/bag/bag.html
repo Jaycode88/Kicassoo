@@ -41,13 +41,12 @@
                                 </div>
                             </td>
                             <td class="text-center" data-label="Quantity">
-                                <form method="POST" action="{% url 'adjust_bag' item.product.printful_id %}">
+                                <form action="{% url 'adjust_bag' item_key=item.product_id|add:"-"|add:item.variant_id %}" method="POST">
                                     {% csrf_token %}
-                                    <div class="input-group input-group-sm quantity-input-group">
-                                        <input class="form-control text-center qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}" id="qty_{{ item.product.printful_id }}" oninput="this.form.submit()">
-                                    </div>
+                                    <input type="number" name="quantity" min="1" value="{{ item.quantity }}" oninput="this.form.submit()">
                                 </form>
                             </td>
+
                             <td class="text-center" data-label="Price">
                                 <p class="mb-0">£{{ item.product.price }}</p>
                             </td>
@@ -56,10 +55,7 @@
                                 
                                 <!-- Add the mobile Remove button here -->
                                 <div class="remove-item-mobile">
-                                    <form method="POST" action="{% url 'remove_from_bag' item.product.printful_id %}">
-                                        {% csrf_token %}
-                                        <button class="btn btn-sm btn-danger rounded-0" type="submit">Remove</button>
-                                    </form>
+                                    <a href="{% url 'remove_from_bag' item_key=item.product_id|add:"-"|add:item.variant_id %}" class="remove-item">Remove</a>
                                 </div>
                             </td>
                         </tr>

@@ -7,22 +7,27 @@ def view_bag(request):
     return render(request, 'bag/bag.html')
 
 def add_to_bag(request, printful_id):
-    """Add a quantity of the specified product to the shopping bag"""
+    """Add a specified product variant and quantity to the shopping bag."""
     quantity = int(request.POST.get('quantity', 1))
     redirect_url = request.POST.get('redirect_url')
+    variant_id = request.POST.get('variant_id')  # Retrieve variant_id from form submission
 
-    # Ensure printful_id is always treated as a string in the session
+    # Ensure identifiers are treated as strings
     printful_id = str(printful_id)
+    variant_id = str(variant_id)
+    
+    # Construct a unique item key for each product variant
+    item_key = f"{printful_id}-{variant_id}"
 
     # Retrieve the current bag from session or initialize a new one
     bag = request.session.get('bag', {})
     print(f"Current Bag Before Update: {bag}")
 
-    # Check if product is already in the bag and increment the quantity
-    if printful_id in bag:
-        bag[printful_id] += quantity
+    # Check if the specific variant is already in the bag; if so, update the quantity
+    if item_key in bag:
+        bag[item_key] += quantity
     else:
-        bag[printful_id] = quantity
+        bag[item_key] = quantity
 
     print(f"Updated Bag: {bag}")
 
@@ -30,54 +35,53 @@ def add_to_bag(request, printful_id):
     request.session['bag'] = bag
     request.session.modified = True  # Ensures session is saved even if nothing else changes
 
-     # Clear delivery-related session data to force recalculation
+    # Clear delivery-related session data to force recalculation if needed
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 
     return redirect(redirect_url)
 
 
+def adjust_bag(request, item_key):
+    """Adjust the quantity of the specified product variant."""
+    try:
+        product_id, variant_id = item_key.split('-')
+    except ValueError:
+        messages.error(request, "Invalid item key.")
+        return redirect('view_bag')
+    
+    quantity = request.POST.get('quantity', '').strip()
+    
+    if not quantity.isdigit():
+        messages.error(request, "Please enter a valid quantity.")
+        return redirect('view_bag')
 
-def adjust_bag(request, printful_id):
-    """ Adjust the quantity of the specified product to the specified amount """
-    product = get_object_or_404(Product, printful_id=printful_id)
-    quantity = int(request.POST.get('quantity'))
-
+    quantity = int(quantity)
     bag = request.session.get('bag', {})
 
     if quantity > 0:
-        bag[printful_id] = quantity
+        bag[item_key] = quantity
     else:
-        bag.pop(printful_id)
+        bag.pop(item_key, None)
 
     request.session['bag'] = bag
     request.session.modified = True
-
-    # Clear delivery-related session data to force recalculation
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 
-    return redirect(reverse('view_bag'))
+    return redirect('view_bag')
 
-def remove_from_bag(request, printful_id):
-    """ Remove the product from the shopping bag """
-    product = get_object_or_404(Product, printful_id=printful_id)
 
+def remove_from_bag(request, item_key):
+    """Remove the specified product variant from the shopping bag."""
     bag = request.session.get('bag', {})
 
-    # Convert printful_id to string, as session keys might be stored as strings
-    printful_id = str(printful_id)
+    if item_key in bag:
+        del bag[item_key]
 
-    if printful_id in bag:
-        bag.pop(printful_id)  # Remove item from the session bag
-
-    request.session['bag'] = bag  # Update the session
+    request.session['bag'] = bag
     request.session.modified = True
-
-    # Clear delivery-related session data to force recalculation
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 
-    return redirect('view_bag')  # Redirect back to the bag page after removing
-
-
+    return redirect('view_bag')

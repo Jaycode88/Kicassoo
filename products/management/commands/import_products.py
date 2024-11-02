@@ -1,9 +1,10 @@
 from django.core.management.base import BaseCommand
 from products.printful_service import PrintfulAPI
 from products.models import Product
+from django.db import IntegrityError
 
 class Command(BaseCommand):
-    help = 'Import products from Printful'
+    help = 'Import products from Printful with variant handling and unique constraint checks'
 
     def handle(self, *args, **kwargs):
         api = PrintfulAPI()
@@ -11,33 +12,43 @@ class Command(BaseCommand):
 
         for item in products:
             try:
-                # Get product details, including variants
+                # Get detailed product info, including variants
                 product_details = api.get_product_details(item['id'])
                 if not product_details:
                     continue
 
-                # Loop through each variant to store `sync_variant_id`
+                # Loop through each variant to store them uniquely
                 variants = product_details.get('sync_variants', [])
                 for variant in variants:
-                    sync_variant_id = variant['id']  # This is `sync_variant_id` from Printful
+                    sync_variant_id = variant['id']
                     price = variant['retail_price']
-                    variant_id = variant['variant_id']  # Specific variant identifier
+                    variant_id = variant['variant_id']
 
-                    # Update or create each variant in your Product model
-                    product, created = Product.objects.update_or_create(
-                        printful_id=item['id'],
-                        variant_id=variant_id,  # Ensure `variant_id` is unique per variant
-                        defaults={
-                            'name': item['name'],
-                            'image_url': item['thumbnail_url'],
-                            'price': price,
-                        }
-                    )
-                    # Optionally, save `sync_variant_id` if not yet stored
-                    product.sync_variant_id = sync_variant_id
-                    product.save()
+                    # Attempt to update or create with fallback delete if IntegrityError is raised
+                    try:
+                        # First, delete any existing product with the same printful_id and variant_id
+                        Product.objects.filter(printful_id=item['id'], variant_id=variant_id).delete()
+                        
+                        # Now, create or update the product
+                        product, created = Product.objects.update_or_create(
+                            printful_id=item['id'],
+                            variant_id=variant_id,
+                            defaults={
+                                'name': item['name'],
+                                'image_url': item['thumbnail_url'],
+                                'price': price,
+                                'sync_variant_id': sync_variant_id
+                            }
+                        )
+                        if created:
+                            self.stdout.write(self.style.SUCCESS(f"Created product variant: {product.name} (Variant ID: {variant_id})"))
+                        else:
+                            self.stdout.write(f"Updated existing product variant: {product.name} (Variant ID: {variant_id})")
+
+                    except IntegrityError as e:
+                        self.stderr.write(f"Error processing variant {variant_id} for item {item}: {e}")
 
             except Exception as e:
-                print(f"Error processing item {item}: {e}")
+                self.stderr.write(f"Error processing item {item}: {e}")
 
-        self.stdout.write(self.style.SUCCESS('Successfully imported products from Printful'))
+        self.stdout.write(self.style.SUCCESS('Successfully imported products and variants from Printful'))
