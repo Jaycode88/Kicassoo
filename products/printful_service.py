@@ -32,8 +32,11 @@ class PrintfulAPI:
         """Get product details by ID from Printful"""
         response = requests.get(f'{self.base_url}/store/products/{product_id}', headers=self.get_headers())
         if response.status_code == 200:
-            return response.json().get('result', {})
+            product_data = response.json().get('result', {})
+            logger.info("Fetched Printful product details: %s", product_data)  # Log details for inspection
+            return product_data
         return {}
+
 
     def get_shipping_rates(self, cart_items, destination):
         """Fetch shipping rates based on cart items and destination"""

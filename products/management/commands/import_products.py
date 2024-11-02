@@ -23,6 +23,7 @@ class Command(BaseCommand):
                     sync_variant_id = variant['id']
                     price = variant['retail_price']
                     variant_id = variant['variant_id']
+                    size = variant.get('size', '')  # Extract size from variant details
 
                     # Attempt to update or create with fallback delete if IntegrityError is raised
                     try:
@@ -37,7 +38,8 @@ class Command(BaseCommand):
                                 'name': item['name'],
                                 'image_url': item['thumbnail_url'],
                                 'price': price,
-                                'sync_variant_id': sync_variant_id
+                                'sync_variant_id': sync_variant_id,
+                                'size': size  # Save size to the model
                             }
                         )
                         if created:

@@ -13,25 +13,30 @@
             <h2>{{ product_variants.first.name }}</h2>
             <p class="text-muted">{{ product_variants.first.category.name }}</p>
             
-            <!-- Display initial price and description from the first variant -->
+            <!-- Display initial price -->
             <p class="lead" id="product-price">£{{ product_variants.first.price }}</p>
-            <p id="product-description">{{ product_variants.first.description }}</p>
+
+            <!-- Check if there's only one variant to display the size -->
+            {% if product_variants|length == 1 %}
+                <p><strong>Size:</strong> {{ product_variants.first.size }}</p>
+            {% else %}
+                <!-- Variant Selector for multiple variants -->
+                <label for="variant-select"><strong>Select Variant:</strong></label>
+                <select id="variant-select" name="variant_id" class="form-control mb-3">
+                    {% for variant in product_variants %}
+                        <option value="{{ variant.variant_id }}" data-price="{{ variant.price }}">
+                            {{ variant.name }} - {{ variant.size }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
             
+            <!-- Product Description -->
+            <p>{{ product_variants.first.description }}</p>
+
             <form class="form" action="{% url 'add_to_bag' product_variants.first.printful_id %}" method="POST">
                 {% csrf_token %}
                 
-                <!-- Variant Selector (Only if there are multiple variants) -->
-                {% if product_variants|length > 1 %}
-                    <label for="variant-select"><strong>Select Variant:</strong></label>
-                    <select id="variant-select" name="variant_id" class="form-control mb-3">
-                        {% for variant in product_variants %}
-                            <option value="{{ variant.variant_id }}" data-price="{{ variant.price }}" data-description="{{ variant.description }}">
-                                {{ variant.name }} - £{{ variant.price }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                {% endif %}
-
                 <!-- Quantity Selector -->
                 <div class="form-group">
                     <label for="quantity-input"><strong>Quantity:</strong></label>
@@ -41,7 +46,9 @@
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
+                        
                         <input type="number" class="form-control text-center" name="quantity" value="1" min="1" max="99" id="quantity-input">
+                        
                         <div class="input-group-append">
                             <button type="button" class="increment-qty btn btn-outline-secondary" aria-label="Increment Quantity Button">
                                 <i class="fas fa-plus"></i>
@@ -50,7 +57,6 @@
                     </div>
                 </div>
 
-                <!-- Add to Bag and Continue Shopping Buttons -->
                 <div class="mt-4">
                     <a href="{% url 'product_list' %}" class="btn btn-secondary me-2">
                         <i class="fas fa-chevron-left"></i> Continue Shopping
@@ -58,34 +64,28 @@
                     <button type="submit" class="btn btn-primary ms-2">Add to Bag</button>
                 </div>
 
-                <!-- Hidden field to retain the current page after adding the item -->
                 <input type="hidden" name="redirect_url" value="{{ request.path }}">
             </form>
         </div>
     </div>
 </div>
 
-<!-- JavaScript to handle variant selection, price, description, and quantity increment/decrement -->
+<!-- JavaScript to handle variant selection and quantity increment/decrement -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const variantSelect = document.getElementById('variant-select');
         const priceDisplay = document.getElementById('product-price');
-        const descriptionDisplay = document.getElementById('product-description');
 
+        // Set initial price on page load if there are multiple variants
         if (variantSelect) {
-            // Set initial price and description based on the first variant
             const initialPrice = variantSelect.options[variantSelect.selectedIndex].getAttribute('data-price');
-            const initialDescription = variantSelect.options[variantSelect.selectedIndex].getAttribute('data-description');
             priceDisplay.textContent = `£${initialPrice}`;
-            descriptionDisplay.textContent = initialDescription;
-            
-            // Update displayed price and description when variant changes
+
+            // Update displayed price when variant changes
             variantSelect.addEventListener('change', function () {
                 const selectedOption = this.options[this.selectedIndex];
                 const price = selectedOption.getAttribute('data-price');
-                const description = selectedOption.getAttribute('data-description');
                 priceDisplay.textContent = `£${price}`;
-                descriptionDisplay.textContent = description;
             });
         }
 
