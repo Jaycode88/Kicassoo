@@ -12,10 +12,10 @@
         <div class="col-md-6">
             <h2>{{ product_variants.first.name }}</h2>
             <p class="text-muted">{{ product_variants.first.category.name }}</p>
-
-            <!-- Initial price set by selected variant's price -->
+            
+            <!-- Display initial price and description from the first variant -->
             <p class="lead" id="product-price">£{{ product_variants.first.price }}</p>
-            <p>{{ product_variants.first.description }}</p>
+            <p id="product-description">{{ product_variants.first.description }}</p>
             
             <form class="form" action="{% url 'add_to_bag' product_variants.first.printful_id %}" method="POST">
                 {% csrf_token %}
@@ -25,7 +25,7 @@
                     <label for="variant-select"><strong>Select Variant:</strong></label>
                     <select id="variant-select" name="variant_id" class="form-control mb-3">
                         {% for variant in product_variants %}
-                            <option value="{{ variant.variant_id }}" data-price="{{ variant.price }}">
+                            <option value="{{ variant.variant_id }}" data-price="{{ variant.price }}" data-description="{{ variant.description }}">
                                 {{ variant.name }} - £{{ variant.price }}
                             </option>
                         {% endfor %}
@@ -36,17 +36,12 @@
                 <div class="form-group">
                     <label for="quantity-input"><strong>Quantity:</strong></label>
                     <div class="input-group w-50">
-                        <!-- Decrement Button -->
                         <div class="input-group-prepend">
                             <button type="button" class="decrement-qty btn btn-outline-secondary" aria-label="Decrement Quantity Button">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
-                        
-                        <!-- Quantity Input -->
                         <input type="number" class="form-control text-center" name="quantity" value="1" min="1" max="99" id="quantity-input">
-                        
-                        <!-- Increment Button -->
                         <div class="input-group-append">
                             <button type="button" class="increment-qty btn btn-outline-secondary" aria-label="Increment Quantity Button">
                                 <i class="fas fa-plus"></i>
@@ -70,23 +65,27 @@
     </div>
 </div>
 
-<!-- JavaScript to handle variant selection and quantity increment/decrement -->
+<!-- JavaScript to handle variant selection, price, description, and quantity increment/decrement -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const variantSelect = document.getElementById('variant-select');
         const priceDisplay = document.getElementById('product-price');
+        const descriptionDisplay = document.getElementById('product-description');
 
-        // Check if variant selector exists before adding event listener
         if (variantSelect) {
-            // Set initial price based on the first variant
+            // Set initial price and description based on the first variant
             const initialPrice = variantSelect.options[variantSelect.selectedIndex].getAttribute('data-price');
+            const initialDescription = variantSelect.options[variantSelect.selectedIndex].getAttribute('data-description');
             priceDisplay.textContent = `£${initialPrice}`;
+            descriptionDisplay.textContent = initialDescription;
             
-            // Update displayed price when variant changes
+            // Update displayed price and description when variant changes
             variantSelect.addEventListener('change', function () {
                 const selectedOption = this.options[this.selectedIndex];
                 const price = selectedOption.getAttribute('data-price');
+                const description = selectedOption.getAttribute('data-description');
                 priceDisplay.textContent = `£${price}`;
+                descriptionDisplay.textContent = description;
             });
         }
 
