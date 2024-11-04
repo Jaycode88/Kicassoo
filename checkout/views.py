@@ -16,23 +16,13 @@ from .services import prepare_printful_order_data
 from django_countries.fields import Country
 from products.models import Product
 import json
+import uuid
 
 
 logger = logging.getLogger(__name__)
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-from django.shortcuts import render, redirect, reverse
-from django.conf import settings
-from django.contrib import messages
-from .forms import DeliveryForm
-from bag.contexts import bag_contents
-import requests
-from decimal import Decimal
-import stripe
-import json
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def checkout(request):
     """Unified view to display checkout form and calculate delivery on user request."""
@@ -42,20 +32,14 @@ def checkout(request):
     grand_total_with_shipping = None
 
     if request.method == 'POST':
-        # If the user submits the form, attempt to calculate delivery
         form = DeliveryForm(request.POST)
         
         if form.is_valid():
             form_data = form.cleaned_data
-
-            # Rename `address_line_1` to `address1` for consistency
             form_data['address1'] = form_data.pop('address_line_1', None)
+            request.session['order_details'] = form_data  # Save details to session
 
-            # Save the modified form data to the session
-            request.session['order_details'] = form_data
-            print("Order details saved in session:", form_data)  # Debugging
-
-            # Prepare shipping data for Printful
+            # Prepare shipping data and calculate cost using Printful API
             shipping_data = {
                 "recipient": {
                     "address1": form_data['address1'],
@@ -69,7 +53,6 @@ def checkout(request):
                 ]
             }
 
-            # Calculate delivery cost using the Printful API
             try:
                 response = requests.post(
                     f"{settings.PRINTFUL_API_URL}/shipping/rates",
@@ -91,10 +74,54 @@ def checkout(request):
                 messages.error(request, f"Error calculating delivery: {str(e)}")
                 delivery_cost = Decimal('0.00')
 
+            # Create draft order in Django
+            order = Order.objects.create(
+                full_name=form_data['full_name'],
+                email=form_data['email'],
+                phone_number=form_data['phone_number'],
+                street_address1=form_data['address1'],
+                street_address2=form_data.get('address2', ''),
+                town_or_city=form_data['city'],
+                postcode=form_data['postcode'],
+                country=form_data['country'],
+                delivery_cost=delivery_cost,
+                order_total=bag_data['grand_total'],
+                grand_total=grand_total_with_shipping,
+                order_number=uuid.uuid4().hex.upper()
+            )
+
+            # Save order items
+            for item in bag_data['bag_items']:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item['product'],
+                    quantity=item['quantity'],
+                    price=item['product'].price
+                )
+
+            # Create Stripe PaymentIntent with essential metadata
+            payment_intent = stripe.PaymentIntent.create(
+                amount=int(order.grand_total * 100),
+                currency='usd',
+                metadata={'order_number': order.order_number}  # Pass the order number only
+            )
+
+            # Save the order number in the session for webhook reference
+            request.session['order_number'] = order.order_number
+
+            # Render the checkout page with payment intent client_secret
+            return render(request, 'checkout/checkout.html', {
+                'form': form,
+                'bag_items': bag_data['bag_items'],
+                'grand_total': bag_data['grand_total'],
+                'delivery': delivery_cost,
+                'grand_total_with_shipping': grand_total_with_shipping,
+                'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+                'client_secret': payment_intent.client_secret
+            })
         else:
             messages.error(request, "Please correct the form errors and try again.")
 
-    # Context for rendering the checkout page
     context = {
         'form': form,
         'bag_items': bag_data['bag_items'],
@@ -102,7 +129,6 @@ def checkout(request):
         'delivery': delivery_cost if delivery_cost is not None else request.session.get('delivery'),  
         'grand_total_with_shipping': grand_total_with_shipping if grand_total_with_shipping is not None else request.session.get('grand_total_with_shipping'),
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
-        'order_details': request.session.get('order_details', {})
     }
 
     return render(request, 'checkout/checkout.html', context)
@@ -157,38 +183,26 @@ def order_success(request):
 def create_payment_intent(request):
     if request.method == 'POST':
         try:
-            order_details = json.loads(request.body)
-            print("Order details retrieved in create_payment_intent:", order_details)
+            # Retrieve order details from session
+            order_details = request.session.get('order_details', {})
+            total_amount = request.session.get('grand_total_with_shipping', None)
 
-            if not order_details.get('address1'):
-                print("Error: Missing `address1` in order details.")
+            # Check if essential fields are present
+            if not order_details.get('address1') or total_amount is None:
+                print("Error: Missing required order fields.")
                 return JsonResponse({'error': 'Missing essential fields in order details'}, status=400)
 
-            items_metadata = [
-                {
-                    'sync_variant_id': item['sync_variant_id'],
-                    'printful_id': item.get('printful_id', ''),
-                    'variant_id': item.get('variant_id', ''),
-                    'quantity': item['quantity']
-                }
-                for item in order_details['items']
-            ]
+            # Convert total_amount to an integer in cents for Stripe (if it is not already)
+            amount = int(total_amount * 100) if isinstance(total_amount, (int, float, Decimal)) else None
+            if amount is None:
+                print("Error: Invalid total_amount value.")
+                return JsonResponse({'error': 'Invalid total amount'}, status=400)
 
+            # Metadata now only includes the order number
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(order_details['total_amount'] * 100),
+                amount=amount,
                 currency='usd',
-                metadata={
-                    'full_name': order_details['full_name'],
-                    'email': order_details['email'],
-                    'phone_number': order_details['phone_number'],
-                    'address1': order_details['address1'],
-                    'address2': order_details.get('address2', ''),
-                    'city': order_details['city'],
-                    'postcode': order_details['postcode'],
-                    'country': order_details['country'],
-                    'delivery_cost': order_details['delivery_cost'],
-                    'items': json.dumps(items_metadata)
-                },
+                metadata={'order_number': request.session.get('order_number')}
             )
             return JsonResponse({'clientSecret': payment_intent['client_secret']})
 
@@ -214,84 +228,43 @@ def stripe_webhook(request):
         print("💸 Payment intent succeeded:", payment_intent['id'])
 
         try:
-            # Retrieve metadata
-            metadata = payment_intent.get('metadata', {})
-            items = json.loads(metadata.get('items', '[]'))
-            address1 = metadata.get('address1')
-
-            # Verify address1 presence
-            if not address1:
-                print("Error: Address line 1 is missing in webhook metadata.")
-                return HttpResponse("Missing address line 1", status=400)
-
-            # Create Order in Django
-            order = Order.objects.create(
-                full_name=metadata.get('full_name', 'No Name Provided'),
-                email=metadata.get('email', 'no-email@example.com'),
-                phone_number=metadata.get('phone_number', '0000000000'),
-                street_address1=address1,
-                street_address2=metadata.get('address2', ''),
-                town_or_city=metadata.get('city', 'Unknown City'),
-                postcode=metadata.get('postcode', '00000'),
-                country=metadata.get('country', 'US'),
-                delivery_cost=Decimal(metadata.get('delivery_cost', '0')),
-                order_total=Decimal(payment_intent['amount_received'] / 100),
-                grand_total=Decimal(payment_intent['amount_received'] / 100) + Decimal(metadata.get('delivery_cost', '0')),
-                stripe_payment_intent_id=payment_intent['id']
-            )
-            print(f"Order created with ID: {order.id}")
-
-            # Create each OrderItem for the Order, using multiple ID checks
-            for item in items:
-                product = None
-                # Attempt to find product by sync_variant_id, printful_id, or variant_id
-                for id_field in ['sync_variant_id', 'printful_id', 'variant_id']:
-                    try:
-                        product = Product.objects.get(**{id_field: item[id_field]})
-                        break  # Exit loop if product is found
-                    except Product.DoesNotExist:
-                        continue
-
-                if not product:
-                    print(f"Error: Product with any of the provided IDs (sync_variant_id, printful_id, variant_id) not found in DB for item: {item}")
-                    return HttpResponse("Product not found", status=404)
-
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    quantity=item['quantity'],
-                    price=product.price
-                )
-            print(f"Order items created for Order ID: {order.id}")
+            # Retrieve order using the order number in metadata
+            order_number = payment_intent.get('metadata', {}).get('order_number')
+            order = Order.objects.get(order_number=order_number)
+            order.stripe_payment_intent_id = payment_intent['id']
+            order.save()
 
             # Prepare order data for Printful
             printful_api = PrintfulAPI()
             printful_order_data = {
                 'recipient': {
-                    'name': metadata.get('full_name', 'No Name Provided'),
-                    'email': metadata.get('email', 'no-email@example.com'),
-                    'phone': metadata.get('phone_number', '0000000000'),
-                    'address1': address1,
-                    'address2': metadata.get('address2', ''),
-                    'city': metadata.get('city', 'Unknown City'),
-                    'zip': metadata.get('postcode', '00000'),
-                    'country_code': metadata.get('country', 'US'),
+                    'name': order.full_name,
+                    'email': order.email,
+                    'phone': order.phone_number,
+                    'address1': order.street_address1,
+                    'address2': order.street_address2 or '',
+                    'city': order.town_or_city,
+                    'zip': order.postcode,
+                    'country_code': order.country.code,
                 },
                 'items': [
                     {
-                        'sync_variant_id': item['sync_variant_id'],
-                        'quantity': item['quantity']
-                    } for item in items
+                        'sync_variant_id': item.product.sync_variant_id,
+                        'quantity': item.quantity
+                    } for item in order.items.all()
                 ]
             }
 
             # Send the order to Printful
-            printful_response = printful_api.create_order(printful_order_data, confirm=False)
+            printful_response = printful_api.create_order(printful_order_data, confirm=True)
             if printful_response:
                 order.printful_order_id = printful_response.get('id')
                 order.save()
                 print("Order successfully sent to Printful.")
 
+        except Order.DoesNotExist:
+            print(f"Order with order number {order_number} not found.")
+            return HttpResponse(status=404)
         except Exception as e:
             print(f"Error processing order in Printful: {e}")
             return HttpResponse(status=500)

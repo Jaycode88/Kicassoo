@@ -47,11 +47,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         {% if stripe_public_key %}
-        console.log("Stripe public key is available:", "{{ stripe_public_key }}");
         const stripe = Stripe('{{ stripe_public_key }}');
         const elements = stripe.elements();
 
-        // Configure card element to exclude the postal code field
+        // Configure the card element
         const card = elements.create('card', {
             style: {
                 base: {
@@ -66,15 +65,14 @@
                     iconColor: '#fa755a',
                 }
             },
-            hidePostalCode: true // Hide postal/ZIP code field
+            hidePostalCode: true
         });
 
-        card.mount('#card-element');  // Mount card element
-
-        console.log("Card element mounted successfully with postal code hidden.");
+        card.mount('#card-element');
 
         const submitButton = document.getElementById('submit-payment');
 
+        // Order details for creating the PaymentIntent
         const orderDetails = {
             full_name: "{{ order_details.full_name|default_if_none:'' }}",
             email: "{{ order_details.email|default_if_none:'' }}",
@@ -96,8 +94,6 @@
             ]
         };
 
-        console.log("Final Order Details before PaymentIntent:", orderDetails);
-
         async function createPaymentIntent(orderDetails) {
             try {
                 const response = await fetch("{% url 'create-payment-intent' %}", {
@@ -105,7 +101,21 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(orderDetails)
                 });
-                return await response.json();
+
+                if (!response.ok) {
+                    alert("Error setting up payment. Please try again.");
+                    return null;
+                }
+
+                const data = await response.json();
+
+                if (!data.clientSecret) {
+                    alert("Failed to initialize payment. Please try again.");
+                    return null;
+                }
+
+                return data.clientSecret;
+
             } catch (error) {
                 console.error("Error creating PaymentIntent:", error);
                 alert("There was an error setting up the payment. Please try again.");
@@ -114,13 +124,10 @@
 
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
-            createPaymentIntent(orderDetails).then(data => {
-                if (!data || !data.clientSecret) {
-                    alert("Failed to initialize payment. Please try again.");
-                    return;
-                }
+            createPaymentIntent(orderDetails).then(clientSecret => {
+                if (!clientSecret) return;
 
-                stripe.confirmCardPayment(data.clientSecret, {
+                stripe.confirmCardPayment(clientSecret, {
                     payment_method: {
                         card: card,
                         billing_details: {
@@ -131,7 +138,7 @@
                                 line2: orderDetails.address2,
                                 city: orderDetails.city,
                                 postal_code: orderDetails.postcode,
-                                country: orderDetails.country
+                                country: orderDetails.country || undefined  // Only set if not empty
                             }
                         }
                     }
@@ -145,10 +152,9 @@
             });
         });
         {% else %}
-        console.error("Stripe public key is missing; unable to load payment form.");
         alert("Error: Payment form could not be loaded. Please try again.");
         {% endif %}
-    });    
+    });
 </script>
 {% endblock %}
 
