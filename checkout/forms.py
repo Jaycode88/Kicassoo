@@ -8,5 +8,6 @@ class DeliveryForm(forms.Form):
     address_line_1 = forms.CharField(max_length=255, required=True, label="Address Line 1")
     address_line_2 = forms.CharField(max_length=255, required=False, label="Address Line 2")
     city = forms.CharField(max_length=100, required=True, label="City")
+    county = forms.CharField(max_length=100, required=False, label="County/State")
     postcode = forms.CharField(max_length=20, required=True, label="Postcode")
     country = CountryField(blank_label='(Select country)').formfield()  # Use CountryField to get country code
