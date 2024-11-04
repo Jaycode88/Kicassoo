@@ -24,7 +24,9 @@
                     <label for="variant-select"><strong>Select Variant:</strong></label>
                     <select id="variant-select" name="variant_id" class="form-control mb-3">
                         {% for variant in product_variants %}
-                            <option value="{{ variant.variant_id }}" data-price="{{ variant.price }}">
+                            <option value="{{ variant.variant_id }}" 
+                                    data-price="{{ variant.price }}" 
+                                    data-description="{{ variant.description }}">
                                 {{ variant.name }} - {{ variant.size }}
                             </option>
                         {% endfor %}
@@ -36,7 +38,7 @@
                 {% endif %}
 
                 <!-- Product Description -->
-                <p>{{ product_variants.first.description }}</p>
+                <p id="product-description">{{ product_variants.first.description }}</p>
 
                 <!-- Quantity Selector -->
                 <div class="form-group">
