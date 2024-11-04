@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h2>Thank you for your order, {{ full_name }}!</h2>
+    <p>Your order has been successfully placed with the following details:</p>
+
+    <h3>Order Summary</h3>
+    <ul>
+        {% for item in order_items %}
+            <li>{{ item.name }} - {{ item.quantity }} x £{{ item.price }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Delivery Cost:</strong> £{{ delivery_cost }}</p>
+    <p><strong>Grand Total:</strong> £{{ grand_total }}</p>
+
+    <h3>Shipping Details</h3>
+    <p>
+        {{ full_name }}<br>
+        {{ address1 }}<br>
+        {% if address2 %}{{ address2 }}<br>{% endif %}
+        {{ city }}<br>
+        {{ postcode }}<br>
+        {{ country }}
+    </p>
+
+    <p>We hope you enjoy your purchase! Feel free to contact us if you have any questions.</p>
+
+    <p>Best Regards,<br>Your Company Team</p>
+</body>
+</html>

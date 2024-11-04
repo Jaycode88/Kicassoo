@@ -29,6 +29,7 @@ def bag_contents(request):
             'product': product,
             'quantity': quantity,
             'subtotal': subtotal,
+            'size': product.size,
         })
 
     # Ensure grand_total is defined even if there are no items in the bag

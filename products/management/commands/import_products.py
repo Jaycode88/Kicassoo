@@ -23,13 +23,13 @@ class Command(BaseCommand):
                     sync_variant_id = variant['id']
                     price = variant['retail_price']
                     variant_id = variant['variant_id']
+                    size = variant.get('size')  # Fetch the size if available
 
-                    # Attempt to update or create with fallback delete if IntegrityError is raised
                     try:
                         # First, delete any existing product with the same printful_id and variant_id
                         Product.objects.filter(printful_id=item['id'], variant_id=variant_id).delete()
                         
-                        # Now, create or update the product
+                        # Now, create or update the product with size information
                         product, created = Product.objects.update_or_create(
                             printful_id=item['id'],
                             variant_id=variant_id,
@@ -37,13 +37,14 @@ class Command(BaseCommand):
                                 'name': item['name'],
                                 'image_url': item['thumbnail_url'],
                                 'price': price,
-                                'sync_variant_id': sync_variant_id
+                                'sync_variant_id': sync_variant_id,
+                                'size': size,  # Save size for each variant
                             }
                         )
                         if created:
-                            self.stdout.write(self.style.SUCCESS(f"Created product variant: {product.name} (Variant ID: {variant_id})"))
+                            self.stdout.write(self.style.SUCCESS(f"Created product variant: {product.name} (Variant ID: {variant_id}, Size: {size})"))
                         else:
-                            self.stdout.write(f"Updated existing product variant: {product.name} (Variant ID: {variant_id})")
+                            self.stdout.write(f"Updated existing product variant: {product.name} (Variant ID: {variant_id}, Size: {size})")
 
                     except IntegrityError as e:
                         self.stderr.write(f"Error processing variant {variant_id} for item {item}: {e}")

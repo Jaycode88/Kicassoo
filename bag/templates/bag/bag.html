@@ -35,9 +35,11 @@
                                 <div class="d-flex flex-column">
                                     <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="img-fluid rounded product-img">
                                     <p class="mb-0 text-center d-md-none"><strong>{{ item.product.name }}</strong></p>
+                                    <p class="mb-0 text-center d-md-none"><small><strong>Size:</strong> {{ item.size }}</small></p> <!-- Show size for mobile -->
                                 </div>
                                 <div class="ml-3 d-none d-md-block">
                                     <p class="mb-0"><strong>{{ item.product.name }}</strong></p>
+                                    <p class="mb-0"><small><strong>Size:</strong> {{ item.size }}</small></p> <!-- Show size on larger screens -->
                                 </div>
                             </td>
                             <td class="text-center" data-label="Quantity">
@@ -53,7 +55,6 @@
                             <td class="text-center" data-label="Subtotal">
                                 <p class="mb-0">£{{ item.subtotal|floatformat:2 }}</p>  <!-- Displaying the subtotal -->
                                 
-                                <!-- Add the mobile Remove button here -->
                                 <div class="remove-item-mobile">
                                     <a href="{% url 'remove_from_bag' item_key=item.product_id|add:"-"|add:item.variant_id %}" class="remove-item">Remove</a>
                                 </div>
