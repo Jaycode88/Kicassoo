@@ -13,7 +13,7 @@
 
 - in checkout to create Draft/test order set "confirm" to false in services.py line 48 and views.py line 30
 
-
+- Details and category need to be added manually to the imported products
 
 
 
