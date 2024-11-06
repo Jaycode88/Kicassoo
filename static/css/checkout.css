@@ -1,0 +1,30 @@
+/* Order success styling */
+.order-success-container {
+    text-align: center;
+    max-width: 600px;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 8px;
+    background-color: #f4f9ff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-success-container h1 {
+    color: #4CAF50;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.order-buttons .button {
+    display: inline-block;
+    margin: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.order-buttons .button:hover {
+    background-color: #0056b3;
+}

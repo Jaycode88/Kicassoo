@@ -1,9 +1,21 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
 
 {% block title %}Order Successful{% endblock %}
 
 {% block content %}
-    <h2>Thank You!</h2>
-    <p>Your order has been placed successfully.</p>
-    <p>We will process and ship your order shortly.</p>
+    <div class="order-success-container">
+        <h1>Thank you for your order!</h1>
+        <p>Your order was successfully placed, and a confirmation email has been sent to <strong>{{ order.email }}</strong>.</p>
+        
+        <div class="order-buttons">
+            <a href="{% url 'product_list' %}" class="button custom-btn back-to-shopping">Back to Shopping</a>
+            <a href="{% url 'home' %}" class="button custom-btn back-to-homepage">Back to Homepage</a>
+        </div>
+    </div>
+
 {% endblock %}

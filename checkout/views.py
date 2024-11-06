@@ -176,12 +176,15 @@ def place_order(request):
 
 
 def order_success(request):
-    """Order success page after payment is completed"""
-     # Clear the bag after payment success
-    request.session['bag'] = {}  # Clear the bag
-    request.session.modified = True  # Mark the session as modified to trigger a save
-    return render(request, 'checkout/order_success.html')
-
+    order_number = request.session.get('order_number')  # Retrieve order number from session
+    order = Order.objects.get(order_number=order_number) if order_number else None  # Fetch the order
+    
+    # Clear the session data after use
+    request.session.pop('order_number', None)
+    request.session.pop('bag', None)
+    request.session.modified = True
+    
+    return render(request, 'checkout/order_success.html', {'order': order})
 
 @csrf_exempt
 def create_payment_intent(request):
