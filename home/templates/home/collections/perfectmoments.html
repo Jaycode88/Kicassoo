@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Collections{% endblock %}
+
+{% block page_header %}
+<h1 class="text-center mb-4 montaga collections-heading mb-1 mt-1">Collections By Kicassoo</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mb-2 montaga">Perfect Moments</h1>
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/celebrate_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/celebrate_300.webp 300w,
+                            {{ MEDIA_URL }}collections/celebrate_600.webp 600w,
+                            {{ MEDIA_URL }}collections/celebrate_900.webp 900w,
+                            {{ MEDIA_URL }}collections/celebrate_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Celebrate">
+                </div>
+                <h2 class="montaga img-title">Celebrate</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/doforlove_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/doforlove_300.webp 300w,
+                            {{ MEDIA_URL }}collections/doforlove_600.webp 600w,
+                            {{ MEDIA_URL }}collections/doforlove_900.webp 900w,
+                            {{ MEDIA_URL }}collections/doforlove_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Do for Love">
+                </div>
+                <h2 class="montaga img-title">Do for Love</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/loopus_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/loopus_300.webp 300w,
+                            {{ MEDIA_URL }}collections/loopus_600.webp 600w,
+                            {{ MEDIA_URL }}collections/loopus_900.webp 900w,
+                            {{ MEDIA_URL }}collections/loopus_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Loopus">
+                </div>
+                <h2 class="montaga img-title">Loopus</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/orangetint_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/orangetint_300.webp 300w,
+                            {{ MEDIA_URL }}collections/orangetint_600.webp 600w,
+                            {{ MEDIA_URL }}collections/orangetint_900.webp 900w,
+                            {{ MEDIA_URL }}collections/orangetint_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Orange Tint">
+                </div>
+                <h2 class="montaga img-title">Orange Tint</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/princessandma_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/princessandma_300.webp 300w,
+                            {{ MEDIA_URL }}collections/princessandma_600.webp 600w,
+                            {{ MEDIA_URL }}collections/princessandma_900.webp 900w,
+                            {{ MEDIA_URL }}collections/princessandma_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Princess and Ma">
+                </div>
+                <h2 class="montaga img-title">Princess and Ma</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/sensie_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/sensie_300.webp 300w,
+                            {{ MEDIA_URL }}collections/sensie_600.webp 600w,
+                            {{ MEDIA_URL }}collections/sensie_900.webp 900w,
+                            {{ MEDIA_URL }}collections/sensie_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Sensie">
+                </div>
+                <h2 class="montaga img-title">Sensie</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/womaninpower_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/womaninpower_300.webp 300w,
+                            {{ MEDIA_URL }}collections/womaninpower_600.webp 600w,
+                            {{ MEDIA_URL }}collections/womaninpower_900.webp 900w,
+                            {{ MEDIA_URL }}collections/womaninpower_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Woman in Power">
+                </div>
+                <h2 class="montaga img-title">Woman in Power</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

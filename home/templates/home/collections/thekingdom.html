@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}The Kingdom{% endblock %}
+
+{% block page_header %}
+<h1 class="text-center mb-4 montaga collections-heading mt-1 mb-2">Collections By Kicassoo</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="container mb-5">
+        <h1 class="text-center mb-4 montaga">The Kingdom</h1>
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/formidable_small.webp" srcset="
+                            {{ MEDIA_URL }}collections/formidable_300.webp 300w,
+                            {{ MEDIA_URL }}collections/formidable_600.webp 600w,
+                            {{ MEDIA_URL }}collections/formidable_900.webp 900w,
+                            {{ MEDIA_URL }}collections/formidable_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Formidable">
+                </div>
+                <h2 class="montaga img-title">Formidable</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/grizilliebear_small.webp" srcset="
+                            {{ MEDIA_URL }}collections/grizilliebear_300.webp 300w,
+                            {{ MEDIA_URL }}collections/grizilliebear_600.webp 600w,
+                            {{ MEDIA_URL }}collections/grizilliebear_900.webp 900w,
+                            {{ MEDIA_URL }}collections/grizilliebear_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Grizillie Bear">
+                </div>
+                <h2 class="montaga img-title">Grizillie Bear</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/preyed_small.webp" srcset="
+                            {{ MEDIA_URL }collections/preyed_336.webp 336w,
+                            {{ MEDIA_URL }}collections/preyed_456.webp 456w,
+                            {{ MEDIA_URL }}collections/preyed_546.webp 546w,
+                            {{ MEDIA_URL }}collections/preyed_672.webp 672w,
+                            {{ MEDIA_URL }}collections/preyed_800.webp 800w,
+                            {{ MEDIA_URL }}collections/preyed_912.webp 912w,
+                            {{ MEDIA_URL }}collections/preyed_1010.webp 1010w,
+                            {{ MEDIA_URL }}collections/preyed_1092.webp 1092w,
+                            {{ MEDIA_URL }}collections/preyed_1190.webp 1190w,
+                            {{ MEDIA_URL }}collections/preyed_1272.webp 1272w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Preyed">
+                </div>
+                <h2 class="montaga img-title">Preyed</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/sloth_small.webp" srcset="
+                            {{ MEDIA_URL }}collections/sloth_300.webp 300w,
+                            {{ MEDIA_URL }}collections/sloth_600.webp 600w,
+                            {{ MEDIA_URL }}collections/sloth_900.webp 900w,
+                            {{ MEDIA_URL }}collections/sloth_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Sloth">
+                </div>
+                <h2 class="montaga img-title">Sloth</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

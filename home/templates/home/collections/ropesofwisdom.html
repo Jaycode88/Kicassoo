@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block page_header %}
+<h1 class="text-center mb-4 montaga collections-heading mb-1">Collections By Kicassoo</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mb-4 montaga">Ropes of Wisdom</h1>
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/amotherscry_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/amotherscry_300.webp 300w,
+                            {{ MEDIA_URL }}collections/amotherscry_600.webp 600w,
+                            {{ MEDIA_URL }}collections/amotherscry_900.webp 900w,
+                            {{ MEDIA_URL }}collections/amotherscry_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="A Mother's Cry">
+                </div>
+                <h2 class="montaga img-title">A Mother's Cry</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/divine_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/divine_300.webp 300w,
+                            {{ MEDIA_URL }}collections/divine_600.webp 600w,
+                            {{ MEDIA_URL }}collections/divine_900.webp 900w,
+                            {{ MEDIA_URL }}collections/divine_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Divine">
+                </div>
+                <h2 class="montaga img-title">Divine</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/queenahnk_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/queenahnk_300.webp 300w,
+                            {{ MEDIA_URL }}collections/queenahnk_600.webp 600w,
+                            {{ MEDIA_URL }}collections/queenahnk_900.webp 900w,
+                            {{ MEDIA_URL }}collections/queenahnk_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Queen Ahnk">
+                </div>
+                <h2 class="montaga img-title">Queen Ahnk</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-4">
+                <div class="watermark-container">
+                    <img src="{{ MEDIA_URL }}collections/sittinontopamyworld_300.webp" srcset="
+                            {{ MEDIA_URL }}collections/sittinontopamyworld_300.webp 300w,
+                            {{ MEDIA_URL }}collections/sittinontopamyworld_600.webp 600w,
+                            {{ MEDIA_URL }}collections/sittinontopamyworld_900.webp 900w,
+                            {{ MEDIA_URL }}collections/sittinontopamyworld_1200.webp 1200w"
+                        sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                        class="img-fluid grow" alt="Sittin on top'a my world">
+                </div>
+                <h2 class="montaga img-title">Sittin on top'a my world</h2>
+                <button class="custom-btn" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

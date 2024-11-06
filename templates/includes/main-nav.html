@@ -21,9 +21,10 @@
             <!-- Dropdown Menu for collections -->
             <div class="dropdown-menu border-0" aria-labelledby="collections-link">
                 <!-- Specific categories as dropdown items -->
-                <a href="#" class="dropdown-item">The Kingdom</a>
-                <a href="#" class="dropdown-item">Ropes of Wisdom</a>
-                <a href="#" class="dropdown-item">Perfect Moments</a>
+                <a href="{% url 'all_collections'%}" class="dropdown-item">All Collections</a>
+                <a href="{% url 'thekingdom'%}" class="dropdown-item">The Kingdom</a>
+                <a href="{% url 'ropesofwisdom'%}" class="dropdown-item">Ropes of Wisdom</a>
+                <a href="{% url 'perfectmoments'%}" class="dropdown-item">Perfect Moments</a>
             </div>
         </li>
         <!-- Navigation Item: Events -->

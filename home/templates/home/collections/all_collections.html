@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Collections{% endblock %}
+
+{% block page_header %}
+<h1 class="text-center mb-4 montaga collections-heading mb-2 mt-1">Collections By Kicassoo</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Collection Section 1 -->
+    <div class="row mb-5">
+        <h2 class="montaga collection-title">The Kingdom</h2>
+        <div class="col-md-6 order-md-2">
+            <img src="{{ MEDIA_URL }}collections/Kingdom_1200.webp"
+                 srcset="
+                    {{ MEDIA_URL }}collections/Kingdom_300.webp 300w,
+                    {{ MEDIA_URL }}collections/Kingdom_600.webp 600w,
+                    {{ MEDIA_URL }}collections/Kingdom_900.webp 900w,
+                    {{ MEDIA_URL }}collections/Kingdom_1200.webp 1200w"
+                 sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                 class="img-fluid collection-img" alt="The Kingdom Collection">
+        </div>
+        <div class="col-md-6 order-md-1 collection-text">
+            <p>Life in all its forms captured through beautiful art. "The Kingdom" collection
+                celebrates the innate creativity and awareness of the animal kingdom...</p>
+            <div class="button-container">
+                <a class="custom-btn" href="{% url 'thekingdom' %}" aria-label="View the kingdom collection">View Collection</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Section 2 -->
+    <div class="row mb-5">
+        <h2 class="montaga collection-title">Ropes of Wisdom</h2>
+        <div class="col-md-6 order-md-2">
+            <img src="{{ MEDIA_URL }}collections/ropes_1200.webp"
+                 srcset="
+                    {{ MEDIA_URL }}collections/ropes_300.webp 300w,
+                    {{ MEDIA_URL }}collections/ropes_600.webp 600w,
+                    {{ MEDIA_URL }}collections/ropes_900.webp 900w,
+                    {{ MEDIA_URL }}collections/ropes_1200.webp 1200w"
+                 sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                 class="img-fluid collection-img" alt="Ropes of Wisdom Collection">
+        </div>
+        <div class="col-md-6 order-md-1 collection-text">
+            <p>This Collection delves into the profound connections that bind us to friends, family, and those who...</p>
+            <div class="button-container">
+                <a class="custom-btn" href="{% url 'ropesofwisdom' %}" aria-label="View the Ropes of wisdom collection">View Collection</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Section 3 -->
+    <div class="row mb-5">
+        <h2 class="montaga collection-title">Perfect Moments</h2>
+        <div class="col-md-6 order-md-2">
+            <img src="{{ MEDIA_URL }}collections/moments_1200.webp"
+                 srcset="
+                    {{ MEDIA_URL }}collections/moments_300.webp 300w,
+                    {{ MEDIA_URL }}collections/moments_600.webp 600w,
+                    {{ MEDIA_URL }}collections/moments_900.webp 900w,
+                    {{ MEDIA_URL }}collections/moments_1200.webp 1200w"
+                 sizes="(min-width: 1400px) 636px, (min-width: 1200px) 546px, (min-width: 1000px) 456px, (min-width: 780px) 336px, (min-width: 580px) 246px, (min-width: 340px) calc(100vw - 24px), calc(20vw + 216px)"
+                 class="img-fluid collection-img" alt="Perfect Moments Collection">
+        </div>
+        <div class="col-md-6 order-md-1 collection-text">
+            <p>This is one of Kicassoo's favorite collections. It captures the essence of those fleeting instances...</p>
+            <div class="button-container">
+                <a class="custom-btn" href="{% url 'perfectmoments' %}" aria-label="View the perfect moments collection">View Collection</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
