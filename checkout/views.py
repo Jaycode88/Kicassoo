@@ -15,6 +15,8 @@ from .models import Order, OrderItem
 from .services import prepare_printful_order_data
 from django_countries.fields import Country
 from products.models import Product
+from .utils.email import send_order_confirmation_email
+from django.db import transaction
 import json
 import uuid
 
@@ -226,57 +228,75 @@ def stripe_webhook(request):
         logger.error(f"Webhook signature verification failed: {e}")
         return HttpResponse(status=400)
 
+    # Track if email has already been sent
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
         order_number = payment_intent.get('metadata', {}).get('order_number')
+        stripe_intent_id = payment_intent['id']
 
         try:
-            # Fetch the order from the database
-            order = Order.objects.get(order_number=order_number)
-            order.payment_status = 'COMPLETED'
-            order.stripe_payment_intent_id = payment_intent['id']
-            order.save()
+            # Begin a transaction to lock the order for this webhook event
+            with transaction.atomic():
+                order = Order.objects.select_for_update().get(order_number=order_number)
 
-            # Instantiate the PrintfulAPI class
-            printful_api = PrintfulAPI()
+                # Avoid processing duplicate or previously processed payment intents
+                if order.stripe_payment_intent_id == stripe_intent_id or order.confirmation_email_sent:
+                    logger.info(f"Ignoring duplicate or already processed webhook for order {order_number}.")
+                    return JsonResponse({'status': 'ignored'}, status=200)
 
-            # Prepare Printful order data using sync_variant_id
-            printful_order_data = {
-                'recipient': {
-                    'name': order.full_name,
-                    'email': order.email,
-                    'phone': order.phone_number,
-                    'address1': order.street_address1,
-                    'address2': order.street_address2 or '',
-                    'city': order.town_or_city,
-                    'state_code': order.county,
-                    'zip': order.postcode,
-                    'country_code': order.country.code,
-                },
-                'items': [
-                    {
-                        'sync_variant_id': item.product.sync_variant_id,
-                        'quantity': item.quantity
-                    } for item in order.items.all()
-                ]
-            }
+                # Mark payment as completed and save Stripe payment intent ID
+                order.payment_status = 'COMPLETED'
+                order.stripe_payment_intent_id = stripe_intent_id
+                order.save(update_fields=['payment_status', 'stripe_payment_intent_id'])
 
-            # Send the order to Printful and get the response
-            printful_response = printful_api.create_order(printful_order_data, confirm=True)
-            logger.info(f"Printful API Response: {printful_response}")
+                # Prepare Printful order data using sync_variant_id
+                printful_api = PrintfulAPI()
+                printful_order_data = {
+                    'recipient': {
+                        'name': order.full_name,
+                        'email': order.email,
+                        'phone': order.phone_number,
+                        'address1': order.street_address1,
+                        'address2': order.street_address2 or '',
+                        'city': order.town_or_city,
+                        'state_code': order.county,
+                        'zip': order.postcode,
+                        'country_code': order.country.code,
+                    },
+                    'items': [
+                        {
+                            'sync_variant_id': item.product.sync_variant_id,
+                            'quantity': item.quantity
+                        } for item in order.items.all()
+                    ]
+                }
 
-            # Process the response from Printful
-            if printful_response and 'result' in printful_response:
-                order.printful_order_id = printful_response['result'].get('id')
-                order.save()
+                # Send the order to Printful
+                printful_response = printful_api.create_order(printful_order_data, confirm=True)
+                logger.info(f"Printful API Response: {printful_response}")
 
-                # Update each OrderItem with Printful IDs
-                for item_data, order_item in zip(printful_response['result']['items'], order.items.all()):
-                    order_item.printful_id = item_data.get('id')
-                    order_item.sync_variant_id = item_data.get('sync_variant_id')
-                    order_item.printful_variant_id = item_data.get('variant_id')
-                    order_item.save()
-                logger.info("Order and items successfully sent to Printful with updated IDs.")
+                # Process Printful response and update order items
+                if printful_response and 'result' in printful_response:
+                    order.printful_order_id = printful_response['result'].get('id')
+                    estimated_shipping_date = printful_response['result'].get('estimated_shipping_date')
+                    if estimated_shipping_date:
+                        order.estimated_shipping_date = estimated_shipping_date
+                    order.save(update_fields=['printful_order_id', 'estimated_shipping_date'])
+
+                    for item_data, order_item in zip(printful_response['result']['items'], order.items.all()):
+                        order_item.printful_id = item_data.get('id')
+                        order_item.sync_variant_id = item_data.get('sync_variant_id')
+                        order_item.printful_variant_id = item_data.get('variant_id')
+                        order_item.save()
+
+                    # Send email only if not already sent
+                    if not order.confirmation_email_sent:
+                        logger.info("Sending order confirmation email.")
+                        send_order_confirmation_email(order)
+                        order.confirmation_email_sent = True  # Mark email as sent
+                        order.save(update_fields=['confirmation_email_sent'])
+                    else:
+                        logger.info("Order confirmation email already sent; skipping.")
 
         except Order.DoesNotExist:
             logger.error(f"Order with order number {order_number} not found.")
@@ -285,12 +305,17 @@ def stripe_webhook(request):
             logger.error(f"Error processing order in Printful: {e}")
             return HttpResponse(status=500)
 
+    # Skip processing for `charge.succeeded` or other events to prevent duplicate actions
+    elif event['type'] == 'charge.succeeded':
+        logger.info("Ignoring `charge.succeeded` event to prevent duplicate actions.")
+        return JsonResponse({'status': 'ignored'}, status=200)
+
     elif event['type'] == 'payment_intent.payment_failed':
         payment_intent = event['data']['object']
         order_number = payment_intent.get('metadata', {}).get('order_number')
         logger.warning(f"Payment failed for intent {payment_intent['id']} for order {order_number}.")
-        
-        # Handle failed payment
+
+        # Handle payment failure
         try:
             order = Order.objects.get(order_number=order_number)
             order.payment_status = 'FAILED'

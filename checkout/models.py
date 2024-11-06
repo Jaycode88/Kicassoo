@@ -17,7 +17,7 @@ class Order(models.Model):
         choices=PAYMENT_STATUS_CHOICES,
         default='PENDING',
     )
-    
+
     order_number = models.CharField(max_length=32, null=False, editable=False)
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
@@ -41,6 +41,9 @@ class Order(models.Model):
     printful_order_id = models.CharField(max_length=50, null=True, blank=True)  # Store Printful order ID
     estimated_shipping_date = models.DateField(null=True, blank=True)  # Store estimated shipping date
 
+    # confirmation email
+    confirmation_email_sent = models.BooleanField(default=False)
+    
     def _generate_order_number(self):
         """
         Generate a random, unique order number using UUID.

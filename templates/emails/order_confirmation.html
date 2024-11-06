@@ -1,33 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
 </head>
 <body>
-    <h2>Thank you for your order, {{ full_name }}!</h2>
-    <p>Your order has been successfully placed with the following details:</p>
+    <h2>Thank you for your order, {{ order.full_name }}!</h2>
+    <p>Your order number is <strong>{{ order.order_number }}</strong></p>
 
-    <h3>Order Summary</h3>
+    <h3>Order Summary:</h3>
     <ul>
         {% for item in order_items %}
-            <li>{{ item.name }} - {{ item.quantity }} x £{{ item.price }}</li>
+            <li>
+                {{ item.product.name }} - {{ item.quantity }} x £{{ item.price|floatformat:2 }}<br>
+                <small>Size: {{ item.product.size }}</small>
+            </li>
         {% endfor %}
     </ul>
-    <p><strong>Delivery Cost:</strong> £{{ delivery_cost }}</p>
-    <p><strong>Grand Total:</strong> £{{ grand_total }}</p>
+    <p><strong>Order Total:</strong> £{{ order.grand_total|floatformat:2 }}</p>
 
-    <h3>Shipping Details</h3>
+    <h3>Delivery Information:</h3>
     <p>
-        {{ full_name }}<br>
-        {{ address1 }}<br>
-        {% if address2 %}{{ address2 }}<br>{% endif %}
-        {{ city }}<br>
-        {{ postcode }}<br>
-        {{ country }}
+        {{ order.street_address1 }}<br>
+        {{ order.street_address2 }}<br>
+        {{ order.town_or_city }}, {{ order.county }}<br>
+        {{ order.postcode }}<br>
+        {{ order.country.name }}
     </p>
 
-    <p>We hope you enjoy your purchase! Feel free to contact us if you have any questions.</p>
-
-    <p>Best Regards,<br>Your Company Team</p>
+    {% if order.estimated_delivery_date %}
+        <p><strong>Estimated Delivery Date:</strong> {{ order.estimated_delivery_date }}</p>
+    {% else %}
+        <p><strong>Estimated Delivery Date:</strong> Not available</p>
+    {% endif %}
+    
+    <p>If you have any questions, please contact our support team using the contact us button on the website or you can email at .....@....com</p>
+    <p>Thank you for shopping with us!</p>
 </body>
 </html>
