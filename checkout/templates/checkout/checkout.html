@@ -19,7 +19,10 @@
             <form method="POST" action="{% url 'checkout' %}">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button type="submit" class="btn btn-primary w-100">Calculate Delivery</button>
+                {% if not delivery %}
+                    <!-- Show the button only if delivery cost is not set -->
+                    <button type="submit" class="btn btn-green w-100">Calculate Delivery</button>
+                {% endif %}
             </form>
         </div>
 
@@ -48,7 +51,7 @@
                 <div id="payment-form">
                     <h5>Payment Details</h5>
                     <div id="card-element"><!-- Stripe card element goes here --></div>
-                    <button id="submit-payment" class="btn btn-success mt-3">Submit Payment</button>
+                    <button id="submit-payment" class="btn btn-green mt-3">Submit Payment</button>
                 </div>
                 {% endif %}
             </div>
