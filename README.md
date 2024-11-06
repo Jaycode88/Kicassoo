@@ -16,9 +16,9 @@
 - Details and category need to be added manually to the imported products
 
 
-- checkout is very robust it stores the order as soon as a person enters their card details with a status of payment pending then the webhook carries the order number on receipt of a succesful payment webhook the order payment status is updated to completed and the order is sent to printful via the API.. I did originally put all of the order info onto the webhook but this caused problems due to the 500 characther limit the stripe webhook is restricted to.
+- checkout is very robust it stores the order as soon as a person enters their card details with a status of payment pending then the webhook carries the order number on receipt of a succesful payment webhook the order payment status is updated to completed and the order is sent to printful via the API.. I did originally put all of the order info onto the webhook but this caused problems due to the 500 characther limit the stripe webhook is restricted to. Another great benefit of the way that checkout is setup is that If a user's payment fails and they do not choose to use another card and complete the order, You will have the order stored with a payment failed staus from here you can aquire the user's information  such as email address and send them reminders or discount  to encourage completion of order.
 
-
+- mention the webhook error in solved bugs, I had a problem when there were many items(over 4 or 5) on an order i got an error due to the stripe webhook having a character limit of 500, I had set the webhook up to contain all of the order data including the items but this is what was causing the error. To solve the issue I implemented that as soon as the user submits their card details the order is created with a payment pending status, then that allowed for the webhook to only need to hold the order number. When the webook returns a payment intent succeeded with the order number only then is the order payment status updated to completed and the order is sent to printful for fulfillment.
 
 
 

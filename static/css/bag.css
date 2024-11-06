@@ -1,126 +1,114 @@
 /* Style for images in the bag table */
 .product-img {
-    width: 140px;
+    width: 80px;
     height: auto;
 }
 
-/* Quantity selector fix for screens between 768px and 576px */
+/* Responsive adjustments for medium screens */
 @media (max-width: 768px) {
-    .quantity-input-group {
-        max-width: 150px;
-        /* Increase the width for two-digit numbers */
-        margin: 0 auto;
-    }
-
-    .qty-input {
-        width: 60px;
-        /* Adjust width for two-digit numbers */
-        text-align: center;
-    }
-
-    .increment-qty,
-    .decrement-qty {
-        width: 40px;
-        /* Slightly larger buttons */
-    }
-
-    /* Ensure the table doesn't allow overflow */
-    .table td {
-        white-space: nowrap;
-        /* Prevent wrapping of table contents */
+    .product-img {
+        width: 70px;
     }
 }
 
 @media (max-width: 576px) {
-    .table td[data-label="Quantity"] {
-        white-space: normal;
-        /* Allow wrapping for better layout on smaller screens */
+    .product-img {
+        width: 60px;
     }
 
-    .table td {
-        text-align: center;
-    }
-
-    /* Fix for the quantity header */
-    .text-center[data-label="Quantity"] {
-        padding-right: 10px;
-    }
-}
-
-/* General styling to ensure title is centered */
-.bag-page-title {
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* For smaller screens below 768px */
-@media (max-width: 768px) {
-    .bag-page-title {
-        text-align: center;
-        font-size: 24px;
-        /* Reduce font size */
+    /* Full-width buttons */
+    .btn.custom-btn,
+    .btn.btn-green {
         width: 100%;
-        /* Ensure it spans full width */
-        margin-top: 10px;
-        /* Adjust margin for smaller screens */
+        margin-bottom: 10px;
     }
 }
 
-@media (max-width: 455px) {
-    .table td[data-label="Remove"] {
+/* Between 480px and 321px - Hide table header, keep images, spread content */
+@media (max-width: 480px) and (min-width: 321px) {
+    .table-responsive {
+        overflow-x: hidden;
+    }
+
+    /* Hide the table header */
+    .table thead {
         display: none;
-        /* Hide the original Remove button column */
     }
 
-    /* Display the Remove button under the subtotal */
+    /* Retain images and spread content */
+    .product-img {
+        display: inline;
+        width: 50px;
+        margin-right: 10px;
+    }
+
+    /* Hide quantity column for better spacing */
+    .table td[data-label="Quantity"] {
+        display: none;
+    }
+
+    .table tbody tr {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    /* Improve spacing and labels */
+    .table tbody tr td {
+        flex: 1;
+        padding: 5px;
+        text-align: left;
+    }
+
+    .table tbody tr td[data-label]:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    /* Center-align mobile remove item button */
     .remove-item-mobile {
         display: block;
+        text-align: right;
+        margin-top: 10px;
+    }
+}
+
+/* Below 320px - Hide quantity and images for compact view */
+@media (max-width: 320px) {
+    .table thead {
+        display: none;
+    }
+
+    .table tbody tr {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    /* Hide images and quantity */
+    .product-img {
+        display: none;
+    }
+
+    .table td[data-label="Quantity"] {
+        display: none;
+    }
+
+    /* Center-align the remove button on the smallest screens */
+    .remove-item-mobile {
         text-align: center;
         margin-top: 10px;
     }
-}
 
-
-@media (max-width: 380px) {
-
-    /* Ensure table cells wrap and don't overflow */
-    .table td {
-        display: block;
-        text-align: left;
-        white-space: normal;
-    }
-
-    /* Move Subtotal and Remove button to a new line below product info */
-    .table td[data-label="Subtotal"],
-    .remove-item-mobile {
-        display: block;
-        width: 100%;
-        margin-top: 10px;
-        text-align: right;
-    }
-
-    /* Align the Remove button with the subtotal */
-    .remove-item-mobile {
-        text-align: left;
-    }
-
-    /* Adjust button size */
-    .btn.custom-btn {
-        width: 100%;
-        /* Ensure buttons are full-width */
-    }
-}
-
-@media (max-width: 352px) {
     .bag-page-title {
-        margin-top: 50px;
         font-size: 20px;
-        /* Reduce font size */
-    }
-}
-
-@media (max-width: 342px) {
-    .bag-page-title {
-        margin-top: 30px;
+        margin-top: 20px;
     }
 }
