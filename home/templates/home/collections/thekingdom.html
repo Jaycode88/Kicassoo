@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <style>
+        :root {
+            --watermark-image: url('{{ MEDIA_URL }}collections/copyrightgrey.png');
+        }
+    </style>
+{% endblock %}
+
 {% block title %}The Kingdom{% endblock %}
 
 {% block page_header %}
