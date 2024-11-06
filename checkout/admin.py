@@ -22,7 +22,7 @@ class OrderAdmin(admin.ModelAdmin):
         'order_number', 'full_name', 'email', 'phone_number',
         'postcode', 'town_or_city', 'street_address1', 'street_address2', 
         'county', 'country', 'date', 'delivery_cost', 'order_total', 'grand_total',
-        'stripe_payment_intent_id', 'printful_order_id', 'estimated_shipping_date'
+        'stripe_payment_intent_id', 'printful_order_id', 'payment_status', 'estimated_shipping_date'
     )
 
     list_display = ('order_number', 'full_name', 'email', 'grand_total', 'date')

@@ -7,6 +7,17 @@ from django_countries.fields import CountryField
 from products.models import Product
 
 class Order(models.Model):
+    PAYMENT_STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('COMPLETED', 'Completed'),
+        ('FAILED', 'Failed'),
+    ]
+    payment_status = models.CharField(
+        max_length=10,
+        choices=PAYMENT_STATUS_CHOICES,
+        default='PENDING',
+    )
+    
     order_number = models.CharField(max_length=32, null=False, editable=False)
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
@@ -24,6 +35,7 @@ class Order(models.Model):
     order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     stripe_payment_intent_id = models.CharField(max_length=50, null=True, blank=True)
+    payment_status = models.CharField(max_length=20, default="PENDING", null=False, blank=False)
 
     # Printful-specific fields
     printful_order_id = models.CharField(max_length=50, null=True, blank=True)  # Store Printful order ID

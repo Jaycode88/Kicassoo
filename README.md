@@ -16,6 +16,8 @@
 - Details and category need to be added manually to the imported products
 
 
+- checkout is very robust it stores the order as soon as a person enters their card details with a status of payment pending then the webhook carries the order number on receipt of a succesful payment webhook the order payment status is updated to completed and the order is sent to printful via the API.. I did originally put all of the order info onto the webhook but this caused problems due to the 500 characther limit the stripe webhook is restricted to.
+
 
 
 

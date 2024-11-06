@@ -9,7 +9,7 @@ from decimal import Decimal
 import stripe
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from products.printful_service import PrintfulAPI 
+from products.printful_service import PrintfulAPI
 import logging
 from .models import Order, OrderItem
 from .services import prepare_printful_order_data
@@ -88,6 +88,7 @@ def checkout(request):
                 delivery_cost=delivery_cost,
                 order_total=bag_data['grand_total'],
                 grand_total=grand_total_with_shipping,
+                payment_status="PENDING",
                 order_number=uuid.uuid4().hex.upper()
             )
 
@@ -227,19 +228,19 @@ def stripe_webhook(request):
 
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
-        logger.info(f"💸 Payment intent succeeded: {payment_intent['id']}")
+        order_number = payment_intent.get('metadata', {}).get('order_number')
 
         try:
-            # Retrieve order using the order number in metadata
-            order_number = payment_intent.get('metadata', {}).get('order_number')
+            # Fetch the order from the database
             order = Order.objects.get(order_number=order_number)
-            
-            # Save the Stripe Payment Intent ID to the Order
+            order.payment_status = 'COMPLETED'
             order.stripe_payment_intent_id = payment_intent['id']
             order.save()
 
-            # Prepare Printful order data using sync_variant_id
+            # Instantiate the PrintfulAPI class
             printful_api = PrintfulAPI()
+
+            # Prepare Printful order data using sync_variant_id
             printful_order_data = {
                 'recipient': {
                     'name': order.full_name,
@@ -254,33 +255,28 @@ def stripe_webhook(request):
                 },
                 'items': [
                     {
-                        'sync_variant_id': item.product.sync_variant_id,  # Use sync_variant_id here
+                        'sync_variant_id': item.product.sync_variant_id,
                         'quantity': item.quantity
                     } for item in order.items.all()
                 ]
             }
 
-            # Send the order to Printful and retrieve the response
+            # Send the order to Printful and get the response
             printful_response = printful_api.create_order(printful_order_data, confirm=True)
             logger.info(f"Printful API Response: {printful_response}")
 
-            # Check if 'result' and 'items' are present in the response
-            if printful_response and 'result' in printful_response and 'items' in printful_response['result']:
+            # Process the response from Printful
+            if printful_response and 'result' in printful_response:
                 order.printful_order_id = printful_response['result'].get('id')
                 order.save()
 
                 # Update each OrderItem with Printful IDs
                 for item_data, order_item in zip(printful_response['result']['items'], order.items.all()):
-                    # Map fields: printful_id should be Printful's item 'id', sync_variant_id stays as the identifier
                     order_item.printful_id = item_data.get('id')
-                    order_item.sync_variant_id = item_data.get('sync_variant_id')  # Make sure sync_variant_id is saved
-                    order_item.printful_variant_id = item_data.get('variant_id')  # Printful’s variant ID
+                    order_item.sync_variant_id = item_data.get('sync_variant_id')
+                    order_item.printful_variant_id = item_data.get('variant_id')
                     order_item.save()
-
                 logger.info("Order and items successfully sent to Printful with updated IDs.")
-            else:
-                logger.warning("Warning: 'items' key missing in Printful response or response is empty.")
-                return HttpResponse("Error: 'items' key missing in Printful response.", status=500)
 
         except Order.DoesNotExist:
             logger.error(f"Order with order number {order_number} not found.")
@@ -289,8 +285,22 @@ def stripe_webhook(request):
             logger.error(f"Error processing order in Printful: {e}")
             return HttpResponse(status=500)
 
-    return JsonResponse({'status': 'success'})
+    elif event['type'] == 'payment_intent.payment_failed':
+        payment_intent = event['data']['object']
+        order_number = payment_intent.get('metadata', {}).get('order_number')
+        logger.warning(f"Payment failed for intent {payment_intent['id']} for order {order_number}.")
+        
+        # Handle failed payment
+        try:
+            order = Order.objects.get(order_number=order_number)
+            order.payment_status = 'FAILED'
+            order.save()
+        except Order.DoesNotExist:
+            logger.error(f"Failed payment for order {order_number} could not be found.")
+        
+        return JsonResponse({'status': 'payment_failed'}, status=400)
 
+    return JsonResponse({'status': 'success'})
 
 
 def payment_failed(request):
