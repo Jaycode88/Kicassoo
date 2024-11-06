@@ -1,3 +1,14 @@
+/* Checkout page styling */
+.product-image-sm {
+    width: 50px;
+    /* Adjust size as needed */
+    height: auto;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+
+
 /* Order success styling */
 .order-success-container {
     text-align: center;
