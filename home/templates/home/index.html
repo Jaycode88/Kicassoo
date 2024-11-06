@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block title %}Home{% endblock %}
 
 {% block page_header %}
@@ -17,7 +21,7 @@
             captivating displays of stillness and beauty. Kicassoo's work is a testament to her ability to capture
             the essence of the present moment, bringing a unique energy to homes, offices, and personal spaces.</p>
         <div class="btn-container">
-            <a href="collections.html" class="custom-btn">View Collections</a>
+            <a href="collections.html" class="btn custom-btn">View Collections</a>
             <a href="{% url 'product_list' %}" class="btn custom-btn me-2">
                 View Store
             </a>

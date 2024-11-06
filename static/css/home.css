@@ -1,3 +1,13 @@
+/* index.html */
+.btn-container {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+/* COLLECTIONS */
 /* Image watermark */
 .watermark-container {
     position: relative;
