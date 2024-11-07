@@ -1,0 +1,46 @@
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactModalLabel">Contact Me</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm" method="post" data-url="{% url 'contact' %}">
+                    {% csrf_token %}
+
+                    <!-- Name Field -->
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="me-3">
+                            {{ contact_form.name.label_tag }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <input type="text" name="name" class="form-control border border-1 rounded" placeholder="Your Name">
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="me-3">
+                            {{ contact_form.email.label_tag }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <input type="email" name="email" class="form-control border border-1 rounded" placeholder="Your Email">
+                        </div>
+                    </div>
+
+                    <!-- Message Field -->
+                    <div class="mb-3">
+                        {{ contact_form.message.label_tag }}
+                        <textarea name="message" class="form-control border border-1 rounded" placeholder="Your Message"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="reset" class="custom-btn">Reset</button>
+                        <button type="submit" class="custom-btn">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

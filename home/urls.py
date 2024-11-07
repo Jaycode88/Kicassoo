@@ -13,6 +13,7 @@ urlpatterns = [
     path('collections/perfectmoments/', views.perfectmoments, name='perfectmoments'),
     path('collections/ropesofwisdom/', views.ropesofwisdom, name='ropesofwisdom'),
     path('collections/thekingdom/', views.thekingdom, name='thekingdom'),
+    path('contact/', views.contact, name='contact'),
 ]
 
 if settings.DEBUG:
