@@ -32,3 +32,12 @@
     pointer-events: none;
     /* Ensures the watermark does not interfere with clicking on the image */
 }
+
+/* events.html */
+/* download button*/
+
+@media (min-width: 992px) {
+    .dwnld-btn {
+        margin-right: 0.5rem !important;
+    }
+}
