@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
+
 {% block title %}Home{% endblock %}
 
 {% block page_header %}
@@ -20,12 +21,15 @@
         <p>Welcome to the vibrant world of Kicassoo, where the interplay of colors and tones transforms spaces into
             captivating displays of stillness and beauty. Kicassoo's work is a testament to her ability to capture
             the essence of the present moment, bringing a unique energy to homes, offices, and personal spaces.</p>
-        <div class="btn-container">
-            <a href="collections.html" class="btn custom-btn">View Collections</a>
-            <a href="{% url 'product_list' %}" class="btn custom-btn me-2">
+            <div class="btn-container">
+                <a href="collections.html" class="btn custom-btn">View Collections</a>
+                <a href="{% url 'product_list' %}" class="btn custom-btn me-2">
                 View Store
             </a>
         </div>
     </div>
 </section>
+{% endblock %}
+{% block postloadjs %}
+    <script src="{% static 'js/copyright-script.js' %}"></script>
 {% endblock %}
