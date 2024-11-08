@@ -106,7 +106,7 @@ def remove_from_bag(request, item_key):
     try:
         product_id, variant_id = item_key.split('-')
     except ValueError:
-        messages.error(request, "Invalid item key.")
+        messages.error(request, "An error occurred.")
         return redirect('view_bag')
 
     # Fetch product details for messaging

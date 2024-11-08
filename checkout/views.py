@@ -21,7 +21,7 @@ import json
 import uuid
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('checkout')
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
