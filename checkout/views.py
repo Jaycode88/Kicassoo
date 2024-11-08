@@ -70,13 +70,19 @@ def checkout(request):
                     request.session['grand_total_with_shipping'] = float(grand_total_with_shipping)
                     messages.success(request, "Delivery cost calculated successfully.")
                 else:
-                    messages.error(request, f"Could not calculate delivery: {response_data['error']['message']}")
-                    delivery_cost = Decimal('0.00')
+                    messages.error(request, "Could not calculate delivery: Unsupported destination. Please try again or contact support.")
+                    delivery_cost = None  # Set to None to indicate failure
+                    grand_total_with_shipping = None
             except Exception as e:
-                messages.error(request, f"Error calculating delivery: {str(e)}")
-                delivery_cost = Decimal('0.00')
+                messages.error(request, "Error calculating delivery. Please try again later or contact support.")
+                delivery_cost = None
+                grand_total_with_shipping = None
 
-            # Create draft order in Django
+            # Early return if delivery cost is not calculated
+            if delivery_cost is None or grand_total_with_shipping is None:
+                return redirect('checkout')
+
+            # Create draft order in Django only if delivery cost was calculated
             order = Order.objects.create(
                 full_name=form_data['full_name'],
                 email=form_data['email'],
@@ -138,6 +144,7 @@ def checkout(request):
     return render(request, 'checkout/checkout.html', context)
 
 
+
 def place_order(request):
     """Handles order submission and redirects to payment page with order summary"""
 
@@ -148,7 +155,8 @@ def place_order(request):
             grand_total = Decimal(request.session.get('grand_total', 0))
             grand_total_with_shipping = grand_total + shipping_cost
         except (TypeError, ValueError) as e:
-            print(f"Error retrieving or calculating grand total: {e}")
+            logger.error(f"Error retrieving or calculating grand total: {e}")
+            messages.error(request, "An error occurred while calculating the order total.")
             return HttpResponse("Invalid order total", status=400)
 
         # Create Stripe PaymentIntent
@@ -160,7 +168,8 @@ def place_order(request):
                 metadata=request.session.get('checkout_form_data', {})  # Attach metadata if needed
             )
         except Exception as e:
-            print(f"Error creating PaymentIntent: {e}")
+            logger.error(f"Error creating PaymentIntent: {e}")
+            messages.error(request, "Failed to create payment intent. Please try again.")
             return HttpResponse("Failed to create payment intent", status=500)
 
         # Render payment page with required client_secret and order data
@@ -196,13 +205,13 @@ def create_payment_intent(request):
 
             # Check if essential fields are present
             if not order_details.get('address1') or total_amount is None:
-                print("Error: Missing required order fields.")
+                logger.error("Error: Missing required order fields.")
                 return JsonResponse({'error': 'Missing essential fields in order details'}, status=400)
 
             # Convert total_amount to an integer in cents for Stripe (if it is not already)
             amount = int(total_amount * 100) if isinstance(total_amount, (int, float, Decimal)) else None
             if amount is None:
-                print("Error: Invalid total_amount value.")
+                logger.error("Error: Invalid total_amount value.")
                 return JsonResponse({'error': 'Invalid total amount'}, status=400)
 
             # Metadata now only includes the order number
@@ -214,7 +223,7 @@ def create_payment_intent(request):
             return JsonResponse({'clientSecret': payment_intent['client_secret']})
 
         except Exception as e:
-            print(f"Error in create_payment_intent: {e}")
+            logger.error(f"Error in create_payment_intent: {e}")
             return JsonResponse({'error': str(e)}, status=500)
 
 

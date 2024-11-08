@@ -21,7 +21,6 @@ def add_to_bag(request, printful_id):
 
     # Retrieve the current bag from session or initialize a new one
     bag = request.session.get('bag', {})
-    print(f"Current Bag Before Update: {bag}")
 
     # Check if the specific variant is already in the bag; if so, update the quantity
     if item_key in bag:
@@ -29,9 +28,7 @@ def add_to_bag(request, printful_id):
     else:
         bag[item_key] = quantity
 
-    print(f"Updated Bag: {bag}")
-
-    # Save the updated bag to the session
+    # Save the updated bag to the session without changing the original bag structure
     request.session['bag'] = bag
     request.session.modified = True  # Ensures session is saved even if nothing else changes
 
@@ -39,12 +36,27 @@ def add_to_bag(request, printful_id):
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 
+    # Fetch product details for the success message
+    product = get_object_or_404(Product, printful_id=printful_id)
+    item_name = product.name
+    item_size = getattr(product, 'size', 'N/A')  # Assuming 'size' exists on the Product model; modify if necessary
+    item_price = product.price
+    total_price = item_price * quantity
+
+    # Add a user-friendly success message
+    messages.success(
+        request,
+        f'Added {item_name} (Size: {item_size}) x{quantity} to your bag.',
+        extra_tags='add_to_bag alert-success'
+    )
+
     return redirect(redirect_url)
 
 
 def adjust_bag(request, item_key):
     """Adjust the quantity of the specified product variant."""
     try:
+        # Split the item_key to extract product and variant IDs
         product_id, variant_id = item_key.split('-')
     except ValueError:
         messages.error(request, "Invalid item key.")
@@ -59,11 +71,25 @@ def adjust_bag(request, item_key):
     quantity = int(quantity)
     bag = request.session.get('bag', {})
 
-    if quantity > 0:
-        bag[item_key] = quantity
-    else:
-        bag.pop(item_key, None)
+    # Fetch the product details for messaging
+    product = get_object_or_404(Product, printful_id=product_id)
 
+    if quantity > 0:
+        # Update the quantity and notify the user
+        bag[item_key] = quantity
+        messages.success(
+            request,
+            f'You have updated {product.name} to {quantity} item(s) in your bag.'
+        )
+    else:
+        # Remove the item if quantity is zero
+        bag.pop(item_key, None)
+        messages.success(
+            request,
+            f'{product.name} has been removed from your bag.'
+        )
+
+    # Update the session
     request.session['bag'] = bag
     request.session.modified = True
     request.session.pop('delivery', None)
@@ -76,9 +102,25 @@ def remove_from_bag(request, item_key):
     """Remove the specified product variant from the shopping bag."""
     bag = request.session.get('bag', {})
 
-    if item_key in bag:
-        del bag[item_key]
+    # Extract product and variant IDs for product name retrieval
+    try:
+        product_id, variant_id = item_key.split('-')
+    except ValueError:
+        messages.error(request, "Invalid item key.")
+        return redirect('view_bag')
 
+    # Fetch product details for messaging
+    product = get_object_or_404(Product, printful_id=product_id)
+
+    if item_key in bag:
+        # Remove the item and notify the user
+        del bag[item_key]
+        messages.success(
+            request,
+            f'{product.name} has been removed from your bag.'
+        )
+
+    # Update the session
     request.session['bag'] = bag
     request.session.modified = True
     request.session.pop('delivery', None)

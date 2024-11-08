@@ -17,8 +17,23 @@ def contact(request):
                 from_email=form.cleaned_data['email'],
                 recipient_list=[settings.EMAIL_HOST_USER],
             )
-            return JsonResponse({"success": True})
-    return JsonResponse({"success": False}, status=400)
+            # Return JSON with a success message
+            return JsonResponse({
+                "success": True,
+                "message": "Your message has been sent successfully!"
+            })
+        else:
+            # Return JSON with an error message
+            return JsonResponse({
+                "success": False,
+                "message": "There was an error in your form submission. Please check your entries and try again."
+            }, status=400)
+
+    # Catch-all return if the request is not POST
+    return JsonResponse({
+        "success": False,
+        "message": "Invalid request method."
+    }, status=400)
 
 def index(request):
     contact_form = ContactForm() 

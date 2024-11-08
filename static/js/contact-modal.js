@@ -15,44 +15,56 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: formData,
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Close the modal
-                    $('#contactModal').modal('hide');
-
-                    // Display message on the main page
-                    const messagesContainer = document.getElementById("messages-container");
-                    messagesContainer.innerHTML = ''; // Clear existing messages
-
-                    // Create the new alert message element
-                    const alertDiv = document.createElement("div");
-                    alertDiv.classList.add("alert", "alert-success"); // Use "alert-danger" if it's an error
-                    alertDiv.textContent = data.message || "Your message has been sent successfully!";
-
-                    messagesContainer.appendChild(alertDiv);
-
-                    // Reset the form
-                    contactForm.reset();
-
-                    // Automatically fade out message after a few seconds
-                    setTimeout(() => {
-                        alertDiv.remove();
-                    }, 5000);
-                } else {
-                    // Handle errors in form submission
-                    const messagesContainer = document.getElementById("messages-container");
-                    messagesContainer.innerHTML = ''; // Clear existing messages
-
-                    const alertDiv = document.createElement("div");
-                    alertDiv.classList.add("alert", "alert-danger");
-                    alertDiv.textContent = data.message || "There was an error with your submission.";
-                    messagesContainer.appendChild(alertDiv);
+            .then(response => {
+                // Check if the response is OK (status 200-299)
+                if (!response.ok) {
+                    // If not, return the error JSON response
+                    return response.json().then(data => {
+                        throw new Error(data.message || "There was an error with your submission.");
+                    });
                 }
+                // Otherwise, return the successful JSON response
+                return response.json();
+            })
+            .then(data => {
+                const messagesContainer = document.getElementById("messages-container");
+                messagesContainer.innerHTML = ''; // Clear existing messages
+
+                // Create a new alert message element
+                const alertDiv = document.createElement("div");
+                alertDiv.classList.add("alert");
+
+                // Set alert type and message content based on success status
+                if (data.success) {
+                    $('#contactModal').modal('hide'); // Close the modal on success
+                    alertDiv.classList.add("alert-success");
+                    alertDiv.textContent = data.message;
+                    contactForm.reset(); // Reset form fields
+                } else {
+                    alertDiv.classList.add("alert-danger");
+                    alertDiv.textContent = data.message;
+                }
+
+                messagesContainer.appendChild(alertDiv);
+
+                // Automatically fade out message after 5 seconds
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 5000);
             })
             .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
+                // Catch non-OK responses or other errors and display a message
+                const messagesContainer = document.getElementById("messages-container");
+                messagesContainer.innerHTML = ''; // Clear any existing messages
+
+                const alertDiv = document.createElement("div");
+                alertDiv.classList.add("alert", "alert-danger");
+                alertDiv.textContent = error.message;
+                messagesContainer.appendChild(alertDiv);
+
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 5000);
             });
     });
 });

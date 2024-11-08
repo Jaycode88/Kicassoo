@@ -40,6 +40,11 @@ def product_list(request):
             products = products.filter(category__name__in=categories)
             categories = Category.objects.filter(name__in=categories)
 
+            # Check for no results after category filtering
+            if not products.exists():
+                messages.warning(request, "No products found for the selected category or categories.")
+                return redirect(reverse('product_list'))
+
         if 'q' in request.GET:
             query = request.GET['q']
             if not query:
@@ -52,13 +57,18 @@ def product_list(request):
             # Handle empty search results
             if not products.exists():
                 messages.warning(request, "Your search returned no results.")
+                return redirect(reverse('product_list'))
+
+    # Check if sorting or filtering results in an empty product list
+    if not products.exists():
+        messages.warning(request, "No products match the current sorting and filtering options.")
 
     current_sorting = f'{sort}_{direction}'
 
     context = {
         'products': products,
         'search_term': query,
-        'current_categories': category,
+        'current_categories': categories,
         'current_sorting': current_sorting,
     }
 

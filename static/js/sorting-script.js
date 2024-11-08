@@ -9,7 +9,7 @@
 
 // Listen for changes on the #sort-selector dropdown.
 $('#sort-selector').change(function () {
-    console.log("Sort selector changed"); // Debugging log
+
     // Store a reference to the changed select element.
     var selector = $(this);
     // Create a URL object based on the current window location.
@@ -17,7 +17,7 @@ $('#sort-selector').change(function () {
 
     // Get the value of the selected option.
     var selectedVal = selector.val();
-    console.log("Selected value: ", selectedVal); // Debugging log
+
     // Check if the selected value is not 'reset'.
     if (selectedVal != "reset") {
         // Extract the sort field and direction from the selected value.
