@@ -6,9 +6,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <!-- Message container for displaying messages dynamically -->
+                <div id="messageContainer"></div>
+
                 <form id="contactForm" method="post" data-url="{% url 'contact' %}">
                     {% csrf_token %}
-
                     <!-- Name Field -->
                     <div class="mb-3 d-flex align-items-center">
                         <div class="me-3">
@@ -18,7 +20,6 @@
                             <input type="text" name="name" class="form-control border border-1 rounded" placeholder="Your Name">
                         </div>
                     </div>
-
                     <!-- Email Field -->
                     <div class="mb-3 d-flex align-items-center">
                         <div class="me-3">
@@ -28,13 +29,11 @@
                             <input type="email" name="email" class="form-control border border-1 rounded" placeholder="Your Email">
                         </div>
                     </div>
-
                     <!-- Message Field -->
                     <div class="mb-3">
                         {{ contact_form.message.label_tag }}
                         <textarea name="message" class="form-control border border-1 rounded" placeholder="Your Message"></textarea>
                     </div>
-
                     <div class="modal-footer">
                         <button type="reset" class="custom-btn">Reset</button>
                         <button type="submit" class="custom-btn">Send</button>

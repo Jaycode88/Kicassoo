@@ -43,6 +43,8 @@
     {% block corejs %}
     <!-- Stripe Script -->
     <script src="https://js.stripe.com/v3/"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!--Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -126,15 +128,6 @@
         </div>
     </header>
 
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
 
     <div id="page_header">
         {% block page_header %}
@@ -152,6 +145,17 @@
     </footer>
 
     {% include 'includes/contact_modal.html' %}
+    
+    {% if messages %}
+    <div id="messages-container" class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% else %}
+    <!-- Empty container for AJAX messages -->
+    <div id="messages-container" class="messages"></div>
+{% endif %}
 
     {% block postloadjs %}
     {% endblock %}
