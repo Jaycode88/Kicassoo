@@ -173,3 +173,41 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for *: 'dict' and 'decimal.Decimal'
 ERROR 2024-11-09 10:08:01,124 basehttp "GET /products/353888632/ HTTP/1.1" 500 114767
 ERROR 2024-11-09 10:08:01,124 basehttp "GET /products/353888632/ HTTP/1.1" 500 114767
+ERROR 2024-11-09 13:13:10,607 log Internal Server Error: /bag/remove/365223332-14125/
+Traceback (most recent call last):
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\Desktop\Kicassoo-Django\Kicassoo\bag\views.py", line 111, in remove_from_bag
+    product = get_object_or_404(Product, printful_id=product_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 86, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 652, in get
+    raise self.model.MultipleObjectsReturned(
+products.models.Product.MultipleObjectsReturned: get() returned more than one Product -- it returned 5!
+ERROR 2024-11-09 13:13:10,748 basehttp "GET /bag/remove/365223332-14125/ HTTP/1.1" 500 91111
+ERROR 2024-11-09 13:13:10,748 basehttp "GET /bag/remove/365223332-14125/ HTTP/1.1" 500 91111
+ERROR 2024-11-09 13:16:31,274 log Internal Server Error: /bag/adjust/365223332-14125/
+Traceback (most recent call last):
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\Desktop\Kicassoo-Django\Kicassoo\bag\views.py", line 73, in adjust_bag
+    product = get_object_or_404(Product, printful_id=product_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 86, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Corsair\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 652, in get
+    raise self.model.MultipleObjectsReturned(
+products.models.Product.MultipleObjectsReturned: get() returned more than one Product -- it returned 5!
+ERROR 2024-11-09 13:16:31,388 basehttp "POST /bag/adjust/365223332-14125/ HTTP/1.1" 500 92247
+ERROR 2024-11-09 13:16:31,388 basehttp "POST /bag/adjust/365223332-14125/ HTTP/1.1" 500 92247

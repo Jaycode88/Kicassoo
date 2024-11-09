@@ -57,7 +57,7 @@ def adjust_bag(request, item_key):
         # Split the item_key to extract product and variant IDs
         product_id, variant_id = item_key.split('-')
     except ValueError:
-        messages.error(request, "Invalid item key.")
+        messages.error(request, "Invalid item key format.")
         return redirect('view_bag')
     
     quantity = request.POST.get('quantity', '').strip()
@@ -69,27 +69,29 @@ def adjust_bag(request, item_key):
     quantity = int(quantity)
     bag = request.session.get('bag', {})
 
-    # Fetch the product details for messaging
-    product = get_object_or_404(Product, printful_id=product_id)
+    # Fetch the specific product variant for messaging
+    product = get_object_or_404(Product, printful_id=product_id, variant_id=variant_id)
 
     if quantity > 0:
-        # Update the quantity and notify the user
+        # Update the quantity in the bag and add a success message
         bag[item_key] = quantity
         messages.success(
             request,
-            f'You have updated {product.name} to {quantity} item(s) in your bag.'
+            f'You have updated {product.name} (Size: {product.size}) to {quantity} item(s) in your bag.'
         )
     else:
-        # Remove the item if quantity is zero
+        # Remove the item if quantity is set to zero
         bag.pop(item_key, None)
         messages.success(
             request,
-            f'{product.name} has been removed from your bag.'
+            f'{product.name} (Size: {product.size}) has been removed from your bag.'
         )
 
-    # Update the session
+    # Update the session with the modified bag
     request.session['bag'] = bag
     request.session.modified = True
+
+    # Clear session data related to delivery calculations
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 
@@ -100,27 +102,31 @@ def remove_from_bag(request, item_key):
     """Remove the specified product variant from the shopping bag."""
     bag = request.session.get('bag', {})
 
-    # Extract product and variant IDs for product name retrieval
+    # Extract product and variant IDs from the item key
     try:
         product_id, variant_id = item_key.split('-')
     except ValueError:
-        messages.error(request, "An error occurred.")
+        messages.error(request, "An error occurred with the item key format.")
         return redirect('view_bag')
 
-    # Fetch product details for messaging
-    product = get_object_or_404(Product, printful_id=product_id)
+    # Retrieve the specific product variant based on printful_id and variant_id
+    product = get_object_or_404(Product, printful_id=product_id, variant_id=variant_id)
 
     if item_key in bag:
-        # Remove the item and notify the user
+        # Remove the item from the bag and add a success message
         del bag[item_key]
         messages.success(
             request,
-            f'{product.name} has been removed from your bag.'
+            f'{product.name} (Size: {product.size}) has been removed from your bag.'
         )
+    else:
+        messages.warning(request, "Item not found in the bag.")
 
-    # Update the session
+    # Update the session with the modified bag
     request.session['bag'] = bag
     request.session.modified = True
+
+    # Clear any session data related to delivery calculations
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 

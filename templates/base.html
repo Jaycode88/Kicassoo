@@ -60,115 +60,113 @@
 
 <body class="d-flex flex-column min-vh-100">
     <div class="container-fluid flex-grow-1">
-    <header class="fixed-top bg-white">
-        <div id="top-nav" class="row bg-white pt-lg-2 d-none d-lg-flex">
-            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left" id="logo-container">
-                <a href="{% url 'home' %}" class="nav-link main-logo-link">
-                    <img src="{{ MEDIA_URL }}images/logo.svg" alt="Kicassoo Logo" class="img-fluid">
-                </a>
-            </div>
-
-            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
-                <form action="{% url 'product_list' %}" method="GET">
-                    <div class="input-group w-100">
-                        <input type="text" class="form-control border border-black rounded-0" name="q"
-                            placeholder="Search The Kicassoo Store">
-                        <div class="input-group-append">
-                            <button class="form-control btn-black" type="submit">
-                                <span class="icon">
-                                    <i class="fas fa-search"></i>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0" id="nav-icons-container">
-                <ul class="list-inline list-unstyled my-0">
-                    <!-- Contact Icon and Bag Icon -->
-                    <li class="list-inline-item">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal" class="text-black nav-link">
-                            <div class="text-center">
-                                <i class="fas fa-envelope fa-lg"></i>
-                                <p class="my-0">Contact Me</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="{% url 'view_bag' %}"
-                           class="{% if total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link">
-                            <div class="text-center">
-                                <div>
-                                    <i class="fas fa-shopping-bag fa-lg"></i>
-                                </div>
-                                <p class="my-0">
-                                    {% if total %}
-                                        £{{ total|floatformat:2 }}
-                                    {% else %}
-                                        £0.00
-                                    {% endif %}
-                                </p>
-                            </div>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <nav class="navbar navbar-expand-lg navbar-light w-100">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
-                    aria-controls="main-nav" aria-expanded="false" aria-label="Toggle Navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                {% include 'includes/mobile-top-header.html' %}
-                {% include 'includes/main-nav.html' %}
-            </nav>
-        </div>
-    </header>
-
-
-    <div id="page_header">
-        {% block page_header %}
-        {% endblock %}
-    </div>
-
-    <main id="content" class="flex-grow-1">
-        {% block content %}
-        {% endblock %}
-    </main>
-
-
-    <footer class="bg-white text-black mt-auto">
-    {% include 'includes/footer.html' %}
-    </footer>
-
-    {% include 'includes/contact_modal.html' %}
-
-    {% if messages %}
-        <div id="messages-container" class="messages">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    {% if "add_to_bag" in message.tags %}
-                        <!-- Display the action buttons for "add to bag" messages -->
-                        <div class="mt-2">
-                            <a href="{% url 'product_list' %}" class="btn custom-btn btn-sm mb-1">Continue Shopping</a>
-                            <a href="{% url 'view_bag' %}" class="btn custom-btn btn-sm mt-1">Go to Checkout</a>
-                        </div>
-                    {% endif %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <header class="fixed-top bg-white">
+            <div id="top-nav" class="row bg-white pt-lg-2 d-none d-lg-flex">
+                <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left" id="logo-container">
+                    <a href="{% url 'home' %}" class="nav-link main-logo-link">
+                        <img src="{{ MEDIA_URL }}images/logo.svg" alt="Kicassoo Logo" class="img-fluid">
+                    </a>
                 </div>
-            {% endfor %}
+
+                <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
+                    <form action="{% url 'product_list' %}" method="GET">
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control border border-black rounded-0" name="q"
+                                placeholder="Search The Kicassoo Store">
+                            <div class="input-group-append">
+                                <button class="form-control btn-black" type="submit">
+                                    <span class="icon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-12 col-lg-4 my-auto py-1 py-lg-0" id="nav-icons-container">
+                    <ul class="list-inline list-unstyled my-0">
+                        <!-- Contact Icon and Bag Icon -->
+                        <li class="list-inline-item">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal" class="text-black nav-link">
+                                <div class="text-center">
+                                    <i class="fas fa-envelope fa-lg"></i>
+                                    <p class="my-0">Contact Me</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'view_bag' %}"
+                            class="{% if total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link">
+                                <div class="text-center">
+                                    <div>
+                                        <i class="fas fa-shopping-bag fa-lg"></i>
+                                    </div>
+                                    <p class="my-0">
+                                        {% if total %}
+                                            £{{ total|floatformat:2 }}
+                                        {% else %}
+                                            £0.00
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <nav class="navbar navbar-expand-lg navbar-light w-100">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                        aria-controls="main-nav" aria-expanded="false" aria-label="Toggle Navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    {% include 'includes/mobile-top-header.html' %}
+                    {% include 'includes/main-nav.html' %}
+                </nav>
+            </div>
+        </header>
+
+        <div id="page_header">
+            {% block page_header %}
+            {% endblock %}
         </div>
-    {% else %}
-        <!-- Empty container for AJAX messages -->
-        <div id="messages-container" class="messages"></div>
-    {% endif %}
+
+        <main id="content" class="flex-grow-1">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="bg-white text-black mt-auto">
+            {% include 'includes/footer.html' %}
+        </footer>
+
+        {% include 'includes/contact_modal.html' %}
+
+        {% if messages %}
+            <div id="messages-container" class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        {% if "add_to_bag" in message.tags %}
+                            <!-- Display the action buttons for "add to bag" messages -->
+                            <div class="mt-2">
+                                <a href="{% url 'product_list' %}" class="btn custom-btn btn-sm mb-1">Continue Shopping</a>
+                                <a href="{% url 'view_bag' %}" class="btn custom-btn btn-sm mt-1">Go to Checkout</a>
+                            </div>
+                        {% endif %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty container for AJAX messages -->
+            <div id="messages-container" class="messages"></div>
+        {% endif %}
+    </div>
 
     {% block postloadjs %}
     {% endblock %}
 </body>
-
 </html>
