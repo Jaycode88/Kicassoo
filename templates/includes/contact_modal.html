@@ -17,7 +17,7 @@
                             {{ contact_form.name.label_tag }}
                         </div>
                         <div class="flex-grow-1">
-                            <input type="text" name="name" class="form-control border border-1 rounded" placeholder="Your Name">
+                            {{ contact_form.name }}
                         </div>
                     </div>
                     <!-- Email Field -->
@@ -26,13 +26,13 @@
                             {{ contact_form.email.label_tag }}
                         </div>
                         <div class="flex-grow-1">
-                            <input type="email" name="email" class="form-control border border-1 rounded" placeholder="Your Email">
+                            {{ contact_form.email }}
                         </div>
                     </div>
                     <!-- Message Field -->
-                    <div class="mb-3">
+                    <div class="mb-3 d-flex align-items-center">
                         {{ contact_form.message.label_tag }}
-                        <textarea name="message" class="form-control border border-1 rounded" placeholder="Your Message"></textarea>
+                        {{ contact_form.message }}
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="custom-btn">Reset</button>

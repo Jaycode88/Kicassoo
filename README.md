@@ -25,16 +25,15 @@
 
 # [Kicassoo](https://jaycode88.github.io/Kicassoo/)
 
-# N.B to Self This is the Django Branch do not push this to main branch 
 
 ** amiresponsive image here **
 
-Welcome to Kicassoo, the online showcase for an abstract artist. This website is dedicated to presenting the artist's profile and captivating collections. With a focus on artistic expression and creativity, Kicassoo offers visitors a glimpse into the vibrant world of contemporary art.
+Welcome to Kicassoo, the online showcase for an abstract artist's captivating collections. This website highlights Kicassoo's profile and creative works while offering visitors a glimpse into the vibrant world of contemporary art. With the addition of a dedicated Print Store, users can now explore and purchase a variety of products featuring Kicassoo's unique artwork, merging art appreciation with accessible, personalized pieces.
 
 ## Purpose
-The primary purpose of the website is to establish a foundational online presence for the artist, offering a curated showcase of select collections. As a starting point, Kicassoo serves as a platform to introduce the artist's work to a wider audience and provide a glimpse into their creative vision.
+The primary purpose of the website is to establish a professional online presence for Kicassoo, an abstract artist, by showcasing curated collections and offering a unique shopping experience. Kicassoo serves as a platform to introduce the artist’s work to a broader audience, offering visitors an insight into the artist's creative vision and distinctive style.
 
-With a focus on simplicity and elegance, the website aims to present a few key collections in a visually compelling manner. By showcasing these curated collections, we aim to capture the essence of the artist's style and inspire engagement and interest from visitors.
+With a focus on simplicity and elegance, the website features an accessible Print Store where visitors can purchase a variety of products adorned with Kicassoo's artwork. This addition enhances engagement by allowing art enthusiasts to bring Kicassoo’s creations into their personal spaces, further connecting them with the artist's expressive work. Through both artistic display and functional eCommerce, the site captures and celebrates the essence of Kicassoo's art, fostering a deeper connection with visitors.
 
 ## UX
 ### Colour Scheme
@@ -46,11 +45,11 @@ By embracing simplicity in our color selection, we aim to create a cohesive and 
 
 
 ### Typography
-#### Logo and Headings
+#### Headings
 
 ![Font](documentation/montaga.webp)
 
-For the logo and headings, we've chosen the "Montaga" font. This font exudes elegance and sophistication, making it the perfect choice to represent the artist's brand and to headline the various sections of the website. Its graceful curves and bold strokes command attention, while its timeless aesthetic adds a touch of refinement to the overall design.
+For the headings, we've chosen the "Montaga" font. This font exudes elegance and sophistication, making it the perfect choice to represent the artist's brand and to headline the various sections of the website. Its graceful curves and bold strokes command attention, while its timeless aesthetic adds a touch of refinement to the overall design.
 
 #### Body Text
 
@@ -58,34 +57,30 @@ For the logo and headings, we've chosen the "Montaga" font. This font exudes ele
 
 The body text is set in "Open Sans." This font was selected for its clean and modern appearance, which enhances readability across different devices and screen sizes. With its neutral yet friendly demeanor, Open Sans ensures that the content remains accessible and easy to digest, allowing visitors to focus on the artist's narrative and portfolio without distraction.
 
-#### Accents
-
-![Font](documentation/montez.webp)
-
-To add a hint of personality and flair to certain elements, we've incorporated "Montez" as our accent font. Montez's handwritten style brings a touch of whimsy and creativity to the website, serving as a playful counterpoint to the more structured fonts used elsewhere. This font is strategically employed for decorative purposes, such as embellishments or highlights, infusing the design with charm and character.
-
 
 ## User Stories
 
-### As a User ...
-... I want to be able to easily navigate around the application
+### As a new User ...
 
-... I want to access information about the Artist
+- I want to easily navigate the site to find collections, products, and information about the artist.
+- I want to view available collections and understand the themes or inspiration behind each.
+- I want to see various products featuring Kicassoo’s artwork, with clear descriptions, sizes, and pricing.
+- I want to know more about the artist and the story behind their work.
+- I want to contact the artist directly for inquiries or specific requests.
 
-... I want to view the Artist's Collections
+### As a returning user ...
+- I want to be able to sort and filter products by category or type (e.g., “Wall Art” or “Stationery”).
+- I want to quickly access my cart and review items before checking out.
+- I want a fast, secure, and intuitive checkout process.
+- I want to be able to easily connect with the artist on social media.
 
-... I want to view individual pieces from a collection
+### As Site Owner ...
 
-... I want to be able to easily make an enquiry
-
-### As Site Owner
-
-... I want a site personalised to me.
-
-... I want to showcase my collections and pieces to my audience
-
-... I want to be Accessible to my audience
-
+- I want a site that reflects my artistic identity and vision.
+- I want to manage products, including adding new items and updating details.
+- I want my artwork to be be secure from theft.
+- I want an integrated checkout process that handles orders efficiently.
+- I want to receive notifications of new orders and manage fulfillment through Printful.
 
 ## Wireframes
 
@@ -103,35 +98,71 @@ To add a hint of personality and flair to certain elements, we've incorporated "
 
 ## Features
 ### Responsiveness & Accessibility
-The site has been built to be perfectly responsive accross all devices for 300px wide and up. Special care has been taken to ensure the correct size image is loaded for the correct device type ensuring lower load times and high performance. 
+The site has been built to be perfectly responsive accross all devices for 320px wide and up. Special care has been taken to ensure the correct size image is loaded for the correct device type ensuring lower load times and high performance. 
 The site Has a 100% accessibility score, ensuring it is accesible to screen readers and other assitive technologies Therefore reaching wider audiences.
 
 ### Image Copy protection code
-For security purposes to stop digital copright infrinement, Code has been added which disables the user's ability to use the right click options on images, These options include copy and save image as.. etc. Whilst this measure does not provide complete protection it acts as a detterrent to those casual attempts of image theft.
+To deter casual attempts at image theft, right-click options on images are disabled, preventing common actions such as "Copy" or "Save image as." Although this measure doesn’t provide complete protection, it acts as a basic deterrent. Collection images are also displayed with a copyright watermark overlay to act as a further detterent.
 
 ### Navigation
-The website is built with clear and responsive navigation structure enabling user's to easily find their way around the site. The Navigation consists of the Kicassoo Logo as well as links to the sites pages/sections. When viewed on Smaller screen sizes the navigation links are found in a dropdown burger menu.
+A clear, accessible navigation bar enables users to easily find their way around the site. The navigation bar includes the Kicassoo logo and links to essential pages. On smaller screens, the navigation collapses into a dropdown menu for seamless access.
 
-![Desktop Navigation](documentation/desktopnav.webp)
-![Mobile Navigation](documentation/navmob.webp)
+### Printful API Integration
+This integration automates product import and order fulfillment directly through Printful, enhancing the store’s print-on-demand capabilities:
 
+- **Product Import Command:** Products from the artist’s Printful catalog can be imported directly into the store using the command:
+
+python manage.py import_products
+
+This command retrieves product details, including variants, sizes, and prices, ensuring accurate catalog management.
+
+- **Automated Order Fulfillment:** When an order is completed, it is sent to Printful through the API for fulfillment, ensuring seamless order processing from checkout to delivery.
+
+### Stripe Payments
+Stripe powers secure payment processing within the store, allowing customers to pay with ease. Stripe’s PaymentIntent API creates a secure transaction environment, and users can confirm payments within the checkout flow.
+
+## Stripe Webhook Integration
+The Stripe Webhook monitors payment success and triggers the following automated processes:
+
+- **Order Status Update:** Upon receiving a “payment succeeded” webhook, the system updates the order status to “completed.”
+- **Order Transmission to Printful:** Once payment is confirmed, the completed order is automatically sent to Printful for production and shipping.
+
+- **Order Confirmation Email** Upon a succesfull payment the order confirmation email is sent.
+
+- **Failed Payment Handling:** If a payment fails, the webhook marks the order as “failed,” allowing site admins to follow up as necessary.
+
+## Page Features
 ### Home Page
-The home page consists of Am Image carousel hosting the collection images, As well as the About Me Section.
+The home page consists of A hero image, with 2 call to action buttons inviting the user to view the artist's collections or view the Print store.
 
 ### About me
-This section displays an image of the artist, as well as content decribing the artist and her journey.
+The About page provides more in-depth information about the artist, displayed alongside an artist photo, offering users a personal look into the journey and inspiration behind the art.
 
 ### Collections
-This page Features each of the artist's collections with a description, an image and a button to view the collection.
+This page Features each of the artist's collections with a description, Image and a button to view the collection.
 
 ### Collection Gallery
-Each Collection has its on gallery page to display the Art pieces from each collection, Here the user can find the Title to the art pieces. As well as a call to action contact button for the user to make enquiries.
+Each Collection has its on gallery page to display the Art pieces from each collection, Here the user can find the Title of the art pieces. As well as a call to action contact button for the user to make enquiries, along side a view store button to invite the user to the eccom store.
 
 ### Contact form Modal
-The contact form Has been placed into a modal so that it can be accessed on any page. The backend to the form has been set up with [FormKeep](https://formkeep.com/). The form allows users to make direct contact with the artist. The from requests basic data such as the Name, Email address and the User's message. The form has security so that all fields must be entered before the form can be sent, this includes a check that the email is in the correct format. Once the User has sent a message a message success page opens in a new tab.
-N.B Please see Deployment section for instuctions for [FormKeep](https://formkeep.com/) Setup etc.
+The contact form is embedded in a modal that can be accessed from any page. Using Django's email handling (connected to a Google account via an app password), the form sends user inquiries directly to the artist’s email. The form requires the user’s name, email address, and message, with built-in validation to ensure all fields are correctly completed.
 
 ![Contact Modal](documentation/contactmodal.webp)
+
+### Product List Page
+The Product List page displays the full selection of products available for purchase. Users can filter products by category and sort by price or other parameters, making it easy to browse through Kicassoo’s artwork applied to different product types, such as “Wall Art” and “Stationery.”
+
+### Product Detail Page
+Each product has a detail page where users can view available variants, select options like size, and view additional product information. Users can also adjust quantities and add items to their shopping bag from this page.
+
+### Shopping Bag Page
+The Shopping Bag page displays selected items, quantities, and subtotal costs, giving users control to adjust quantities or remove items. This page also allows users to proceed to checkout or return to shopping.
+
+### Checkout Page
+The Checkout page handles the payment and order summary, allowing users to enter delivery details, calculate shipping costs based on location, and proceed with payment using Stripe. Users see a clear breakdown of item costs, shipping, and the final total.
+
+### Order Success Page
+After a successful order, users are redirected to the Order Success page, where they receive confirmation of their purchase. Users are informed that an order confirmation email has been sent.
 
 ### Footer 
 This contains social links and contact button for Kicasso as well as Socail links for the site developer.
@@ -140,9 +171,13 @@ This contains social links and contact button for Kicasso as well as Socail link
 
 
 ## Future features
-Please See your future features proposal document(If you have not recieved this please contact your developer)
+### Pagination
+As there are more products added to the store, when the number reaces 20+ it would be a good idea to instal pigination on the product list page, this will provide a better user experience over an endles page of products
 
-## Deployment
+### Profiles
+As orders climb in quantity it would be a good to add user profiling so users can access past orders and save delivery addresses etc. This is also good for data collection.
+
+
 ## DEPLOYMENT
 ### Local Deployment
 This project can be cloned or forked in order to make a local copy on your own system.
@@ -179,9 +214,7 @@ You can fork this repository by using the following steps:
 
 ### Live Deployment
 
-### Connecting to FormKeep
-
-- Create an account with [FormKeep](https://formkeep.com/), Create a 
+This section will be updated with platform-specific deployment instructions once a live hosting provider is selected.
 
 ## Tools and Technologies used
 - [HTML](https://en.wikipedia.org/wiki/HTML)  is the backbone of web content. It defines the structure and content of the web pages.

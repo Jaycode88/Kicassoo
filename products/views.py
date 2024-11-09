@@ -36,7 +36,7 @@ def product_list(request):
             products = products.order_by(sortkey)
 
         if 'category' in request.GET:
-            categories = request.GET['category'].split(',')
+            categories = request.GET['category'].replace('+', ' ').split(',')
             products = products.filter(category__name__in=categories)
             categories = Category.objects.filter(name__in=categories)
 
