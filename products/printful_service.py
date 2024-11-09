@@ -4,11 +4,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class PrintfulAPI:
     def __init__(self):
         self.api_key = settings.PRINTFUL_API_KEY
         if not self.api_key:
-            raise ValueError("No PRINTFUL_API_KEY found in environment variables")
+            raise ValueError(
+                "No PRINTFUL_API_KEY found in environment variables")
         self.base_url = 'https://api.printful.com'
 
     def get_headers(self):
@@ -17,27 +19,43 @@ class PrintfulAPI:
             'Content-Type': 'application/json',
         }
 
-
     def get_store_products(self):
         """Get all products from Printful store"""
-        response = requests.get(f'{self.base_url}/store/products', headers=self.get_headers())
+        response = requests.get(
+            f'{self.base_url}/store/products', headers=self.get_headers())
+
         if response.status_code == 200:
             products = response.json().get('result', [])
-            logger.info("Fetched Printful products: %s", products)  # Log products data for debugging
+            logger.info(
+                "Fetched Printful products: %s", products)
             return products
-        logger.error("Failed to fetch products. Status code: %s", response.status_code)
+        logger.error(
+            "Failed to fetch products. Status code: %s",
+            response.status_code)
+
         return []
 
     def get_product_details(self, product_id):
         """Get product details by ID from Printful."""
         try:
-            response = requests.get(f'{self.base_url}/store/products/{product_id}', headers=self.get_headers())
+            response = requests.get(
+                f'{self.base_url}/store/products/{product_id}',
+                headers=self.get_headers())
+
             response.raise_for_status()
             product_data = response.json().get('result', {})
-            logger.info("Fetched Printful product details successfully for product ID %s.", product_id)
+            logger.info(
+                "Fetched Printful product details successfully for "
+                "product ID %s.",
+                product_id
+            )
+
             return product_data
         except requests.exceptions.RequestException as e:
-            logger.error("Failed to fetch product details for product ID %s. Error: %s", product_id, e)
+            logger.error(
+                "Failed to fetch product details for product ID %s. Error: %s",
+                product_id, e)
+
             return {}
 
     def get_shipping_rates(self, cart_items, destination):
@@ -54,7 +72,8 @@ class PrintfulAPI:
         }
 
         try:
-            response = requests.post(url, json=data, headers=self.get_headers())
+            response = requests.post(url,
+                                     json=data, headers=self.get_headers())
             response.raise_for_status()
             shipping_rates = response.json().get('result', [])
             logger.info("Fetched shipping rates successfully.")
@@ -70,23 +89,45 @@ class PrintfulAPI:
         order_data['confirm'] = confirm
 
         # Ensure 'address1' is provided in recipient data
-        address1 = order_data['recipient'].get('address1') or order_data['recipient'].get('address_line_1', '')
+        address1 = (
+            order_data['recipient'].get('address1') or
+            order_data['recipient'].get('address_line_1', '')
+        )
         if not address1:
-            logger.error("Missing address1 in recipient data. Cannot proceed with order creation.")
-            raise ValueError("address1 is required for Printful orders and cannot be empty.")
-        
+            logger.error(
+                "Missing address1 in recipient data. "
+                "Cannot proceed with order creation."
+            )
+            raise ValueError(
+                "address1 is required for Printful orders and cannot be empty."
+            )
+
         order_data['recipient']['address1'] = address1
 
         try:
-            response = requests.post(f"{self.base_url}/orders", json=order_data, headers=self.get_headers())
+            response = requests.post(
+                f"{self.base_url}/orders",
+                json=order_data,
+                headers=self.get_headers()
+            )
             response.raise_for_status()
             order_response = response.json()
-            logger.info("Order successfully created with Printful. Order ID: %s", order_response.get('id'))
+            logger.info(
+                "Order successfully created with Printful. Order ID: %s",
+                order_response.get('id')
+            )
             return order_response
         except requests.exceptions.HTTPError as e:
             # Log detailed HTTP errors from Printful
-            logger.error("HTTP error while creating order with Printful. Status: %s, Error: %s", response.status_code, e)
+            logger.error(
+                "HTTP error while creating order with Printful. "
+                "Status: %s, Error: %s",
+                response.status_code, e
+            )
             return None
         except requests.exceptions.RequestException as e:
-            logger.error("Error creating order with Printful: %s", e)
+            logger.error(
+                "Error creating order with Printful: %s",
+                e
+            )
             return None

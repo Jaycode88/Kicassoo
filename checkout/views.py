@@ -4,7 +4,6 @@ from django.contrib import messages
 from .forms import DeliveryForm
 import requests
 from bag.contexts import bag_contents
-import decimal
 from decimal import Decimal
 import stripe
 from django.http import JsonResponse, HttpResponse
@@ -16,14 +15,13 @@ from .utils.email import send_order_confirmation_email
 from django.db import transaction
 import uuid
 
-
 logger = logging.getLogger('checkout')
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def checkout(request):
-    """Unified view to display checkout form and calculate delivery on user request."""
+    """view to display checkout form and calculate delivery on user request."""
     bag_data = bag_contents(request)
     form = DeliveryForm(initial=request.session.get('order_details', {}))
     delivery_cost = None
@@ -31,13 +29,12 @@ def checkout(request):
 
     if request.method == 'POST':
         form = DeliveryForm(request.POST)
-        
+
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['address1'] = form_data.pop('address_line_1', None)
-            request.session['order_details'] = form_data  # Save details to session
+            request.session['order_details'] = form_data
 
-            # Prepare shipping data and calculate cost using Printful API
             shipping_data = {
                 "recipient": {
                     "address1": form_data['address1'],
@@ -46,39 +43,59 @@ def checkout(request):
                     "zip": form_data['postcode'],
                 },
                 "items": [
-                    {"quantity": item['quantity'], "variant_id": item['product'].variant_id}
+                    {
+                        "quantity": item['quantity'],
+                        "variant_id": item['product'].variant_id
+                    }
                     for item in bag_data['bag_items']
                 ]
+            }
+
+            headers = {
+                'Authorization': f"Bearer {settings.PRINTFUL_API_KEY}"
             }
 
             try:
                 response = requests.post(
                     f"{settings.PRINTFUL_API_URL}/shipping/rates",
                     json=shipping_data,
-                    headers={'Authorization': f"Bearer {settings.PRINTFUL_API_KEY}"}
+                    headers=headers
                 )
                 response_data = response.json()
 
                 if response.status_code == 200:
                     delivery_cost = Decimal(response_data['result'][0]['rate'])
-                    grand_total_with_shipping = bag_data['grand_total'] + delivery_cost
+                    grand_total_with_shipping = (
+                        bag_data['grand_total'] + delivery_cost
+                    )
                     request.session['delivery'] = float(delivery_cost)
-                    request.session['grand_total_with_shipping'] = float(grand_total_with_shipping)
-                    messages.success(request, "Delivery cost calculated successfully.")
+                    request.session['grand_total_with_shipping'] = float(
+                        grand_total_with_shipping
+                    )
+                    messages.success(
+                        request, "Delivery cost calculated successfully."
+                    )
                 else:
-                    messages.error(request, "Could not calculate delivery: Unsupported destination. Please try again or contact support.")
-                    delivery_cost = None  # Set to None to indicate failure
+                    messages.error(
+                        request,
+                        "Could not calculate delivery:"
+                        "Unsupported destination."
+                        "Please try again or contact support."
+                    )
+                    delivery_cost = None
                     grand_total_with_shipping = None
             except Exception as e:
-                messages.error(request, "Error calculating delivery. Please try again later or contact support.")
+                messages.error(
+                    request,
+                    (f"Error calculating delivery."
+                        "Please try again later or contact support.")
+                )
                 delivery_cost = None
                 grand_total_with_shipping = None
 
-            # Early return if delivery cost is not calculated
             if delivery_cost is None or grand_total_with_shipping is None:
                 return redirect('checkout')
 
-            # Create draft order in Django only if delivery cost was calculated
             order = Order.objects.create(
                 full_name=form_data['full_name'],
                 email=form_data['email'],
@@ -96,7 +113,6 @@ def checkout(request):
                 order_number=uuid.uuid4().hex.upper()
             )
 
-            # Save order items
             for item in bag_data['bag_items']:
                 OrderItem.objects.create(
                     order=order,
@@ -105,17 +121,14 @@ def checkout(request):
                     price=item['product'].price
                 )
 
-            # Create Stripe PaymentIntent with essential metadata
             payment_intent = stripe.PaymentIntent.create(
                 amount=int(order.grand_total * 100),
                 currency='usd',
-                metadata={'order_number': order.order_number}  # Pass the order number only
+                metadata={'order_number': order.order_number}
             )
 
-            # Save the order number in the session for webhook reference
             request.session['order_number'] = order.order_number
 
-            # Render the checkout page with payment intent client_secret
             return render(request, 'checkout/checkout.html', {
                 'form': form,
                 'bag_items': bag_data['bag_items'],
@@ -126,49 +139,58 @@ def checkout(request):
                 'client_secret': payment_intent.client_secret
             })
         else:
-            messages.error(request, "Please correct the form errors and try again.")
+            messages.error(
+                request, "Please correct the form errors and try again."
+            )
+
+    delivery_value = (
+        delivery_cost if delivery_cost is not None
+        else request.session.get('delivery')
+    )
 
     context = {
         'form': form,
         'bag_items': bag_data['bag_items'],
         'grand_total': bag_data['grand_total'],
-        'delivery': delivery_cost if delivery_cost is not None else request.session.get('delivery'),  
-        'grand_total_with_shipping': grand_total_with_shipping if grand_total_with_shipping is not None else request.session.get('grand_total_with_shipping'),
+        'delivery': delivery_value,
+        'grand_total_with_shipping': (
+            grand_total_with_shipping if grand_total_with_shipping is not None
+            else request.session.get('grand_total_with_shipping')
+        ),
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
     }
 
     return render(request, 'checkout/checkout.html', context)
 
 
-
 def place_order(request):
-    """Handles order submission and redirects to payment page with order summary"""
-
+    """Handles order submission"""
     if request.method == 'POST':
-        # Retrieve shipping cost and grand total from session
         try:
             shipping_cost = Decimal(request.session.get('delivery', 0))
             grand_total = Decimal(request.session.get('grand_total', 0))
             grand_total_with_shipping = grand_total + shipping_cost
         except (TypeError, ValueError) as e:
             logger.error(f"Error retrieving or calculating grand total: {e}")
-            messages.error(request, "An error occurred while calculating the order total.")
+            messages.error(
+                request, "An error occurred while calculating the order total."
+            )
             return HttpResponse("Invalid order total", status=400)
 
-        # Create Stripe PaymentIntent
         try:
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(grand_total_with_shipping * 100),  # Convert to cents/pence
+                amount=int(grand_total_with_shipping * 100),
                 currency='gbp',
                 payment_method_types=['card'],
-                metadata=request.session.get('checkout_form_data', {})  # Attach metadata if needed
+                metadata=request.session.get('checkout_form_data', {})
             )
         except Exception as e:
             logger.error(f"Error creating PaymentIntent: {e}")
-            messages.error(request, "Failed to create payment intent. Please try again.")
+            messages.error(
+                request, "Failed to create payment intent. Please try again."
+            )
             return HttpResponse("Failed to create payment intent", status=500)
 
-        # Render payment page with required client_secret and order data
         return render(request, 'checkout/payment_page.html', {
             'client_secret': payment_intent.client_secret,
             'grand_total': grand_total,
@@ -181,42 +203,47 @@ def place_order(request):
 
 
 def order_success(request):
-    order_number = request.session.get('order_number')  # Retrieve order number from session
-    order = Order.objects.get(order_number=order_number) if order_number else None  # Fetch the order
-    
-    # Clear the session data after use
+    order_number = request.session.get('order_number')
+    order = Order.objects.get(
+            order_number=order_number) if order_number else None
+
     request.session.pop('order_number', None)
     request.session.pop('bag', None)
     request.session.modified = True
-    
+
     return render(request, 'checkout/order_success.html', {'order': order})
+
 
 @csrf_exempt
 def create_payment_intent(request):
     if request.method == 'POST':
         try:
-            # Retrieve order details from session
             order_details = request.session.get('order_details', {})
-            total_amount = request.session.get('grand_total_with_shipping', None)
+            total_amount = request.session.get(
+                'grand_total_with_shipping', None)
 
-            # Check if essential fields are present
             if not order_details.get('address1') or total_amount is None:
                 logger.error("Error: Missing required order fields.")
-                return JsonResponse({'error': 'Missing essential fields in order details'}, status=400)
+                return JsonResponse(
+                    {'error': 'Missing essential fields in order details'},
+                    status=400
+                )
 
-            # Convert total_amount to an integer in cents for Stripe (if it is not already)
-            amount = int(total_amount * 100) if isinstance(total_amount, (int, float, Decimal)) else None
+            amount = int(total_amount * 100) if isinstance(
+                total_amount, (int, float, Decimal)
+            ) else None
             if amount is None:
                 logger.error("Error: Invalid total_amount value.")
-                return JsonResponse({'error': 'Invalid total amount'}, status=400)
+                return JsonResponse(
+                        {'error': 'Invalid total amount'}, status=400)
 
-            # Metadata now only includes the order number
             payment_intent = stripe.PaymentIntent.create(
                 amount=amount,
                 currency='usd',
                 metadata={'order_number': request.session.get('order_number')}
             )
-            return JsonResponse({'clientSecret': payment_intent['client_secret']})
+            return JsonResponse(
+                {'clientSecret': payment_intent['client_secret']})
 
         except Exception as e:
             logger.error(f"Error in create_payment_intent: {e}")
@@ -230,34 +257,38 @@ def stripe_webhook(request):
     event = None
 
     try:
-        # Verify and construct event from Stripe
-        event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
     except (ValueError, stripe.error.SignatureVerificationError) as e:
         logger.error(f"Webhook signature verification failed: {e}")
         return HttpResponse(status=400)
 
-    # Track if email has already been sent
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
         order_number = payment_intent.get('metadata', {}).get('order_number')
         stripe_intent_id = payment_intent['id']
 
         try:
-            # Begin a transaction to lock the order for this webhook event
             with transaction.atomic():
-                order = Order.objects.select_for_update().get(order_number=order_number)
+                order = Order.objects.select_for_update().get(
+                        order_number=order_number)
 
-                # Avoid processing duplicate or previously processed payment intents
-                if order.stripe_payment_intent_id == stripe_intent_id or order.confirmation_email_sent:
-                    logger.info(f"Ignoring duplicate or already processed webhook for order {order_number}.")
+                if (
+                    order.stripe_payment_intent_id == stripe_intent_id
+                    or order.confirmation_email_sent
+                ):
+                    logger.info(
+                        f"Ignoring duplicate or already processed webhook for "
+                        f"order {order_number}."
+                    )
                     return JsonResponse({'status': 'ignored'}, status=200)
 
-                # Mark payment as completed and save Stripe payment intent ID
                 order.payment_status = 'COMPLETED'
                 order.stripe_payment_intent_id = stripe_intent_id
-                order.save(update_fields=['payment_status', 'stripe_payment_intent_id'])
+                order.save(update_fields=[
+                        'payment_status', 'stripe_payment_intent_id'])
 
-                # Prepare Printful order data using sync_variant_id
                 printful_api = PrintfulAPI()
                 printful_order_data = {
                     'recipient': {
@@ -272,39 +303,47 @@ def stripe_webhook(request):
                         'country_code': order.country.code,
                     },
                     'items': [
-                        {
-                            'sync_variant_id': item.product.sync_variant_id,
-                            'quantity': item.quantity
-                        } for item in order.items.all()
+                        {'sync_variant_id': item.product.sync_variant_id,
+                         'quantity': item.quantity}
+                        for item in order.items.all()
                     ]
                 }
 
-                # Send the order to Printful
-                printful_response = printful_api.create_order(printful_order_data, confirm=True)
+                printful_response = printful_api.create_order(
+                    printful_order_data, confirm=True)
+
                 logger.info(f"Printful API Response: {printful_response}")
 
-                # Process Printful response and update order items
                 if printful_response and 'result' in printful_response:
-                    order.printful_order_id = printful_response['result'].get('id')
-                    estimated_shipping_date = printful_response['result'].get('estimated_shipping_date')
+                    order.printful_order_id = printful_response[
+                        'result'].get('id')
+
+                    estimated_shipping_date = printful_response[
+                        'result'].get('estimated_shipping_date')
+
                     if estimated_shipping_date:
                         order.estimated_shipping_date = estimated_shipping_date
-                    order.save(update_fields=['printful_order_id', 'estimated_shipping_date'])
+                    order.save(update_fields=[
+                        'printful_order_id', 'estimated_shipping_date'])
 
-                    for item_data, order_item in zip(printful_response['result']['items'], order.items.all()):
+                    for item_data, order_item in zip(
+                        printful_response['result']['items'],
+                        order.items.all()
+                    ):
                         order_item.printful_id = item_data.get('id')
-                        order_item.sync_variant_id = item_data.get('sync_variant_id')
-                        order_item.printful_variant_id = item_data.get('variant_id')
+                        order_item.sync_variant_id = item_data.get(
+                            'sync_variant_id')
+
+                        order_item.printful_variant_id = item_data.get(
+                            'variant_id')
+
                         order_item.save()
 
-                    # Send email only if not already sent
                     if not order.confirmation_email_sent:
                         logger.info("Sending order confirmation email.")
                         send_order_confirmation_email(order)
-                        order.confirmation_email_sent = True  # Mark email as sent
+                        order.confirmation_email_sent = True
                         order.save(update_fields=['confirmation_email_sent'])
-                    else:
-                        logger.info("Order confirmation email already sent; skipping.")
 
         except Order.DoesNotExist:
             logger.error(f"Order with order number {order_number} not found.")
@@ -313,24 +352,28 @@ def stripe_webhook(request):
             logger.error(f"Error processing order in Printful: {e}")
             return HttpResponse(status=500)
 
-    # Skip processing for `charge.succeeded` or other events to prevent duplicate actions
     elif event['type'] == 'charge.succeeded':
-        logger.info("Ignoring `charge.succeeded` event to prevent duplicate actions.")
+        logger.info(f"Ignoring `charge.succeeded`"
+                    "event to prevent duplicate actions.")
         return JsonResponse({'status': 'ignored'}, status=200)
 
     elif event['type'] == 'payment_intent.payment_failed':
         payment_intent = event['data']['object']
         order_number = payment_intent.get('metadata', {}).get('order_number')
-        logger.warning(f"Payment failed for intent {payment_intent['id']} for order {order_number}.")
+        logger.warning(
+            f"Payment failed for intent {payment_intent['id']} "
+            f"for order {order_number}."
+        )
 
-        # Handle payment failure
         try:
             order = Order.objects.get(order_number=order_number)
             order.payment_status = 'FAILED'
             order.save()
         except Order.DoesNotExist:
-            logger.error(f"Failed payment for order {order_number} could not be found.")
-        
+            logger.error(
+                f"Failed payment for order {order_number} could not be found."
+            )
+
         return JsonResponse({'status': 'payment_failed'}, status=400)
 
     return JsonResponse({'status': 'success'})

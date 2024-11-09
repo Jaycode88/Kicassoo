@@ -1,28 +1,3 @@
-# This is the kicassoo store readme
-
-## unsolved bugs
-
-- nav bar dropdown on screen sizes below 332px is a pain in the ass as it the dropdown does not ocnnedct to the nav bar making it look not great
-
-- homepage styling on screens below 450px the buttons go out of the image this may be to do with my cody and home-content heigh calculations??
-
-
-## Notes
-
-- to import products from store use terminal command "python manage.py import_products"
-
-- in checkout to create Draft/test order set "confirm" to false in services.py line 48 and views.py line 30
-
-- Details and category need to be added manually to the imported products
-
-
-- checkout is very robust it stores the order as soon as a person enters their card details with a status of payment pending then the webhook carries the order number on receipt of a succesful payment webhook the order payment status is updated to completed and the order is sent to printful via the API.. I did originally put all of the order info onto the webhook but this caused problems due to the 500 characther limit the stripe webhook is restricted to. Another great benefit of the way that checkout is setup is that If a user's payment fails and they do not choose to use another card and complete the order, You will have the order stored with a payment failed staus from here you can aquire the user's information  such as email address and send them reminders or discount  to encourage completion of order.
-
-- mention the webhook error in solved bugs, I had a problem when there were many items(over 4 or 5) on an order i got an error due to the stripe webhook having a character limit of 500, I had set the webhook up to contain all of the order data including the items but this is what was causing the error. To solve the issue I implemented that as soon as the user submits their card details the order is created with a payment pending status, then that allowed for the webhook to only need to hold the order number. When the webook returns a payment intent succeeded with the order number only then is the order payment status updated to completed and the order is sent to printful for fulfillment.
-
-
-
-
 # [Kicassoo](https://jaycode88.github.io/Kicassoo/)
 
 
@@ -82,20 +57,6 @@ The body text is set in "Open Sans." This font was selected for its clean and mo
 - I want an integrated checkout process that handles orders efficiently.
 - I want to receive notifications of new orders and manage fulfillment through Printful.
 
-## Wireframes
-
-### Home
-
-![screenshot](documentation/wirehome.webp)
-
-### Collections
-
-![screenshot](documentation/wirehome.webp)
-
-### Collection Detail
-
-![screenshot](documentation/wirecollectiondetail.webp)
-
 ## Features
 ### Responsiveness & Accessibility
 The site has been built to be perfectly responsive accross all devices for 320px wide and up. Special care has been taken to ensure the correct size image is loaded for the correct device type ensuring lower load times and high performance. 
@@ -121,7 +82,7 @@ This command retrieves product details, including variants, sizes, and prices, e
 ### Stripe Payments
 Stripe powers secure payment processing within the store, allowing customers to pay with ease. Stripe’s PaymentIntent API creates a secure transaction environment, and users can confirm payments within the checkout flow.
 
-## Stripe Webhook Integration
+### Stripe Webhook Integration
 The Stripe Webhook monitors payment success and triggers the following automated processes:
 
 - **Order Status Update:** Upon receiving a “payment succeeded” webhook, the system updates the order status to “completed.”
@@ -130,6 +91,15 @@ The Stripe Webhook monitors payment success and triggers the following automated
 - **Order Confirmation Email** Upon a succesfull payment the order confirmation email is sent.
 
 - **Failed Payment Handling:** If a payment fails, the webhook marks the order as “failed,” allowing site admins to follow up as necessary.
+
+### Error Logging
+Error logging has been integrated into the project to track and record system errors for improved debugging and maintenance. Using Python’s built-in logging library, the application logs critical issues, warnings, and error messages to a dedicated log file, allowing for:
+
+- **Tracking Critical Errors:** Ensures that any failures, such as Stripe payment issues or Printful API request failures, are recorded.
+
+- **Improved Debugging:** Logs provide a detailed account of errors, making it easier to troubleshoot and resolve issues promptly.
+
+Error logs are stored in a dedicated "logs" directory, with different levels of logging (INFO, WARNING, ERROR) set for various aspects of the application.
 
 ## Page Features
 ### Home Page
@@ -217,32 +187,22 @@ You can fork this repository by using the following steps:
 This section will be updated with platform-specific deployment instructions once a live hosting provider is selected.
 
 ## Tools and Technologies used
-- [HTML](https://en.wikipedia.org/wiki/HTML)  is the backbone of web content. It defines the structure and content of the web pages.
-- [CSS](https://en.wikipedia.org/wiki/CSS) used to control the visual presentation of the web application. It defines the layout, colors, fonts etc.
-- [Git](https://git-scm.com) used for version control. (`git add`, `git commit`, `git push`)
-- [GitHub](https://github.com) used for secure online code storage.
-- [Font Awesome](https://fontawesome.com/) For Icons
-- [Google Fonts](https://fonts.google.com/) for all Fonts.
+- [HTML](https://en.wikipedia.org/wiki/HTML):  Provides the structural foundation for web content, organizing elements and layout for a cohesive design.
+- [CSS](https://en.wikipedia.org/wiki/CSS): Controls visual presentation, including layout, colors, and fonts, ensuring an aesthetically pleasing and consistent experience.
+- [Javascript](https://www.javascript.com/): Adds interactivity and enhances user experience across dynamic elements such as forms and checkout features.
+- [jQuery](https://jquery.com/): Simplifies JavaScript operations for interactivity and responsiveness, including navigation toggles and dynamic form behaviors.
+- [Python](https://www.python.org/): The core programming language used for server-side logic in Django, processing data, and managing back-end functionality.
+- [Django](https://www.djangoproject.com/): The main web framework, providing essential features like ORM for database management, user authentication, and robust handling of views, models, and templates.
+- [Django Crispy Forms](https://github.com/django-crispy-forms/crispy-bootstrap5): Enhances form rendering and styling, allowing for responsive forms with integrated Bootstrap components.
+- [Stripe API](https://docs.stripe.com/api): Manages secure payments, including payment intents and webhooks to ensure real-time updates on order status and successful payments.
+- [Stripe Webhook](https://docs.stripe.com/webhooks): Receives updates on payment events, allowing the application to automatically confirm and update order statuses upon payment success.
+- [Printful API](https://www.printful.com/api): Integrates with Printful for product import and order fulfillment, automating the management of print-on-demand items.
+- [Git](https://git-scm.com): Used for version control, tracking changes and supporting collaboration with commands like git add, git commit, and git push.
+- [GitHub](https://github.com): Provides secure online code storage and version control, with repository management for tracking development progress.
+- [Bootstrap](https://getbootstrap.com/): A front-end framework for responsive design, creating a consistent layout across devices and enhancing visual elements.
+- [Font Awesome](https://fontawesome.com/): Provides a collection of icons used for visual and functional enhancement, such as navigation icons and action buttons.
+- [Google Fonts](https://fonts.google.com/): Supplies typography styles (Montaga, Open Sans, Montez) that align with the brand’s aesthetic.
+- [Google Workspace](https://workspace.google.com/): Configures Django’s email backend with a secure Google app password, enabling contact form submissions to be sent directly to the artist’s inbox.
+- [VS Code](https://code.visualstudio.com/): A powerful text editor used for coding, debugging, and development management with extensions for Django and Python support.
+- [Python Logging Library](https://docs.python.org/3/library/logging.html): Integrated error logging captures system errors and warnings, recording them in a dedicated log file for streamlined error tracking and troubleshooting.
 - [Responsinator](http://www.responsinator.com/) Used to check responsiveness.
-- [FormKeep](https://formkeep.com/) Used for contact form back end.
-
-
-## Bugs
-### Open Issues
-
-
-### Solved bugs
-#### Font package
-I had an issue When the user hovered over a button, all the text changed to black except for the letter "N". I diagnosed this to be a font package issue as when I load the buttons with a different font the problem did not exist. The other option I found was to remove the text transform to uppercase class. 
-I discussed with client which resolution they preffered and it was chosen to remove the uppercase transform.
-
-#### Logo
-I recieved an image to use as a logo but this was not of sufficient quality and did not look good on the preview site, I requested another image but this was poorly sized and pixelated.
-I managed to get a much clearer image using image manipulation and AI software.
-
-
-## Upon sign off
-
-- Sign Customer upto FormKeep and transfer code so messages go to their account.
-- Use customer gmail for Recaptcha security on form.
-- Publish with chosen Host.

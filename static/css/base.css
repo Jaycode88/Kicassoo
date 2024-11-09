@@ -249,7 +249,7 @@ footer.mt-auto {
     padding: 5px;
     border-radius: 5px;
     margin: 0;
-    scale: 1.1;
+    transform: scale(1.1);
 }
 
 footer button {
@@ -418,7 +418,7 @@ footer button {
     color: #000 !important;
     border: #000 solid 1px !important;
     font-weight: bold !important;
-    scale: 1.1 !important;
+    transform: scale(1.1) !important;
 }
 
 .custom-btn-sm {
@@ -438,34 +438,14 @@ footer button {
     color: #28a745 !important;
     border: #28a745 solid 1px !important;
     font-weight: bold !important;
-    scale: 1.1 !important;
+    transform: scale(1.1) !important;
 }
-
-/* .shop-now-button {
-    background: black;
-    color: white;
-    min-width: 260px;
-} */
 
 .btn-black {
     background: black !important;
     color: white !important;
     border-radius: 0px !important;
 }
-
-/* .shop-now-button:hover,
-.shop-now-button:active,
-.shop-now-button:focus,
-.btn-black:hover,
-.btn-black:active,
-.btn-black:focus {
-    background: black;
-    color: white;
-} */
-
-/* .text-black {
-    color: black !important;
-} */
 
 .border-black {
     border: 1px solid black !important;

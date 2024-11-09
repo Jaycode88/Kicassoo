@@ -13,7 +13,9 @@ def product_list(request):
     products = Product.objects.values('printful_id').annotate(id=Min('id'))
 
     # Retrieve the Product objects for each unique `printful_id`
-    products = Product.objects.filter(id__in=[product['id'] for product in products])
+    products = Product.objects.filter(
+        id__in=[product['id'] for product in products]
+    )
 
     query = None
     category = None
@@ -42,26 +44,41 @@ def product_list(request):
 
             # Check for no results after category filtering
             if not products.exists():
-                messages.warning(request, "No products found for the selected category or categories.")
+                messages.warning(
+                    request,
+                    "No products found for the selected categories."
+                )
                 return redirect(reverse('product_list'))
 
         if 'q' in request.GET:
             query = request.GET['q']
             if not query:
-                messages.error(request, "You didn't enter any search criteria!")
+                messages.error(
+                    request,
+                    "You didn't enter any search criteria!"
+                )
                 return redirect(reverse('product_list'))
 
-            queries = Q(name__icontains=query) | Q(description__icontains=query)
+            queries = (
+                Q(name__icontains=query) |
+                Q(description__icontains=query)
+            )
             products = products.filter(queries)
 
             # Handle empty search results
             if not products.exists():
-                messages.warning(request, "Your search returned no results.")
+                messages.warning(
+                    request,
+                    "Your search returned no results."
+                )
                 return redirect(reverse('product_list'))
 
     # Check if sorting or filtering results in an empty product list
     if not products.exists():
-        messages.warning(request, "No products match the current sorting and filtering options.")
+        messages.warning(
+            request,
+            "No products match the current sorting and filtering options."
+        )
 
     current_sorting = f'{sort}_{direction}'
 
@@ -76,5 +93,10 @@ def product_list(request):
 
 
 def product_detail(request, printful_id):
-    product_variants = Product.objects.filter(printful_id=printful_id)  # All variants of this product
-    return render(request, 'products/product_detail.html', {'product_variants': product_variants})
+    # All variants of this product
+    product_variants = Product.objects.filter(printful_id=printful_id)
+    return render(
+        request,
+        'products/product_detail.html',
+        {'product_variants': product_variants}
+    )

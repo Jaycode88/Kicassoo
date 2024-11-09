@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 
 PRINTFUL_API_URL = 'https://api.printful.com'
 
+
 def prepare_printful_order_data(order):
     items = []
     for item in order.items.all():
@@ -30,6 +31,8 @@ def prepare_printful_order_data(order):
     }
 
     # Log prepared data with explicit `address1` check
-    logger.info("Prepared Printful order data with address1 verification: %s", order_data)
-    return order_data
+    logger.info(
+        "Prepared Printful order data with address1 verification: %s",
+        order_data)
 
+    return order_data

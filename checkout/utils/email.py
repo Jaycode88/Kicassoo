@@ -2,8 +2,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 
+
 def send_order_confirmation_email(order):
-     # Calculate the totals
+    # Calculate the totals
     items_total = order.order_total
     delivery_cost = order.delivery_cost
     grand_total_with_delivery = order.grand_total
@@ -17,7 +18,7 @@ def send_order_confirmation_email(order):
         'delivery_cost': delivery_cost,
         'grand_total_with_delivery': grand_total_with_delivery,
     })
-    
+
     # Send the email
     send_mail(
         email_subject,

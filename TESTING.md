@@ -31,13 +31,79 @@ I have used various tools to Test Funcionality, Validity and responsiveness. I h
 ## Code Validation
 
 ### HTML
-All pages files have been tested with [W3C Markup Validation Service](https://validator.w3.org/).
+All pages files have been tested with [W3C Markup Validation Service](https://validator.w3.org/) to check validation.
 
+- Home Page - PASS
+- About Page - PASS
+- All Collections page - PASS
+- The Kingdom page - PASS
+- Ropes of Wisdom page - PASS
+- Perfect Moments page - PASS
+- Events page - PASS
+- Product List page - PASS
+- Product Detail page - PASS
+- Shopping Bag page - PASS
+- Checkout page - PASS
+- Order Success page - PASS
 
+### CSS
 
+All CSS files have been tested with [W3C CSS Validator](https://jigsaw.w3.org/css-validator) to check validation.
 
+- base.css - PASS
+- home.css - PASS
+- products.css - PASS
+- bag.css - PASS
+- checkout.css - PASS
 
+### JavaScript
 
+All Javascript files have been tested with [JShint Validator](https://jshint.com) to check validation. I used version 11 which does not throw errors due to use of ES6 syntax, Aswell as informing JSHint that I was intenionally using jQuery.
+
+- sorting-script.js - PASS
+- event-script.js - PASS
+- copyright-script.js - PASS
+- contact-modal.js - PASS
+- back_to_top_script.js - PASS
+- variantandquantity.js - PASS
+
+The Javascript in the checkout.html could not be validated due to its use of Python code but a temporary structure without the use of Python was used for a successful code validation.
+
+### Python PEP8 Compliance
+
+All python files have been tested with [Python Linter](https://pep8ci.herokuapp.com/) (Provided by CodeInstitute) to ensure they are PEP8 compliant.
+
+Kicasso_store:
+- settings.py - PASS
+- urls.py - PASS
+
+Home App:
+- views.py - PASS
+- urls.py - PASS
+- forms.py - PASS
+- context_processors.py - PASS
+
+Products App:
+- views.py - PASS
+- urls.py - PASS
+- printful_service.py - PASS
+- models.py - PASS
+- admin.py - PASS
+- import_products.py - PASS
+
+Bag App:
+- views.py- PASS
+- urls.py - PASS
+- contexts.py - PASS
+
+Checkout App:
+- views.py- PASS
+- urls.py - PASS
+- services.py - PASS
+- models.py - PASS
+- forms.py - PASS
+- admin.py - PASS
+- email.py - PASS
 
 ## Bugs
 ### Open Issues
