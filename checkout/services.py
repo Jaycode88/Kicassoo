@@ -1,6 +1,5 @@
 from django.conf import settings
 import logging
-from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 

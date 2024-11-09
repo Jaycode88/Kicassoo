@@ -1,6 +1,5 @@
 from django.db import models
 import uuid
-from django.conf import settings
 from decimal import Decimal
 from django_countries.fields import CountryField
 

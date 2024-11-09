@@ -12,12 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from products.printful_service import PrintfulAPI
 import logging
 from .models import Order, OrderItem
-from .services import prepare_printful_order_data
-from django_countries.fields import Country
-from products.models import Product
 from .utils.email import send_order_confirmation_email
 from django.db import transaction
-import json
 import uuid
 
 

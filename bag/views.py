@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse, HttpResponse, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from products.models import Product
 
@@ -16,32 +16,30 @@ def add_to_bag(request, printful_id):
     printful_id = str(printful_id)
     variant_id = str(variant_id)
     
-    # Construct a unique item key for each product variant
-    item_key = f"{printful_id}-{variant_id}"
+    # Construct the unique item key using product_id and variant_id
+    item_key = f"{printful_id}-{variant_id}" if variant_id else printful_id
 
     # Retrieve the current bag from session or initialize a new one
     bag = request.session.get('bag', {})
 
-    # Check if the specific variant is already in the bag; if so, update the quantity
+    # Update quantity if the item already exists in the bag, or add it with the specified quantity
     if item_key in bag:
         bag[item_key] += quantity
     else:
         bag[item_key] = quantity
 
-    # Save the updated bag to the session without changing the original bag structure
+    # Save the updated bag back to the session
     request.session['bag'] = bag
-    request.session.modified = True  # Ensures session is saved even if nothing else changes
+    request.session.modified = True
 
     # Clear delivery-related session data to force recalculation if needed
     request.session.pop('delivery', None)
     request.session.pop('grand_total_with_shipping', None)
 
     # Fetch product details for the success message
-    product = get_object_or_404(Product, printful_id=printful_id)
+    product = get_object_or_404(Product, printful_id=printful_id, variant_id=variant_id)
     item_name = product.name
-    item_size = getattr(product, 'size', 'N/A')  # Assuming 'size' exists on the Product model; modify if necessary
-    item_price = product.price
-    total_price = item_price * quantity
+    item_size = product.size  # Adjust if the product size is stored elsewhere
 
     # Add a user-friendly success message
     messages.success(
