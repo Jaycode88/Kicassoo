@@ -141,6 +141,9 @@ This contains social links and contact button for Kicasso as well as Socail link
 
 
 ## Future features
+### Expand Apps
+Currently the events and collections pages are run from the home app, These could each have a seperate app allowing Admins and Owners to Add, Modify and delete events or collections without having to use code to make modifications
+
 ### Pagination
 As there are more products added to the store, when the number reaces 20+ it would be a good idea to instal pigination on the product list page, this will provide a better user experience over an endles page of products
 

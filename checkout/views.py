@@ -203,15 +203,50 @@ def place_order(request):
 
 
 def order_success(request):
+    """Confirm order success only after verifying payment status."""
     order_number = request.session.get('order_number')
-    order = Order.objects.get(
-            order_number=order_number) if order_number else None
+    if not order_number:
+        messages.error(request, "Order not found.")
+        return redirect('checkout')
 
-    request.session.pop('order_number', None)
-    request.session.pop('bag', None)
-    request.session.modified = True
+    try:
+        # Retrieve the order from the database
+        order = Order.objects.get(order_number=order_number)
+        
+        # Verify payment status with Stripe
+        if order.stripe_payment_intent_id:
+            payment_intent = stripe.PaymentIntent.retrieve(
+                order.stripe_payment_intent_id
+            )
+            if payment_intent['status'] != 'succeeded':
+                messages.error(
+                    request,
+                    "Payment verification failed. Please contact support."
+                )
+                return redirect('checkout')
 
-    return render(request, 'checkout/order_success.html', {'order': order})
+        # Mark the order as successful (if not already marked by the webhook)
+        if order.payment_status != 'COMPLETED':
+            order.payment_status = 'COMPLETED'
+            order.save(update_fields=['payment_status'])
+
+        # Clear session data
+        request.session.pop('order_number', None)
+        request.session.pop('bag', None)
+        request.session.modified = True
+
+        return render(request, 'checkout/order_success.html', {'order': order})
+
+    except Order.DoesNotExist:
+        messages.error(request, "Order not found.")
+        return redirect('checkout')
+    except Exception as e:
+        logger.error(f"Error confirming order success: {e}")
+        messages.error(
+            request,
+            "An error occurred while confirming your order. Please contact support."
+        )
+        return redirect('checkout')
 
 
 @csrf_exempt

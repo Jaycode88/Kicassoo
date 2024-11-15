@@ -12,6 +12,12 @@
 {% endblock %}
 
 {% block content %}
+<div id="loading-overlay" class="loading-overlay d-none">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Processing...</span>
+    </div>
+</div>
+
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
@@ -89,6 +95,25 @@
         card.mount('#card-element');
 
         const submitButton = document.getElementById('submit-payment');
+        const calculateDeliveryButton = document.querySelector('button[type="submit"]');
+        const loadingOverlay = document.getElementById('loading-overlay'); // Get the overlay
+
+        // Function to show the loading spinner
+        function showSpinner() {
+            loadingOverlay.classList.remove('d-none');
+        }
+
+        // Function to hide the loading spinner
+        function hideSpinner() {
+            loadingOverlay.classList.add('d-none');
+        }
+
+        // Add event listener to the Calculate Delivery button
+        if (calculateDeliveryButton) {
+            calculateDeliveryButton.addEventListener('click', function () {
+                showSpinner(); // Show spinner while calculating delivery
+            });
+        }
 
         // Order details for creating the PaymentIntent
         const orderDetails = {
@@ -142,8 +167,15 @@
 
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
+
+            // Show spinner while processing payment
+            showSpinner();
+
             createPaymentIntent(orderDetails).then(clientSecret => {
-                if (!clientSecret) return;
+                if (!clientSecret) {
+                    hideSpinner(); // Hide spinner if payment fails to initialize
+                    return;
+                }
 
                 stripe.confirmCardPayment(clientSecret, {
                     payment_method: {
@@ -156,14 +188,17 @@
                                 line2: orderDetails.address2,
                                 city: orderDetails.city,
                                 postal_code: orderDetails.postcode,
-                                country: orderDetails.country || undefined  // Only set if not empty
+                                country: orderDetails.country || undefined
                             }
                         }
                     }
                 }).then(result => {
+                    hideSpinner(); // Always hide spinner after payment processing
+
                     if (result.error) {
                         alert("Payment error: " + result.error.message);
                     } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+                        // Redirect to success page
                         window.location.href = "{% url 'order_success' %}";
                     }
                 });
@@ -175,4 +210,3 @@
     });
 </script>
 {% endblock %}
-
