@@ -77,6 +77,8 @@ python manage.py import_products
 
 This command retrieves product details, including variants, sizes, and prices, ensuring accurate catalog management.
 
+After importing products their category and description need to be added manually through the Django admin panel.
+
 - **Automated Order Fulfillment:** When an order is completed, it is sent to Printful through the API for fulfillment, ensuring seamless order processing from checkout to delivery.
 
 ### Stripe Payments
@@ -102,6 +104,7 @@ Error logging has been integrated into the project to track and record system er
 Error logs are stored in a dedicated "logs" directory, with different levels of logging (INFO, WARNING, ERROR) set for various aspects of the application.
 
 ## Page Features
+
 ### Home Page
 The home page consists of A hero image, with 2 call to action buttons inviting the user to view the artist's collections or view the Print store.
 
