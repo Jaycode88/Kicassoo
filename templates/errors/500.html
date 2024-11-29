@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+
+{% block title %}Server Error{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+<section id="error-500" class="container text-center mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <h1 class="montaga display-1 text-warning">500</h1>
+            <h2 class="mt-3">Internal Server Error</h2>
+            <p class="mt-4">
+                Something went wrong on our end. Please try again later.
+                If the problem persists, contact support for assistance.
+            </p>
+            <a href="{% url 'home' %}" class="btn custom-btn mt-4">Return to Homepage</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

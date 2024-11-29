@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+<section id="error-404" class="container text-center mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <h1 class="montaga display-1 text-danger">404</h1>
+            <h2 class="mt-3">Oops! Page Not Found</h2>
+            <p class="mt-4">
+                The page you're looking for doesn't exist or might have been moved.
+                Check the URL or go back to the homepage.
+            </p>
+            <a href="{% url 'home' %}" class="btn custom-btn mt-4">Return to Homepage</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
