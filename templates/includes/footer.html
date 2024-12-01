@@ -1,9 +1,10 @@
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+        <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
             <p class="montaga footer-header">Kicassoo</p>
             <button class="custom-btn custom-btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal">Contact
                 Me</button>
+
             <div class="social-icons mt-2 ms-1">
                 <a href="https://www.snapchat.com/add/dollyz88" class="footer-icon me-5" target="_blank"
                     aria-label="Go to Kicassoo's SnapChat"><i class="fa-brands fa-snapchat"></i></a>
@@ -11,7 +12,14 @@
                     aria-label="Go to Kicassoo's Instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
-        <div class="col-md-6 text-center text-md-end developer-info">
+
+        <!-- Middle Column for Links -->
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+            <a href="{% url 'terms_and_conditions' %}" class="footer-link me-3">Terms & Conditions</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+        </div>
+
+        <div class="col-md-4 text-center text-md-end developer-info">
             <p>Website designed & developed</p>
             <p>by Joe Seabrook</p>
             <a href="https://www.linkedin.com/in/joeseabrook/" target="_blank" class="footer-icon"

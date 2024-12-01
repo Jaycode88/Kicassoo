@@ -256,6 +256,17 @@ footer button {
     margin-left: 15px;
 }
 
+.footer-link {
+    font-size: 1rem;
+    color: #000;
+    /* Adjust to match your theme */
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
 /* Media Queries */
 @media (min-width: 768px) {
     footer {
