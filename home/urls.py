@@ -5,19 +5,21 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.index, name='home'),
-    path('about/', views.about, name='about'),
-    path('events/', views.events, name='events'),
-    path('collections/all/', views.all_collections, name='all_collections'),
+     path('', views.index, name='home'),
+     path('about/', views.about, name='about'),
+     path('events/', views.events, name='events'),
+     path('collections/all/', views.all_collections, name='all_collections'),
 
-    path('collections/perfectmoments/',
+     path('collections/perfectmoments/',
          views.perfectmoments, name='perfectmoments'),
 
-    path('collections/ropesofwisdom/',
+     path('collections/ropesofwisdom/',
          views.ropesofwisdom, name='ropesofwisdom'),
 
-    path('collections/thekingdom/', views.thekingdom, name='thekingdom'),
-    path('contact/', views.contact, name='contact'),
+     path('collections/thekingdom/', views.thekingdom, name='thekingdom'),
+     path('contact/', views.contact, name='contact'),
+     path('terms-and-conditions/', views.terms_and_conditions, name='terms_and_conditions'),
+     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
 ]
 
 if settings.DEBUG:

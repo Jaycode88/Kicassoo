@@ -77,3 +77,12 @@ def custom_404(request, exception):
 def custom_500(request):
     """Custom 500 error handler"""
     return render(request, 'errors/500.html', status=500)
+
+def terms_and_conditions(request):
+    """View to render Terms and Conditions page."""
+    return render(request, 'home/terms_and_conditions.html')
+
+
+def privacy_policy(request):
+    """View to render Privacy Policy page."""
+    return render(request, 'home/privacy_policy.html')

@@ -34,6 +34,17 @@
                         {{ contact_form.message.label_tag }}
                         {{ contact_form.message }}
                     </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="mb-3 text-center">
+                        <small class="text-muted">
+                            By clicking "Send," you agree to our 
+                            <a href="{% url 'terms_and_conditions' %}" class="footer-link">Terms & Conditions</a> and 
+                            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>.
+                        </small>
+                    </div>
+
+                    <!-- Submit Button -->
                     <div class="modal-footer">
                         <button type="reset" class="custom-btn">Reset</button>
                         <button type="submit" class="custom-btn">Send</button>
