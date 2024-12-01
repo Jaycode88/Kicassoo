@@ -12,7 +12,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     printful_id = models.CharField(max_length=255)
     variant_id = models.CharField(max_length=255)
-    sync_variant_id = models.IntegerField()
+    sync_variant_id = models.BigIntegerField()
     image_url = models.URLField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)
