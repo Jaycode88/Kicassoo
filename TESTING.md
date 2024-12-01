@@ -2,7 +2,7 @@
 ensure orders are set to confirm for final deployement
 
 
-- in checkout to create Draft/test order set "confirm" to false in services.py line 48 and views.py line 30
+- in checkout to create Draft/test order set "confirm" to false in views.py line 348 in the stripe webhook function, and services.py line 9
 
 # Testing
 Return back to the [README.md](README.md) file.
