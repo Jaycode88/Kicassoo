@@ -345,7 +345,7 @@ def stripe_webhook(request):
                 }
 
                 printful_response = printful_api.create_order(
-                    printful_order_data, confirm=True)
+                    printful_order_data, confirm=False)
 
                 logger.info(f"Printful API Response: {printful_response}")
 

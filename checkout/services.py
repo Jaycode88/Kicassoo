@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 PRINTFUL_API_URL = 'https://api.printful.com'
 
 
-def prepare_printful_order_data(order):
+def prepare_printful_order_data(order, confirm=False):
     items = []
     for item in order.items.all():
         items.append({
