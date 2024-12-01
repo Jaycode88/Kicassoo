@@ -4,6 +4,7 @@ botocore==1.34.145
 certifi==2024.6.2
 cffi==1.16.0
 charset-normalizer==3.3.2
+crispy-bootstrap5==2024.10
 cryptography==42.0.8
 dj-database-url==2.2.0
 Django==5.0.6

@@ -40,7 +40,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['87.106.68.212', 'localhost']
+ALLOWED_HOSTS = ['87.106.68.212', '127.0.0.1', 'localhost']
 
 
 MESSAGE_TAGS = {
@@ -207,8 +207,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # production 
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),) # Development
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -245,7 +245,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'error.log'),
+            'filename': '/home/joe/Kicassoo/logs/error.log',
             'formatter': 'verbose',
         },
         'console': {
@@ -290,6 +290,6 @@ HANDLER500 = 'home.views.custom_500'
 SECURE_HSTS_SECONDS = 3600  # Enforce HTTPS
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = False  # Redirect all HTTP requests to HTTPS
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
