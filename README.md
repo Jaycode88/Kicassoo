@@ -142,6 +142,9 @@ This contains social links and contact button for Kicasso as well as Socail link
 ![Desktop Footer](documentation/desktopfooter.webp)
 ![Mobile Footer](documentation/mobfooter.webp)
 
+### Terms and conditions & Privacy Policy
+These pages outline the terms and conditions and privacy policy for the user.
+
 
 ## Future features
 ### Expand Apps
