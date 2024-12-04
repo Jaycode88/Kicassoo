@@ -388,6 +388,11 @@ def stripe_webhook(request):
                         order.confirmation_email_sent = True
                         order.save(update_fields=['confirmation_email_sent'])
 
+                if not printful_response or 'result' not in printful_response:
+                    logger.error(f"Printful response invalid for order {order_number}: {printful_response}")
+                    raise ValueError("Invalid Printful response")
+
+
         except Order.DoesNotExist:
             logger.error(f"Order with order number {order_number} not found.")
             return HttpResponse(status=404)
