@@ -90,7 +90,7 @@ CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://87.106.68.212',
-    'https://www,jaycode88.co.uk'
+    'https://www.jaycode88.co.uk'
 ]
 
 ROOT_URLCONF = 'kicassoo_store.urls'
