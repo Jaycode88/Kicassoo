@@ -38,7 +38,7 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['87.106.68.212', '127.0.0.1', 'jaycode88.co.uk', 'www.jaycode88.co.uk']
 
@@ -250,7 +250,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'ERROR',
+            'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': '/home/joe/Kicassoo/logs/error.log',
             'formatter': 'verbose',
@@ -267,7 +267,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['file', 'console', 'mail_admins'],
-        'level': 'WARNING',
+        'level': 'ERROR',
     },
     'loggers': {
         'django': {
@@ -283,7 +283,7 @@ LOGGING = {
         # Custom logger for your application
         'checkout': {
             'handlers': ['file', 'console'],
-            'level': 'INFO',
+            'level': 'WARNING',
             'propagate': True,
         },
     },
