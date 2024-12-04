@@ -86,6 +86,9 @@ class PrintfulAPI:
         """Send order to Printful, ensuring address requirements are met."""
         logger.info("Attempting to create order with Printful...")
 
+        # Log the initial order data
+        logger.debug("Initial order data: %s", order_data)
+
         order_data['confirm'] = confirm
 
         # Ensure 'address1' is provided in recipient data
@@ -96,7 +99,8 @@ class PrintfulAPI:
         if not address1:
             logger.error(
                 "Missing address1 in recipient data. "
-                "Cannot proceed with order creation."
+                "Cannot proceed with order creation. Recipient data: %s",
+                order_data['recipient']
             )
             raise ValueError(
                 "address1 is required for Printful orders and cannot be empty."
@@ -104,27 +108,37 @@ class PrintfulAPI:
 
         order_data['recipient']['address1'] = address1
 
+        # Log the final payload before making the API call
+        logger.debug("Final order data to be sent to Printful: %s", order_data)
+
         try:
             response = requests.post(
                 f"{self.base_url}/orders",
                 json=order_data,
                 headers=self.get_headers()
             )
+
+            # Log the full response content for debugging
+            logger.debug("Printful API response: %s", response.text)
+
             response.raise_for_status()
             order_response = response.json()
+
             logger.info(
                 "Order successfully created with Printful. Order ID: %s",
                 order_response.get('id')
             )
             return order_response
+
         except requests.exceptions.HTTPError as e:
             # Log detailed HTTP errors from Printful
             logger.error(
                 "HTTP error while creating order with Printful. "
-                "Status: %s, Error: %s",
-                response.status_code, e
+                "Status: %s, Response: %s, Error: %s",
+                response.status_code, response.text, e
             )
             return None
+
         except requests.exceptions.RequestException as e:
             logger.error(
                 "Error creating order with Printful: %s",
