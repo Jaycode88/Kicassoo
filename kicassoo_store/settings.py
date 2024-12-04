@@ -40,7 +40,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['87.106.68.212', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['87.106.68.212', '127.0.0.1', 'jaycode88.co.uk', 'www.jaycode88.co.uk']
 
 
 MESSAGE_TAGS = {
