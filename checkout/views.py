@@ -304,6 +304,8 @@ def stripe_webhook(request):
         order_number = payment_intent.get('metadata', {}).get('order_number')
         stripe_intent_id = payment_intent['id']
 
+        logger.info(f"Processing order {order_number} with intent {stripe_intent_id}")
+
         try:
             with transaction.atomic():
                 order = Order.objects.select_for_update().get(
@@ -324,6 +326,8 @@ def stripe_webhook(request):
                 order.save(update_fields=[
                         'payment_status', 'stripe_payment_intent_id'])
 
+
+                logger.info(f"Preparing order data for Printful: {order_number}")
                 printful_api = PrintfulAPI()
                 printful_order_data = {
                     'recipient': {
@@ -344,12 +348,14 @@ def stripe_webhook(request):
                     ]
                 }
 
+                logger.info(f"Sending order to Printful for order {order_number}")
                 printful_response = printful_api.create_order(
                     printful_order_data, confirm=False)
 
                 logger.info(f"Printful API Response: {printful_response}")
 
                 if printful_response and 'result' in printful_response:
+                    logger.error(f"Printful response invalid for order {order_number}")
                     order.printful_order_id = printful_response[
                         'result'].get('id')
 
@@ -374,6 +380,8 @@ def stripe_webhook(request):
 
                         order_item.save()
 
+                    logger.info(f"Printful response for {order_number}: {printful_response}")
+
                     if not order.confirmation_email_sent:
                         logger.info("Sending order confirmation email.")
                         send_order_confirmation_email(order)
@@ -384,7 +392,7 @@ def stripe_webhook(request):
             logger.error(f"Order with order number {order_number} not found.")
             return HttpResponse(status=404)
         except Exception as e:
-            logger.error(f"Error processing order in Printful: {e}")
+            logger.error(f"Unhandled error processing payment intent: {e}")
             return HttpResponse(status=500)
 
     elif event['type'] == 'charge.succeeded':
