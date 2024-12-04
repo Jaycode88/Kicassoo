@@ -309,7 +309,8 @@ def stripe_webhook(request):
         try:
             with transaction.atomic():
                 order = Order.objects.select_for_update().get(
-                        order_number=order_number)
+                    order_number=order_number
+                )
 
                 if (
                     order.stripe_payment_intent_id == stripe_intent_id
@@ -324,8 +325,8 @@ def stripe_webhook(request):
                 order.payment_status = 'COMPLETED'
                 order.stripe_payment_intent_id = stripe_intent_id
                 order.save(update_fields=[
-                        'payment_status', 'stripe_payment_intent_id'])
-
+                    'payment_status', 'stripe_payment_intent_id'
+                ])
 
                 logger.info(f"Preparing order data for Printful: {order_number}")
                 printful_api = PrintfulAPI()
@@ -350,34 +351,33 @@ def stripe_webhook(request):
 
                 logger.info(f"Sending order to Printful for order {order_number}")
                 printful_response = printful_api.create_order(
-                    printful_order_data, confirm=False)
+                    printful_order_data, confirm=False
+                )
 
                 logger.info(f"Printful API Response: {printful_response}")
 
-                if printful_response and 'result' in printful_response:
-                    logger.error(f"Printful response invalid for order {order_number}")
-                    order.printful_order_id = printful_response[
-                        'result'].get('id')
+                if printful_response and printful_response.get('result'):
+                    result = printful_response['result']
 
-                    estimated_shipping_date = printful_response[
-                        'result'].get('estimated_shipping_date')
+                    # Check if the order is created as a draft
+                    if result.get('status') == 'draft':
+                        logger.info(f"Order {order_number} created as a draft in Printful.")
+
+                    order.printful_order_id = result.get('id')
+                    estimated_shipping_date = result.get('estimated_shipping_date')
 
                     if estimated_shipping_date:
                         order.estimated_shipping_date = estimated_shipping_date
                     order.save(update_fields=[
-                        'printful_order_id', 'estimated_shipping_date'])
+                        'printful_order_id', 'estimated_shipping_date'
+                    ])
 
                     for item_data, order_item in zip(
-                        printful_response['result']['items'],
-                        order.items.all()
+                        result['items'], order.items.all()
                     ):
                         order_item.printful_id = item_data.get('id')
-                        order_item.sync_variant_id = item_data.get(
-                            'sync_variant_id')
-
-                        order_item.printful_variant_id = item_data.get(
-                            'variant_id')
-
+                        order_item.sync_variant_id = item_data.get('sync_variant_id')
+                        order_item.printful_variant_id = item_data.get('variant_id')
                         order_item.save()
 
                     logger.info(f"Printful response for {order_number}: {printful_response}")
@@ -388,10 +388,11 @@ def stripe_webhook(request):
                         order.confirmation_email_sent = True
                         order.save(update_fields=['confirmation_email_sent'])
 
-                if not printful_response or 'result' not in printful_response:
-                    logger.error(f"Printful response invalid for order {order_number}: {printful_response}")
+                else:
+                    logger.error(
+                        f"Invalid or unexpected Printful response for order {order_number}: {printful_response}"
+                    )
                     raise ValueError("Invalid Printful response")
-
 
         except Order.DoesNotExist:
             logger.error(f"Order with order number {order_number} not found.")
@@ -425,6 +426,7 @@ def stripe_webhook(request):
         return JsonResponse({'status': 'payment_failed'}, status=400)
 
     return JsonResponse({'status': 'success'})
+
 
 
 def payment_failed(request):
