@@ -250,7 +250,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': '/home/joe/Kicassoo/logs/error.log',
             'formatter': 'verbose',
@@ -272,12 +272,12 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'file', 'mail_admins'],
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'propagate': True,
         },
         'django.request': {
             'handlers': ['file', 'mail_admins'],
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'propagate': False,
         },
         # Custom logger for your application
