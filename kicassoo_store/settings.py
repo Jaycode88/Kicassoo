@@ -38,7 +38,7 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['87.106.68.212', '127.0.0.1', 'jaycode88.co.uk', 'www.jaycode88.co.uk']
 
@@ -84,6 +84,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+]
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://87.106.68.212',
+    'https://www,jaycode88.co.uk'
 ]
 
 ROOT_URLCONF = 'kicassoo_store.urls'
