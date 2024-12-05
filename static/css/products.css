@@ -24,7 +24,7 @@
 /* Default quantity input width for screens larger than 991px */
 @media (min-width: 992px) {
     #quantity-input {
-        width: auto;
+        width: 40%;
         /* Restore to default behavior */
     }
 
