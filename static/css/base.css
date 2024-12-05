@@ -8,6 +8,12 @@
     border: none;
 }
 
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
 /* error messages */
 .messages {
     z-index: 9999;

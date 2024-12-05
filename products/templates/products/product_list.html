@@ -92,12 +92,10 @@
         {% endif %}
     {% endfor %}
 </div>
-{% include 'includes/back_to_top.html' %}
 {% endblock %}
 
 {% block postloadjs %}
 {{ block.super }}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/sorting-script.js' %}"></script>
-<script src="{% static 'js/back_to_top_script.js' %}"></script>
 {% endblock %}
