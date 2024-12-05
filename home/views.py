@@ -9,23 +9,36 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Process the form data and send the email
-            send_mail(
-                subject=f"Contact Form Submission from"
-                "{form.cleaned_data['name']}",
+            # Extract form data
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
 
-                message=form.cleaned_data['message'],
-                from_email=form.cleaned_data['email'],
-                recipient_list=[settings.EMAIL_HOST_USER],
+            # Construct email subject and body
+            subject = f"Contact Form Submission from {name}"
+            body = (
+                f"You have received a new message via the contact form.\n\n"
+                f"Name: {name}\n"
+                f"Email: {email}\n\n"
+                f"Message:\n{message}"
             )
 
-            # Return JSON with a success message
+            # Send the email
+            send_mail(
+                subject=subject,
+                message=body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.EMAIL_HOST_USER],
+                fail_silently=False,  # To debug email issues
+            )
+
+            # Return success response
             return JsonResponse({
                 "success": True,
                 "message": "Your message has been sent successfully!"
             })
         else:
-            # Return JSON with an error message
+            # Return form validation errors
             return JsonResponse({
                 "success": False,
                 "message": (
@@ -34,7 +47,7 @@ def contact(request):
                 )
             }, status=400)
 
-    # Catch-all return if the request is not POST
+    # Catch-all for non-POST requests
     return JsonResponse({
         "success": False,
         "message": "Invalid request method."
