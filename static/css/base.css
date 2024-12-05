@@ -145,6 +145,35 @@ icon {
     margin: 0 !important;
 }
 
+/* search bar */
+input.form-control {
+    height: auto;
+    /* Allow the input to adapt to the button's size */
+    padding: 10px;
+    /* Ensure consistent padding */
+    border-radius: 0;
+    /* Ensure no rounded edges for uniformity */
+}
+
+.input-group .form-control {
+    border-radius: 0;
+    /* Ensure no rounding on group elements */
+}
+
+.input-group .input-group-append .form-control {
+    padding: 10px;
+    /* Match input padding */
+}
+
+.input-group-append button {
+    height: 100%;
+    /* Ensure the button matches the input height */
+    border-radius: 0;
+    /* Consistency with the input box */
+    padding: 0 15px;
+    /* Ensure the button text/icon is not squished */
+}
+
 /*---Bag and account icons---*/
 #nav-icons-container {
     display: flex;
