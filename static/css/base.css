@@ -16,25 +16,25 @@
 
 /* messages */
 .messages-right {
-    z-index: 9999;
+    z-index: 9999 !important;
     /* Ensure messages appear above all elements */
-    position: fixed;
-    top: 80px;
+    position: fixed !important;
+    top: 80px !important;
     /* Adjust to align with the bottom of your navbar */
-    right: 20px;
+    right: 20px !important;
     /* Align to the right of the screen */
-    width: 300px;
+    width: 300px !important;
     /* Limit width for consistency */
 }
 
 /* Adjust spacing for mobile screens */
 @media (max-width: 991px) {
     .messages-right {
-        top: 60px;
+        top: 60px !important;
         /* Align with mobile navbar height */
-        right: 10px;
+        right: 10px !important;
         /* Reduce margin for smaller screens */
-        width: 90%;
+        width: 90% !important;
         /* Use more space for mobile devices */
     }
 }
