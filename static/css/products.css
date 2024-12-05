@@ -18,3 +18,29 @@
         margin-top: 30px !important;
     }
 }
+
+/* Quantity input adjustments for smaller screens */
+@media (max-width: 350px) {
+    #quantity-input {
+        width: 80%;
+        margin: 0 auto;
+        /* Center the input for better alignment */
+    }
+
+    .input-group {
+        display: flex;
+        justify-content: center;
+    }
+
+    .input-group-prepend,
+    .input-group-append {
+        display: flex;
+        align-items: center;
+    }
+
+    .decrement-qty,
+    .increment-qty {
+        padding: 5px 10px;
+        /* Adjust button padding for smaller screens */
+    }
+}
