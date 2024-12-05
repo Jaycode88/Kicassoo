@@ -68,20 +68,11 @@
                     </a>
                 </div>
 
-                <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
-                    <form action="{% url 'product_list' %}" method="GET">
-                        <div class="input-group w-100">
-                            <input type="text" class="form-control border border-black rounded-0" name="q"
-                                placeholder="Search The Kicassoo Store">
-                            <div class="input-group-append">
-                                <button class="form-control btn-black" type="submit">
-                                    <span class="icon">
-                                        <i class="fas fa-search"></i>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="input-group w-100">
+                    <input type="text" class="form-control border border-black" name="q" placeholder="Search The Kicassoo Store">
+                    <button class="btn btn-black" type="submit" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
 
                 <div class="col-12 col-lg-4 my-auto py-1 py-lg-0" id="nav-icons-container">
