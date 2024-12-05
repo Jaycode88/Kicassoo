@@ -21,18 +21,6 @@
 
 /* Quantity input adjustments */
 
-/* Default quantity input width for screens larger than 991px */
-@media (min-width: 992px) {
-    #quantity-input {
-        max-width: 40% !important;
-    }
-
-    .input-group {
-        justify-content: start;
-        /* Align with form elements */
-    }
-}
-
 /* Quantity input adjustments for smaller screens */
 @media (max-width: 350px) {
     #quantity-input {
