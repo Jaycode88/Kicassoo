@@ -24,8 +24,7 @@
 /* Default quantity input width for screens larger than 991px */
 @media (min-width: 992px) {
     #quantity-input {
-        width: 40%;
-        /* Restore to default behavior */
+        width: 40% !important;
     }
 
     .input-group {
