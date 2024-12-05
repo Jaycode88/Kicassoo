@@ -19,6 +19,8 @@
     }
 }
 
+/* Quantity input adjustments */
+
 /* Quantity input adjustments for smaller screens */
 @media (max-width: 350px) {
     #quantity-input {
