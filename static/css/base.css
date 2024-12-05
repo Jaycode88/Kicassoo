@@ -14,13 +14,29 @@
     box-sizing: border-box;
 }
 
-/* error messages */
-.messages {
+/* messages */
+.messages-right {
     z-index: 9999;
+    /* Ensure messages appear above all elements */
     position: fixed;
-    top: 50px;
-    left: 20px;
+    top: 80px;
+    /* Adjust to align with the bottom of your navbar */
+    right: 20px;
+    /* Align to the right of the screen */
     width: 300px;
+    /* Limit width for consistency */
+}
+
+/* Adjust spacing for mobile screens */
+@media (max-width: 991px) {
+    .messages-right {
+        top: 60px;
+        /* Align with mobile navbar height */
+        right: 10px;
+        /* Reduce margin for smaller screens */
+        width: 90%;
+        /* Use more space for mobile devices */
+    }
 }
 
 /* Ensure the entire document uses full height */
@@ -146,33 +162,7 @@ icon {
 }
 
 /* search bar */
-input.form-control {
-    height: auto;
-    /* Allow the input to adapt to the button's size */
-    padding: 10px;
-    /* Ensure consistent padding */
-    border-radius: 0;
-    /* Ensure no rounded edges for uniformity */
-}
 
-.input-group .form-control {
-    border-radius: 0;
-    /* Ensure no rounding on group elements */
-}
-
-.input-group .input-group-append .form-control {
-    padding: 10px;
-    /* Match input padding */
-}
-
-.input-group-append button {
-    height: 100%;
-    /* Ensure the button matches the input height */
-    border-radius: 0;
-    /* Consistency with the input box */
-    padding: 0 15px;
-    /* Ensure the button text/icon is not squished */
-}
 
 /*---Bag and account icons---*/
 #nav-icons-container {
