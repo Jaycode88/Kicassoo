@@ -40,7 +40,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['87.106.68.212', '127.0.0.1', 'jaycode88.co.uk', 'www.jaycode88.co.uk']
+ALLOWED_HOSTS = ['127.0.0.1', 'jaycode88.co.uk', 'www.jaycode88.co.uk']
 
 
 MESSAGE_TAGS = {
@@ -86,8 +86,9 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
+CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     'https://87.106.68.212',
     'https://www.jaycode88.co.uk'
@@ -297,6 +298,6 @@ HANDLER500 = 'home.views.custom_500'
 SECURE_HSTS_SECONDS = 3600  # Enforce HTTPS
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = False  # Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
