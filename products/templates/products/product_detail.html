@@ -69,6 +69,17 @@
             
                 <input type="hidden" name="redirect_url" value="{{ request.path }}">
             </form>
+
+            <!-- Detailed Product Info Section -->
+            {% if product_variants.first.details %}
+                <div class="mt-5">
+                    <h4>Product Details</h4>
+                    <div id="product-details">
+                        {{ product_variants.first.details|safe }}
+                    </div>
+                </div>
+            {% endif %}
+            
         </div>
     </div>
 </div>
