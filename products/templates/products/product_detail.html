@@ -38,7 +38,7 @@
                 {% endif %}
 
                 <!-- Product Description -->
-                <p id="product-description">{{ product_variants.first.description }}</p>
+                <p id="product-description">{{ product_variants.first.description|safe }}</p>
 
                 <!-- Quantity Selector -->
                 <div class="form-group">
